@@ -1,2 +1,6 @@
-ceylon compile
-ceylon war dddsample/1.0.0  -R webapp
+
+Original Java source code : https://java.net/projects/cargotracker/pages/Home
+
+To build :
+* ceylon compile
+* ceylon war dddsample/1.0.0  -R webapp
