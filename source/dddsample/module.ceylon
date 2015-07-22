@@ -4,6 +4,7 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import javax.inject "1";
 	shared import javax.servlet "3.1.0";
 	shared import java.base "7";
+	shared import ceylon.interop.java "1.1.1";
 	//shared import "org.hibernate.javax.persistence:hibernate-jpa-2.0-api"  "1.0.1.Final-redhat-3";
 	//shared import "org.jboss.jbossts:jbossjta" "4.16.6.Final-redhat-1";
 	shared import hibernatejpa21api "jpa-2.1-api-1.0.0.Final";
