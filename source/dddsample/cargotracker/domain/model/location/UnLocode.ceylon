@@ -3,8 +3,7 @@ import java.io {
 }
 
 import javax.persistence {
-	embeddable,
-	column__FIELD
+	embeddable
 }
 """
    United nations location code.
@@ -14,7 +13,6 @@ import javax.persistence {
 embeddable
 shared class UnLocode  satisfies Serializable{
 	
-	column__FIELD
 	String unlocode;
 	
 	shared new(){
@@ -23,7 +21,6 @@ shared class UnLocode  satisfies Serializable{
 	shared new withCountryAndLocation(String countryAndLocation){
 		unlocode = countryAndLocation.uppercased;
 	}
-	
 	
 	shared String idString => unlocode;
 	

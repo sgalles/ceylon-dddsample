@@ -70,7 +70,7 @@ shared class CarrierMovement satisfies Serializable{
 	}
 	
 	// null object pattern
-	shared new unknown extends CarrierMovement(Location.unknown, Location().unknown, Date(0), Date(0)){}
+	shared new unknown extends CarrierMovement(Location.unknown, Location.unknown, Date(0), Date(0)){}
 	
 		
 }

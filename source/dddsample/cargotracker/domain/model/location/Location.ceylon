@@ -9,9 +9,9 @@ import javax.persistence {
 	entity,
 	namedQueries,
 	namedQuery,
-	id__FIELD,
-	generatedValue__FIELD,
-	embedded__FIELD
+	id = id__FIELD,
+	generatedValue = generatedValue__FIELD,
+	embedded = embedded__FIELD
 }
 
 
@@ -31,23 +31,21 @@ namedQueries({
 		}) 
 shared class Location satisfies Serializable{
 	
-	id__FIELD
-	generatedValue__FIELD
-	Long? id;
+	id
+	generatedValue
+	Long? id = null;
 
-	embedded__FIELD
+	embedded
 	shared UnLocode unLocode;
 	
 	shared String name;
 	
 	shared new (){
-		id = null;
-		this.unLocode = UnLocode.withCountryAndLocation("");
+		this.unLocode = UnLocode();
 		this.name = "";
 	}
 	
 	shared new init(UnLocode unLocode, String name){
-		id = null;
 		this.unLocode = unLocode;
 		this.name = name;
 	}
