@@ -9,7 +9,7 @@ import java.io {
 }
 class JpaCargoRepository() satisfies CargoRepository & Serializable{
 	
-	shared actual Cargo? find(TrackingId trackingId) => Cargo();
+	shared actual Cargo? find(TrackingId trackingId) => Cargo(TrackingId("BLABLA"));
 	
 	shared actual List<Cargo> findAll() => nothing;
 	

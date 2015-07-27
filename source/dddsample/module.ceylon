@@ -11,5 +11,9 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import transactionapi12 "1.0.0";
 	shared import cdiapi "api-1.2";
 	shared import jsfapi22spec "2.2.11";
+	shared import ejbapi32spec "1.0.0.Final";
+	shared import annotationsapi12spec "1.0.0.Final";
+	//shared import "org.wildfly:wildfly-spec-api" "9.0.0.Final"; 
+	//'org.wildfly:wildfly-spec-api:9.0.0.Final
 	
 }
