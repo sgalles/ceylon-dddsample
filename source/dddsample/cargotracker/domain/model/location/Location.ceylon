@@ -40,15 +40,12 @@ shared class Location satisfies Serializable{
 	
 	shared String name;
 	
-	shared new (){
-		this.unLocode = UnLocode();
-		this.name = "";
-	}
-	
 	shared new init(UnLocode unLocode, String name){
 		this.unLocode = unLocode;
 		this.name = name;
 	}
+	
+	shared new () extends init(UnLocode(),""){}
 	
 	shared new unknown extends Location.init(UnLocode.withCountryAndLocation("XXXXX"), "Unknown location"){}
 	

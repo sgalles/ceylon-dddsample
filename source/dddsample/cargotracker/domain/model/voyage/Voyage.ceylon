@@ -33,20 +33,20 @@ shared class Voyage satisfies Serializable{
 	
 	id__FIELD
 	generatedValue__FIELD
-	Long? id;
+	Long? id = null;
 
 	embedded__FIELD
 	shared VoyageNumber voyageNumber;
 	
-	shared new (){
-		id = null;
-		this.voyageNumber = VoyageNumber("");
+	embedded__FIELD
+	shared Schedule schedule;
+	
+	shared new init(VoyageNumber voyageNumber, Schedule schedule){
+		this.voyageNumber = voyageNumber;
+		this.schedule = schedule;
 	}
 	
-	shared new init(VoyageNumber voyageNumber, String name){
-		id = null;
-		this.voyageNumber = voyageNumber;
-	}
+	shared new () extends init(VoyageNumber(""), Schedule.empty){}
 	
 	/*shared new hongkong extends Voyage.init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
 	shared new melbourne extends Voyage.init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
