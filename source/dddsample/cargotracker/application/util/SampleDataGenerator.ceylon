@@ -35,6 +35,7 @@ shared class SampleDataGenerator() {
 	late EntityManager entityManager;
 	
 	
+
 	postConstruct
 	transactionAttribute(TransactionAttributeType.\iREQUIRED)
 	shared void loadSampleData(){
@@ -42,6 +43,7 @@ shared class SampleDataGenerator() {
 		print("Loading sample data.");
 		unLoadAll(); //  Fail-safe in case of application restart that does not trigger a JPA schema drop.
 		loadSampleLocations();
+		loadSampleVoyages();
 		loadSampleCargos();
 	}
 	
@@ -101,5 +103,15 @@ shared class SampleDataGenerator() {
 			print(location.unLocode.idString);
 			
 		}
+	}
+	
+	shared void loadSampleVoyages() {
+		print("Loading sample voyages.");
+		
+		/*entityManager.persist(Voyage.);
+		entityManager.persist(SampleVoyages.NEW_YORK_TO_DALLAS);
+		entityManager.persist(SampleVoyages.DALLAS_TO_HELSINKI);
+		entityManager.persist(SampleVoyages.HELSINKI_TO_HONGKONG);
+		entityManager.persist(SampleVoyages.DALLAS_TO_HELSINKI_ALT);*/
 	}
 }

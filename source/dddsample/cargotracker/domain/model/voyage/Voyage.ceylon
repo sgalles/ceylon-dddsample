@@ -1,21 +1,23 @@
+import dddsample.cargotracker.application.util {
+	toDate
+}
+import dddsample.cargotracker.domain.model.location {
+	Location
+}
+
 import java.io {
 	Serializable
 }
-import java.lang {
-	Long
+import java.util {
+	Date
 }
 
 import javax.persistence {
 	entity,
-	namedQueries,
 	namedQuery,
 	id__FIELD,
 	generatedValue__FIELD,
 	embedded__FIELD
-}
-import dddsample.cargotracker.domain.model.location {
-
-	UnLocode
 }
 
 
@@ -33,7 +35,7 @@ shared class Voyage satisfies Serializable{
 	
 	id__FIELD
 	generatedValue__FIELD
-	Long? id = null;
+	Integer? id = null;
 
 	embedded__FIELD
 	shared VoyageNumber voyageNumber;
@@ -46,7 +48,31 @@ shared class Voyage satisfies Serializable{
 		this.schedule = schedule;
 	}
 	
+	
 	shared new () extends init(VoyageNumber(""), Schedule.empty){}
+	
+	
+	shared new build(VoyageNumber voyageNumber, Location departureLocation, MovementStep+ movementSteps){
+		this.voyageNumber = voyageNumber;
+		
+		CarrierMovement collectingCarrierMovement([Location|MovementStep, MovementStep] pair) 
+				=> let( [departureStep, arrivalStep] = pair,
+						departureLocation = if(is Location departureStep)  then departureStep else departureStep.arrivalLocation
+					)
+					CarrierMovement(departureLocation, 
+									arrivalStep.arrivalLocation, 
+									arrivalStep.departureTime,
+									arrivalStep.departureTime);
+		
+		{CarrierMovement+} collectedCarrierMovement 
+				= zipPairs(movementSteps.follow(departureLocation), movementSteps)
+				  .map(collectingCarrierMovement);
+				
+		this.schedule = Schedule.init(collectedCarrierMovement);
+							
+	}
+			
+	
 	
 	/*shared new hongkong extends Voyage.init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
 	shared new melbourne extends Voyage.init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
@@ -62,4 +88,20 @@ shared class Voyage satisfies Serializable{
 	shared new newyork extends Voyage.init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
 	shared new dallas extends Voyage.init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}*/
 	
+	/*public final static Voyage v100 = new Voyage.Builder(
+		new VoyageNumber("V100"), HONGKONG)
+			.addMovement(TOKYO, toDate("2014-03-03"), toDate("2014-03-05"))
+			.addMovement(NEWYORK, toDate("2014-03-06"), toDate("2014-03-09"))
+			.build();*/
+	
+	shared new v100 extends build(
+				VoyageNumber("V100"), 
+				Location.hongkong, 
+				MovementStep(Location.tokyo, toDate("2014-03-03"), toDate("2014-03-05")),
+				MovementStep(Location.newyork, toDate("2014-03-06"), toDate("2014-03-09"))
+			){}
+	
 }
+
+
+shared class MovementStep(shared Location arrivalLocation, shared Date departureTime, shared Date arrivalTime){}

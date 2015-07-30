@@ -33,7 +33,7 @@ shared class Cargo(trackingId) satisfies Serializable{
 	// Auto-generated surrogate key
 	id__FIELD
 	generatedValue__FIELD
-	Long? id = null;
+	Integer? id = null;
 	
 	embedded__FIELD 
 	shared TrackingId trackingId;

@@ -39,7 +39,7 @@ shared class CarrierMovement satisfies Serializable{
 
 	id
 	generatedValue
-	Long? id = null;
+	Integer? id = null;
 
 	manyToOne
 	joinColumn{name = "departure_location_id";}

@@ -34,7 +34,17 @@ shared class Schedule  satisfies Serializable{
 	
 
 	transient
-	shared variable List<CarrierMovement> _carrierMovements = ArrayList();
+	shared variable List<CarrierMovement> _carrierMovements;
+	
+	_carrierMovements = ArrayList();
+	
+	shared new(){
+		_carrierMovements = ArrayList();
+	}
+	
+	shared new init({CarrierMovement+} carrierMovements){
+		_carrierMovements = ArrayList{*carrierMovements};
+	}
 	
 	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
 	joinColumn{name = "voyage_id";}
@@ -43,8 +53,6 @@ shared class Schedule  satisfies Serializable{
 	assign carrierMovements{
 		_carrierMovements = CeylonList(carrierMovements);
 	}
-	
-	shared new(){}
 	
 	// null object pattern
 	shared new empty extends Schedule(){}

@@ -1,17 +1,14 @@
 import java.io {
 	Serializable
 }
-import java.lang {
-	Long
-}
 
 import javax.persistence {
 	entity,
 	namedQueries,
 	namedQuery,
-	id = id__FIELD,
-	generatedValue = generatedValue__FIELD,
-	embedded = embedded__FIELD
+	id=id__FIELD,
+	generatedValue=generatedValue__FIELD,
+	embedded=embedded__FIELD
 }
 
 
@@ -33,7 +30,7 @@ shared class Location satisfies Serializable{
 	
 	id
 	generatedValue
-	Long? id = null;
+	Integer? id = null;
 
 	embedded
 	shared UnLocode unLocode;
@@ -47,20 +44,20 @@ shared class Location satisfies Serializable{
 	
 	shared new () extends init(UnLocode(),""){}
 	
-	shared new unknown extends Location.init(UnLocode.withCountryAndLocation("XXXXX"), "Unknown location"){}
+	shared new unknown extends init(UnLocode.withCountryAndLocation("XXXXX"), "Unknown location"){}
 	
-	shared new hongkong extends Location.init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
-	shared new melbourne extends Location.init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
-	shared new stockholm extends Location.init(UnLocode.withCountryAndLocation("SESTO"), "Stockholm"){}
-	shared new helsinki extends Location.init(UnLocode.withCountryAndLocation("FIHEL"), "Helsinki"){}
-	shared new chicago extends Location.init(UnLocode.withCountryAndLocation("USCHI"), "Chicago"){}
-	shared new tokyo extends Location.init(UnLocode.withCountryAndLocation("JNTKO"), "Tokyo"){}
-	shared new hamburg extends Location.init(UnLocode.withCountryAndLocation("DEHAM"), "Hamburg"){}
-	shared new shanghai extends Location.init(UnLocode.withCountryAndLocation("CNSHA"), "Shanghai"){}
-	shared new rotterdam extends Location.init(UnLocode.withCountryAndLocation("NLRTM"), "Rotterdam"){}
-	shared new gothenburg extends Location.init(UnLocode.withCountryAndLocation("SEGOT"), "Guttenburg"){}
-	shared new hangzou extends Location.init(UnLocode.withCountryAndLocation("CNHGH"), "Hangzhou"){}
-	shared new newyork extends Location.init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
-	shared new dallas extends Location.init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}
+	shared new hongkong extends init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
+	shared new melbourne extends init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
+	shared new stockholm extends init(UnLocode.withCountryAndLocation("SESTO"), "Stockholm"){}
+	shared new helsinki extends init(UnLocode.withCountryAndLocation("FIHEL"), "Helsinki"){}
+	shared new chicago extends init(UnLocode.withCountryAndLocation("USCHI"), "Chicago"){}
+	shared new tokyo extends init(UnLocode.withCountryAndLocation("JNTKO"), "Tokyo"){}
+	shared new hamburg extends init(UnLocode.withCountryAndLocation("DEHAM"), "Hamburg"){}
+	shared new shanghai extends init(UnLocode.withCountryAndLocation("CNSHA"), "Shanghai"){}
+	shared new rotterdam extends init(UnLocode.withCountryAndLocation("NLRTM"), "Rotterdam"){}
+	shared new gothenburg extends init(UnLocode.withCountryAndLocation("SEGOT"), "Guttenburg"){}
+	shared new hangzou extends init(UnLocode.withCountryAndLocation("CNHGH"), "Hangzhou"){}
+	shared new newyork extends init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
+	shared new dallas extends init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}
 	
 }
