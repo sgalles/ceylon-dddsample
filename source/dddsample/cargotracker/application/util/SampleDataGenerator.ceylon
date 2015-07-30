@@ -10,6 +10,9 @@ import dddsample.cargotracker.domain.model.cargo {
 import dddsample.cargotracker.domain.model.location {
 	Location
 }
+import dddsample.cargotracker.domain.model.voyage {
+	Voyage
+}
 
 import javax.annotation {
 	postConstruct
@@ -108,6 +111,19 @@ shared class SampleDataGenerator() {
 	shared void loadSampleVoyages() {
 		print("Loading sample voyages.");
 		
+		entityManager.persist(Voyage.hongkong_to_new_york);
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		List<Voyage> voyages =CeylonList(entityManager.createQuery("Select c from Voyage c",javaClass<Voyage>())
+			.resultList);
+		
+		for(v in voyages){
+			print(v.schedule);
+			
+		}
+		//HONGKONG_TO_NEW_YORK
 		/*entityManager.persist(Voyage.);
 		entityManager.persist(SampleVoyages.NEW_YORK_TO_DALLAS);
 		entityManager.persist(SampleVoyages.DALLAS_TO_HELSINKI);

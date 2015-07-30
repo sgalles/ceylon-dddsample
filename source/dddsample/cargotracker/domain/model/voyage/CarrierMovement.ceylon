@@ -14,14 +14,14 @@ import java.util {
 
 import javax.persistence {
 	entity,
-	id = id__FIELD,
-	generatedValue = generatedValue__FIELD,
+	id=id__FIELD,
+	generatedValue=generatedValue__FIELD,
 	table,
-	manyToOne = manyToOne__FIELD,
-	joinColumn = joinColumn__FIELD,
+	manyToOne=manyToOne__FIELD,
+	joinColumn=joinColumn__FIELD,
 	TemporalType,
-	column = column__FIELD,
-	temporal = temporal__FIELD
+	column=column__FIELD,
+	temporal=temporal__FIELD
 }
 
 
@@ -39,7 +39,7 @@ shared class CarrierMovement satisfies Serializable{
 
 	id
 	generatedValue
-	Integer? id = null;
+	Long? id = null;
 
 	manyToOne
 	joinColumn{name = "departure_location_id";}
@@ -57,7 +57,9 @@ shared class CarrierMovement satisfies Serializable{
 	column{name = "arrival_time";}
 	shared Date arrivalTime;
 	
-	shared new(
+	
+	
+	shared new init(
 		Location departureLocation,
 		Location arrivalLocation,
 		Date departureTime,
@@ -69,8 +71,10 @@ shared class CarrierMovement satisfies Serializable{
 		this.arrivalTime = arrivalTime;
 	}
 	
+	shared new() extends init(Location.unknown, Location.unknown, Date(0), Date(0)){}
+	
 	// null object pattern
-	shared new unknown extends CarrierMovement(Location.unknown, Location.unknown, Date(0), Date(0)){}
+	shared new unknown extends init(Location.unknown, Location.unknown, Date(0), Date(0)){}
 	
 		
 }

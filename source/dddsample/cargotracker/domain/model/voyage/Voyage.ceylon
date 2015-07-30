@@ -8,6 +8,9 @@ import dddsample.cargotracker.domain.model.location {
 import java.io {
 	Serializable
 }
+import java.lang {
+	Long
+}
 import java.util {
 	Date
 }
@@ -35,7 +38,7 @@ shared class Voyage satisfies Serializable{
 	
 	id__FIELD
 	generatedValue__FIELD
-	Integer? id = null;
+	Long? id = null;
 
 	embedded__FIELD
 	shared VoyageNumber voyageNumber;
@@ -49,7 +52,7 @@ shared class Voyage satisfies Serializable{
 	}
 	
 	
-	shared new () extends init(VoyageNumber(""), Schedule.empty){}
+	shared new () extends init(VoyageNumber.init(""), Schedule.empty){}
 	
 	
 	shared new build(VoyageNumber voyageNumber, Location departureLocation, MovementStep+ movementSteps){
@@ -59,7 +62,8 @@ shared class Voyage satisfies Serializable{
 				=> let( [departureStep, arrivalStep] = pair,
 						departureLocation = if(is Location departureStep)  then departureStep else departureStep.arrivalLocation
 					)
-					CarrierMovement(departureLocation, 
+					CarrierMovement.init(
+									departureLocation, 
 									arrivalStep.arrivalLocation, 
 									arrivalStep.departureTime,
 									arrivalStep.departureTime);
@@ -73,34 +77,23 @@ shared class Voyage satisfies Serializable{
 	}
 			
 	
-	
-	/*shared new hongkong extends Voyage.init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
-	shared new melbourne extends Voyage.init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
-	shared new stockholm extends Voyage.init(UnLocode.withCountryAndLocation("SESTO"), "Stockholm"){}
-	shared new helsinki extends Voyage.init(UnLocode.withCountryAndLocation("FIHEL"), "Helsinki"){}
-	shared new chicago extends Voyage.init(UnLocode.withCountryAndLocation("USCHI"), "Chicago"){}
-	shared new tokyo extends Voyage.init(UnLocode.withCountryAndLocation("JNTKO"), "Tokyo"){}
-	shared new hamburg extends Voyage.init(UnLocode.withCountryAndLocation("DEHAM"), "Hamburg"){}
-	shared new shanghai extends Voyage.init(UnLocode.withCountryAndLocation("CNSHA"), "Shanghai"){}
-	shared new rotterdam extends Voyage.init(UnLocode.withCountryAndLocation("NLRTM"), "Rotterdam"){}
-	shared new gothenburg extends Voyage.init(UnLocode.withCountryAndLocation("SEGOT"), "Guttenburg"){}
-	shared new hangzou extends Voyage.init(UnLocode.withCountryAndLocation("CNHGH"), "Hangzhou"){}
-	shared new newyork extends Voyage.init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
-	shared new dallas extends Voyage.init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}*/
-	
-	/*public final static Voyage v100 = new Voyage.Builder(
-		new VoyageNumber("V100"), HONGKONG)
-			.addMovement(TOKYO, toDate("2014-03-03"), toDate("2014-03-05"))
-			.addMovement(NEWYORK, toDate("2014-03-06"), toDate("2014-03-09"))
-			.build();*/
-	
 	shared new v100 extends build(
-				VoyageNumber("V100"), 
+				VoyageNumber.init("V100"), 
 				Location.hongkong, 
 				MovementStep(Location.tokyo, toDate("2014-03-03"), toDate("2014-03-05")),
 				MovementStep(Location.newyork, toDate("2014-03-06"), toDate("2014-03-09"))
 			){}
 	
+	
+	
+	shared new hongkong_to_new_york extends build(
+		VoyageNumber.init("0100S"), 
+		Location.hongkong, 
+		MovementStep(Location.hangzou, toDate("2013-10-01", "12:00"),toDate("2013-10-03", "14:30")),
+		MovementStep(Location.tokyo, toDate("2013-10-03", "21:00"),toDate("2013-10-06", "06:15")),
+		MovementStep(Location.melbourne, toDate("2013-10-06", "11:00"),toDate("2013-10-12", "11:30")),
+		MovementStep(Location.newyork, toDate("2013-10-14", "12:00"),toDate("2013-10-23", "23:10"))
+	){}
 }
 
 

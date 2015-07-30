@@ -10,7 +10,8 @@ import java.io {
 	Serializable
 }
 import java.util {
-	JList=List
+	JList=List,
+	JArrayList = ArrayList
 }
 
 import javax.persistence {
@@ -18,9 +19,11 @@ import javax.persistence {
 	access,
 	AccessType,
 	CascadeType,
-	oneToMany = oneToMany__GETTER,
-	joinColumn = joinColumn__GETTER,
-	transient = transient__GETTER
+	oneToMany=oneToMany__GETTER,
+	joinColumn=joinColumn__GETTER,
+	transient__FIELD,
+	transient__SETTER,
+	transient__GETTER
 }
 
 """
@@ -32,30 +35,27 @@ embeddable
 access(AccessType.\iPROPERTY)
 shared class Schedule  satisfies Serializable{
 	
-
-	transient
-	shared variable List<CarrierMovement> _carrierMovements;
-	
-	_carrierMovements = ArrayList();
+	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
+	joinColumn{name = "voyage_id";}
+	shared variable JList<CarrierMovement> carrierMovements;
 	
 	shared new(){
-		_carrierMovements = ArrayList();
+		this.carrierMovements = JArrayList<CarrierMovement>();
 	}
 	
 	shared new init({CarrierMovement+} carrierMovements){
-		_carrierMovements = ArrayList{*carrierMovements};
-	}
-	
-	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
-	joinColumn{name = "voyage_id";}
-	shared JList<CarrierMovement> carrierMovements => JavaList(_carrierMovements);
-	
-	assign carrierMovements{
-		_carrierMovements = CeylonList(carrierMovements);
+		this.carrierMovements = 
+				let (ceylonList = ArrayList{*carrierMovements}) 
+				JArrayList<CarrierMovement>(JavaList(ceylonList));
 	}
 	
 	// null object pattern
 	shared new empty extends Schedule(){}
+	
+	
+	
+	
+	
 	
 	
 }

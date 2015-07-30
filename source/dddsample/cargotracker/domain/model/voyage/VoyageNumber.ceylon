@@ -12,9 +12,18 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class VoyageNumber(idString) satisfies Serializable{
+shared class VoyageNumber satisfies Serializable{
 	
 	column__FIELD{name = "voyage_number";}
 	shared String idString;
+	
+	
+	
+	shared new init(String idString){
+		this.idString = idString;
+	}
+	
+	shared new() extends init(""){}
+	
 	
 }

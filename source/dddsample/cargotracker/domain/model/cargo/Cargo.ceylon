@@ -1,8 +1,3 @@
-import dddsample.cargotracker.domain.model.location {
-	Location,
-	UnLocode
-}
-
 import java.io {
 	Serializable
 }
@@ -16,9 +11,7 @@ import javax.persistence {
 	id__FIELD,
 	generatedValue__FIELD,
 	namedQueries,
-	namedQuery,
-	manyToOne__FIELD,
-	joinColumn__FIELD
+	namedQuery
 }
 
 entity
@@ -33,7 +26,7 @@ shared class Cargo(trackingId) satisfies Serializable{
 	// Auto-generated surrogate key
 	id__FIELD
 	generatedValue__FIELD
-	Integer? id = null;
+	Long? id = null;
 	
 	embedded__FIELD 
 	shared TrackingId trackingId;

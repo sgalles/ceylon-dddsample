@@ -1,6 +1,9 @@
 import java.io {
 	Serializable
 }
+import java.lang {
+	Long
+}
 
 import javax.persistence {
 	entity,
@@ -30,7 +33,7 @@ shared class Location satisfies Serializable{
 	
 	id
 	generatedValue
-	Integer? id = null;
+	Long? id = null;
 
 	embedded
 	shared UnLocode unLocode;
