@@ -2,8 +2,7 @@ import ceylon.collection {
 	ArrayList
 }
 import ceylon.interop.java {
-	JavaList,
-	CeylonList
+	JavaList
 }
 
 import java.io {
@@ -11,19 +10,14 @@ import java.io {
 }
 import java.util {
 	JList=List,
-	JArrayList = ArrayList
+	JArrayList=ArrayList
 }
 
 import javax.persistence {
 	embeddable,
-	access,
-	AccessType,
 	CascadeType,
-	oneToMany=oneToMany__GETTER,
-	joinColumn=joinColumn__GETTER,
-	transient__FIELD,
-	transient__SETTER,
-	transient__GETTER
+	oneToMany=oneToMany__FIELD,
+	joinColumn=joinColumn__FIELD
 }
 
 """
@@ -32,7 +26,6 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-access(AccessType.\iPROPERTY)
 shared class Schedule  satisfies Serializable{
 	
 	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
