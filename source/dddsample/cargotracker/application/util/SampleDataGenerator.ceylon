@@ -5,7 +5,8 @@ import ceylon.interop.java {
 
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo,
-	TrackingId
+	TrackingId,
+	RouteSpecification
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -70,12 +71,27 @@ shared class SampleDataGenerator() {
 	shared void loadSampleCargos() {
 		
 		print("Loading sample cargo data.");
+		Cargo abc123 = Cargo.init {
+			trackingId = TrackingId("ABC123");
+			routeSpecification = RouteSpecification.init { 
+				origin = Location.hongkong; 
+				destination = Location.helsinki; 
+				arrivalDeadline = toDate("2014-03-15"); 
+			};
+		};
 		
-		// Cargo ABC123
-		TrackingId trackingId1 = TrackingId("ABC123");
-		
-		Cargo abc123 = Cargo(trackingId1);
 		entityManager.persist(abc123);
+		
+		/*entityManager.flush();
+		entityManager.clear();*/
+		
+		List<Cargo> cargos =CeylonList(entityManager.createQuery("Select c from Cargo c",javaClass<Cargo>())
+			.resultList);
+		
+		for(c  in cargos){
+			print(c.trackingId);
+			
+		}
 		
 	}
 	
@@ -96,8 +112,8 @@ shared class SampleDataGenerator() {
 		entityManager.persist(Location.newyork);
 		entityManager.persist(Location.dallas);
 		
-		entityManager.flush();
-		entityManager.clear();
+		//entityManager.flush();
+		//entityManager.clear();
 		
 		List<Location> locations =CeylonList(entityManager.createQuery("Select c from Location c",javaClass<Location>())
 			.resultList);
@@ -113,8 +129,8 @@ shared class SampleDataGenerator() {
 		
 		entityManager.persist(Voyage.hongkong_to_new_york);
 		
-		entityManager.flush();
-		entityManager.clear();
+		//entityManager.flush();
+		//entityManager.clear();
 		
 		List<Voyage> voyages =CeylonList(entityManager.createQuery("Select c from Voyage c",javaClass<Voyage>())
 			.resultList);

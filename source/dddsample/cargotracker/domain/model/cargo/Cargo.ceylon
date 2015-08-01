@@ -1,3 +1,7 @@
+import dddsample.cargotracker.domain.model.location {
+	Location
+}
+
 import java.io {
 	Serializable
 }
@@ -11,7 +15,9 @@ import javax.persistence {
 	id__FIELD,
 	generatedValue__FIELD,
 	namedQueries,
-	namedQuery
+	namedQuery,
+	manyToOne__FIELD,
+	joinColumn__FIELD
 }
 
 entity
@@ -21,7 +27,7 @@ namedQueries({
 		namedQuery{name = "Cargo.findByTrackingId";
 			query = "Select c from Cargo c where c.trackingId = :trackingId";}	
 }) 
-shared class Cargo(trackingId) satisfies Serializable{
+shared class Cargo satisfies Serializable{
 	
 	// Auto-generated surrogate key
 	id__FIELD
@@ -31,8 +37,24 @@ shared class Cargo(trackingId) satisfies Serializable{
 	embedded__FIELD 
 	shared TrackingId trackingId;
 	
-	/*manyToOne__FIELD
+	manyToOne__FIELD
 	joinColumn__FIELD{name = "origin_id";  updatable = false; }
-	shared Location origin = Location(UnLocode("mycontrylocation"), "myUnLocode");*/
+	shared Location origin;
+	
+	embedded__FIELD
+	shared RouteSpecification routeSpecification;
+	
+	shared new init(TrackingId trackingId, RouteSpecification routeSpecification){
+		this.trackingId = trackingId;
+		this.routeSpecification = routeSpecification;
+		// Cargo origin never changes, even if the route specification changes.
+		// However, at creation, cargo orgin can be derived from the initial
+		// route specification.
+		this.origin = routeSpecification.origin;
+	}
+	
+	shared new() extends init(TrackingId(""), RouteSpecification()){
+		
+	}
 	
 }

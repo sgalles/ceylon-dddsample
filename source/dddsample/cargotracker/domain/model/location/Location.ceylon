@@ -33,7 +33,7 @@ shared class Location satisfies Serializable{
 	
 	id
 	generatedValue
-	Long? id = null;
+	shared Long? id = null;
 
 	embedded
 	shared UnLocode unLocode;
