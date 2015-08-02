@@ -6,7 +6,9 @@ import ceylon.interop.java {
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo,
 	TrackingId,
-	RouteSpecification
+	RouteSpecification,
+	Itinerary,
+	Leg
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -80,6 +82,23 @@ shared class SampleDataGenerator() {
 			};
 		};
 		
+		abc123.assignToRoute(
+			Itinerary.init{
+				Leg.init(Voyage.hongkong_to_new_york, 
+					Location.hongkong, Location.newyork,
+					toDate("2014-03-02"), toDate("2014-03-05")
+				),
+				Leg.init(Voyage.new_york_to_dallas, 
+					Location.newyork, Location.dallas,
+					toDate("2014-03-06"), toDate("2014-03-08")
+				),
+				Leg.init(Voyage.dallas_to_helsinki, 
+					Location.dallas, Location.helsinki,
+					toDate("2014-03-09"), toDate("2014-03-12")
+				)
+			}
+		);
+		
 		entityManager.persist(abc123);
 		
 		/*entityManager.flush();
@@ -128,6 +147,10 @@ shared class SampleDataGenerator() {
 		print("Loading sample voyages.");
 		
 		entityManager.persist(Voyage.hongkong_to_new_york);
+		entityManager.persist(Voyage.new_york_to_dallas);
+		entityManager.persist(Voyage.dallas_to_helsinki);
+		entityManager.persist(Voyage.helsinki_to_hongkong);
+		entityManager.persist(Voyage.dallas_to_helsinki_alt);
 		
 		//entityManager.flush();
 		//entityManager.clear();

@@ -1,8 +1,5 @@
-import ceylon.collection {
-	ArrayList
-}
-import ceylon.interop.java {
-	JavaList
+import dddsample.cargotracker.application.util {
+	toJavaList
 }
 
 import java.io {
@@ -37,9 +34,7 @@ shared class Schedule  satisfies Serializable{
 	}
 	
 	shared new init({CarrierMovement+} carrierMovements){
-		this.carrierMovements = 
-				let (ceylonList = ArrayList{*carrierMovements}) 
-				JArrayList<CarrierMovement>(JavaList(ceylonList));
+		this.carrierMovements = toJavaList(carrierMovements);
 	}
 	
 	// null object pattern

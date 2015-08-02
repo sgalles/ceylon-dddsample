@@ -87,13 +87,38 @@ shared class Voyage satisfies Serializable{
 	
 	
 	shared new hongkong_to_new_york extends build(
-		VoyageNumber.init("0100S"), 
-		Location.hongkong, 
+		VoyageNumber.init("0100S"),Location.hongkong, 
 		MovementStep(Location.hangzou, toDate("2013-10-01", "12:00"),toDate("2013-10-03", "14:30")),
 		MovementStep(Location.tokyo, toDate("2013-10-03", "21:00"),toDate("2013-10-06", "06:15")),
 		MovementStep(Location.melbourne, toDate("2013-10-06", "11:00"),toDate("2013-10-12", "11:30")),
 		MovementStep(Location.newyork, toDate("2013-10-14", "12:00"),toDate("2013-10-23", "23:10"))
 	){}
+	
+	shared new new_york_to_dallas extends build(
+		VoyageNumber.init("0200T"), Location.newyork, 
+		MovementStep(Location.chicago, toDate("2013-10-24", "07:00"), toDate("2013-10-24", "17:45")),
+		MovementStep(Location.dallas, toDate("2013-10-24", "21:25"), toDate("2013-10-25", "19:30"))
+	){}
+	
+	shared new dallas_to_helsinki extends build(
+		VoyageNumber.init("0300A"),Location.dallas, 
+		MovementStep(Location.hamburg, toDate("2013-10-29", "03:30"), toDate("2013-10-31", "14:00")),
+		MovementStep(Location.stockholm, toDate("2013-11-01", "15:20"), toDate("2013-11-01", "18:40")),
+		MovementStep(Location.helsinki, toDate("2013-11-02", "09:00"), toDate("2013-11-02", "11:15"))
+	){}
+	
+	shared new dallas_to_helsinki_alt extends build(
+		VoyageNumber.init("0301S"), Location.dallas, 
+		MovementStep(Location.helsinki, toDate("2013-10-29", "03:30"), toDate("2013-11-05", "15:45"))
+	){}
+	
+	shared new helsinki_to_hongkong extends build(
+		VoyageNumber.init("0400S"),Location.dallas, 
+		MovementStep(Location.rotterdam, toDate("2013-11-04", "05:50"), toDate("2013-11-06", "14:10")),
+		MovementStep(Location.shanghai, toDate("2013-11-10", "21:45"), toDate("2013-11-22", "16:40")),
+		MovementStep(Location.hongkong, toDate("2013-11-24", "07:00"), toDate("2013-11-28", "13:37"))
+	){}
+	
 }
 
 

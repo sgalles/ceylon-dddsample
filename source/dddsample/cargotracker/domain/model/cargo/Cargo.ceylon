@@ -11,13 +11,13 @@ import java.lang {
 
 import javax.persistence {
 	entity,
-	embedded__FIELD,
-	id__FIELD,
-	generatedValue__FIELD,
+	embedded = embedded__FIELD,
+	id = id__FIELD,
+	generatedValue = generatedValue__FIELD,
 	namedQueries,
 	namedQuery,
-	manyToOne__FIELD,
-	joinColumn__FIELD
+	manyToOne = manyToOne__FIELD,
+	joinColumn = joinColumn__FIELD
 }
 
 entity
@@ -30,19 +30,22 @@ namedQueries({
 shared class Cargo satisfies Serializable{
 	
 	// Auto-generated surrogate key
-	id__FIELD
-	generatedValue__FIELD
+	id
+	generatedValue
 	Long? id = null;
 	
-	embedded__FIELD 
+	embedded 
 	shared TrackingId trackingId;
 	
-	manyToOne__FIELD
-	joinColumn__FIELD{name = "origin_id";  updatable = false; }
+	manyToOne
+	joinColumn{name = "origin_id";  updatable = false; }
 	shared Location origin;
 	
-	embedded__FIELD
+	embedded
 	shared RouteSpecification routeSpecification;
+	
+	embedded
+	shared variable Itinerary _itinerary = Itinerary.empty;
 	
 	shared new init(TrackingId trackingId, RouteSpecification routeSpecification){
 		this.trackingId = trackingId;
@@ -53,8 +56,11 @@ shared class Cargo satisfies Serializable{
 		this.origin = routeSpecification.origin;
 	}
 	
-	shared new() extends init(TrackingId(""), RouteSpecification()){
-		
+	shared new() extends init(TrackingId(""), RouteSpecification()){}
+	
+	shared Itinerary itinerary => _itinerary;
+	shared void assignToRoute(Itinerary itinerary){
+		this._itinerary = itinerary;
 	}
 	
 }
