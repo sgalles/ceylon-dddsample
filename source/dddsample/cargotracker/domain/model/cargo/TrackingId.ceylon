@@ -12,8 +12,14 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class TrackingId(idString) satisfies Serializable{
+shared class TrackingId satisfies Serializable{
 	
 	column__FIELD{name = "tracking_id"; unique = true; updatable = false;}
 	shared String idString;
+	
+	shared new init(String idString){
+		this.idString = idString;
+	}
+	
+	shared new() extends init(""){}
 }

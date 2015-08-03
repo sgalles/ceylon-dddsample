@@ -41,10 +41,10 @@ shared class Track() satisfies Serializable{
 		
 	shared void onTrackById(){
 		assert(exists trackingId = trackingId);
-		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
+		Cargo? cargo = cargoRepository.find(TrackingId.init(trackingId));
 		if(exists cargo){
 			List<HandlingEvent> handlingEvents = handlingEventRepository
-					.lookupHandlingHistoryOfCargo(TrackingId(trackingId))
+					.lookupHandlingHistoryOfCargo(TrackingId.init(trackingId))
 					.distinctEventsByCompletionTime;
 			this.cargo = CargoTrackingViewAdapter(cargo, handlingEvents);
 		}else{

@@ -35,6 +35,8 @@ shared class Itinerary {
 		this.legs = toJavaList(legs);
 	}
 	
+	shared new() extends init({}){}
+	
 	shared new empty extends init({}){}	
 	
 }

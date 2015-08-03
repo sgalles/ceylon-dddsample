@@ -11,13 +11,13 @@ import java.lang {
 
 import javax.persistence {
 	entity,
-	embedded = embedded__FIELD,
-	id = id__FIELD,
-	generatedValue = generatedValue__FIELD,
+	embedded=embedded__FIELD,
+	id=id__FIELD,
+	generatedValue=generatedValue__FIELD,
 	namedQueries,
 	namedQuery,
-	manyToOne = manyToOne__FIELD,
-	joinColumn = joinColumn__FIELD
+	manyToOne=manyToOne__FIELD,
+	joinColumn=joinColumn__FIELD
 }
 
 entity
@@ -45,7 +45,10 @@ shared class Cargo satisfies Serializable{
 	shared RouteSpecification routeSpecification;
 	
 	embedded
-	shared variable Itinerary _itinerary = Itinerary.empty;
+	variable Itinerary _itinerary = Itinerary.empty;
+	
+	embedded
+	variable Delivery _delivery;
 	
 	shared new init(TrackingId trackingId, RouteSpecification routeSpecification){
 		this.trackingId = trackingId;
@@ -54,13 +57,21 @@ shared class Cargo satisfies Serializable{
 		// However, at creation, cargo orgin can be derived from the initial
 		// route specification.
 		this.origin = routeSpecification.origin;
+		
+		// TODO temporary
+		this._delivery = Delivery.init();
 	}
 	
-	shared new() extends init(TrackingId(""), RouteSpecification()){}
+	shared new() extends init(TrackingId(), RouteSpecification()){}
 	
 	shared Itinerary itinerary => _itinerary;
+	
+	shared Delivery delivery => _delivery;
+	
 	shared void assignToRoute(Itinerary itinerary){
 		this._itinerary = itinerary;
+		
+		
 	}
 	
 }

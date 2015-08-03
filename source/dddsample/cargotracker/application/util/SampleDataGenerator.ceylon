@@ -74,7 +74,7 @@ shared class SampleDataGenerator() {
 		
 		print("Loading sample cargo data.");
 		Cargo abc123 = Cargo.init {
-			trackingId = TrackingId("ABC123");
+			trackingId = TrackingId.init("ABC123");
 			routeSpecification = RouteSpecification.init { 
 				origin = Location.hongkong; 
 				destination = Location.helsinki; 
