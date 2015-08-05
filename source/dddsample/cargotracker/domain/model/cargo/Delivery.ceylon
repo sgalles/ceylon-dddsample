@@ -2,20 +2,27 @@
 
 
 import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
-	TransportStatusConverter
+	TransportStatusConverter,
+	RoutingStatusConverter
 }
 
 import javax.persistence {
 	embeddable,
-	convert__FIELD
+	convert=convert__FIELD,
+	column=column__FIELD
 }
 
 
 embeddable
 shared class Delivery {
 	
-	convert__FIELD{converter = `TransportStatusConverter`;}
-	shared variable TransportStatus transportStatus = claimed;
+	convert{converter = `TransportStatusConverter`;}
+	column{name = "transport_status";}
+	shared TransportStatus transportStatus = claimed;
+	
+	convert{converter = `RoutingStatusConverter`;}
+	column{name = "routing_status";}
+	shared RoutingStatus routingStatus = misrouted;
 	
 	shared new init(){
 		
