@@ -13,7 +13,7 @@ import java.io {
 }
 class JpaHandlingEventRepository() satisfies HandlingEventRepository & Serializable{
 	shared actual HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId) 
-			=> HandlingHistory();
+			=> HandlingHistory.empty;
 	
 	shared actual void store(HandlingEvent event) {}
 	

@@ -1,3 +1,6 @@
+import dddsample.cargotracker.domain.model.handling {
+	HandlingHistory
+}
 import dddsample.cargotracker.domain.model.location {
 	Location
 }
@@ -52,14 +55,14 @@ shared class Cargo satisfies Serializable{
 	
 	shared new init(TrackingId trackingId, RouteSpecification routeSpecification){
 		this.trackingId = trackingId;
-		this.routeSpecification = routeSpecification;
 		// Cargo origin never changes, even if the route specification changes.
 		// However, at creation, cargo orgin can be derived from the initial
 		// route specification.
 		this.origin = routeSpecification.origin;
+		this.routeSpecification = routeSpecification;
 		
-		// TODO temporary
-		this._delivery = Delivery.init();
+		this._delivery = Delivery.derivedFrom(this.routeSpecification,
+                this._itinerary, HandlingHistory.empty);
 	}
 	
 	shared new() extends init(TrackingId(), RouteSpecification()){}

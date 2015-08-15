@@ -50,7 +50,10 @@ shared class RouteSpecification extends AbstractSpecification<Itinerary>{
 	
 	shared Date arrivalDeadline => Date(_arrivalDeadline.time);
 	
-	shared actual Boolean isSatisfiedBy(Itinerary t) => nothing;
+	shared actual Boolean isSatisfiedBy(Itinerary itinerary) 
+			=> origin.sameIdentityAs(itinerary.initialDepartureLocation())
+                && destination.sameIdentityAs(itinerary.finalArrivalLocation())
+                && arrivalDeadline.after(itinerary.finalArrivalDate());
 	
 	
 	

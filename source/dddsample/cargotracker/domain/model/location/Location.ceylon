@@ -47,6 +47,8 @@ shared class Location satisfies Serializable{
 	
 	shared new () extends init(UnLocode(),""){}
 	
+
+
 	shared new unknown extends init(UnLocode.withCountryAndLocation("XXXXX"), "Unknown location"){}
 	
 	shared new hongkong extends init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
@@ -62,5 +64,8 @@ shared class Location satisfies Serializable{
 	shared new hangzou extends init(UnLocode.withCountryAndLocation("CNHGH"), "Hangzhou"){}
 	shared new newyork extends init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
 	shared new dallas extends init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}
+	
+	shared Boolean sameIdentityAs(Location other) 
+			=> this.unLocode.sameValueAs(other.unLocode);
 	
 }

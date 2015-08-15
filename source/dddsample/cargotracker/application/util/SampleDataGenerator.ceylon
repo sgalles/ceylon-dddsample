@@ -26,8 +26,10 @@ import javax.ejb {
 	transactionAttribute,
 	TransactionAttributeType
 }
+import javax.inject {
+	inject = inject__SETTER
+}
 import javax.persistence {
-	persistenceContext__SETTER,
 	EntityManager
 }
 
@@ -37,7 +39,7 @@ singleton
 startup
 shared class SampleDataGenerator() {
 	
-	persistenceContext__SETTER
+	inject
 	late EntityManager entityManager;
 	
 	

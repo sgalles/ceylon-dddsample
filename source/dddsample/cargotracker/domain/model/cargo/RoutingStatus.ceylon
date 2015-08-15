@@ -1,20 +1,10 @@
-import ceylon.language.meta {
-	type
-}
-import ceylon.collection {
 
-	HashMap
-}
-shared abstract class RoutingStatus(shared String name) 
+shared abstract class RoutingStatus() 
 	of not_routed | routed | misrouted {
-	//shared String name => type(this).declaration.name;
 }
 
-shared object not_routed extends RoutingStatus("not_routed") {}
-shared object routed extends RoutingStatus("routed") {}
-shared object misrouted extends RoutingStatus("misrouted") {}
+shared object not_routed extends RoutingStatus() {}
+shared object routed extends RoutingStatus() {}
+shared object misrouted extends RoutingStatus() {}
 
-
-shared RoutingStatus?(String) getRoutingStatusByName
-		= HashMap{*`RoutingStatus`.caseValues.map((ts) => ts.name->ts)}.get;
 

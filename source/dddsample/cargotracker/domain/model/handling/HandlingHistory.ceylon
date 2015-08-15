@@ -2,7 +2,7 @@ import ceylon.collection {
 
 	ArrayList
 }
-shared class HandlingHistory() {
+shared class HandlingHistory {
 	
 	"""
     return A distinct list (no duplicate registrations) of handling events,
@@ -16,5 +16,10 @@ shared class HandlingHistory() {
 		return Collections.unmodifiableList(ordered);*/
 		return ArrayList{HandlingEvent(),HandlingEvent(),HandlingEvent()};
 	}
+	
+	//TODO 
+	shared HandlingEvent? mostRecentlyCompletedEvent => null;
+	
+	shared new empty{}
 	
 }

@@ -24,4 +24,7 @@ shared class UnLocode  satisfies Serializable{
 	
 	shared String idString => unlocode;
 	
+	shared Boolean sameValueAs(UnLocode other) 
+			=> this.unlocode == other.unlocode;
+	
 }
