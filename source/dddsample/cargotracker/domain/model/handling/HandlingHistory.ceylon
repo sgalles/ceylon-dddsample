@@ -1,25 +1,33 @@
 import ceylon.collection {
-
-	ArrayList
+	HashSet
 }
+
+import dddsample.cargotracker.application.util {
+	ceylonComparison
+}
+
 shared class HandlingHistory {
 	
-	"""
-    return A distinct list (no duplicate registrations) of handling events,
-    ordered by completion time.
-    """    
-	shared List<HandlingEvent> distinctEventsByCompletionTime {
-		/*List<HandlingEvent> ordered = new ArrayList<>(new HashSet<>(
-			handlingEvents));
-		Collections.sort(ordered, BY_COMPLETION_TIME_COMPARATOR);
-		
-		return Collections.unmodifiableList(ordered);*/
-		return ArrayList{HandlingEvent(),HandlingEvent(),HandlingEvent()};
+	
+	shared HandlingEvent[] allHandlingEvents;
+	
+	shared new ({HandlingEvent*} allHandlingEvents){
+		this.allHandlingEvents = allHandlingEvents.sequence();
 	}
 	
-	//TODO 
-	shared HandlingEvent? mostRecentlyCompletedEvent => null;
+	shared new empty extends HandlingHistory({}) {}
 	
-	shared new empty{}
+	
+    Comparison byCompletionTimeComparator(HandlingEvent he1, HandlingEvent he2) 
+		=> ceylonComparison(he1.completionTime.compareTo(he2.completionTime));
+	
+    
+	shared HandlingEvent[] distinctEventsByCompletionTime 
+			=> HashSet{*allHandlingEvents}.sort(byCompletionTimeComparator);
+	
+	shared HandlingEvent? mostRecentlyCompletedEvent 
+			=> distinctEventsByCompletionTime.last;
+	
+	
 	
 }

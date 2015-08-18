@@ -76,6 +76,7 @@ shared class Voyage satisfies Serializable{
 							
 	}
 			
+	shared new none extends Voyage(){}
 	
 	shared new v100 extends build(
 				VoyageNumber.init("V100"), 

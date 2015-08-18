@@ -39,7 +39,7 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 	shared Boolean misdirected = true;
 	shared String eta = "CargoTrackingViewAdapter-eta";
 	
-	List<HandlingEventViewAdapter> _events = ArrayList { HandlingEventViewAdapter(HandlingEvent()), HandlingEventViewAdapter(HandlingEvent())};
+	List<HandlingEventViewAdapter> _events = ArrayList { HandlingEventViewAdapter(nothing/*HandlingEvent()*/), HandlingEventViewAdapter(nothing/*HandlingEvent()*/)};
 	shared JList<HandlingEventViewAdapter> events => JavaList(_events);
 	
 }

@@ -46,8 +46,7 @@ shared class Delivery {
 	
 	
 	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) 
-			=> if(exists lastEvent) 
-					then (switch(lastEvent.type) 
+			=> if(exists lastEvent) then (switch(lastEvent.type) 
 						case(load) onboard_carrier
 						case(unload | receive | customs) in_port
 						case(claim) claimed
@@ -62,13 +61,11 @@ shared class Delivery {
 		
 	}
 	
-	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){
-		
-	}
+	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){}
 	
 	
 	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary itinerary, HandlingHistory handlingHistory)
-			extends init(null /* TODO !!!!! */, itinerary, routeSpecification){}
+			extends init(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
 	
 
 	
