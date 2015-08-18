@@ -11,10 +11,10 @@ import dddsample.cargotracker.domain.model.cargo {
 	Leg
 }
 import dddsample.cargotracker.domain.model.location {
-	Location
+	Location {...}
 }
 import dddsample.cargotracker.domain.model.voyage {
-	Voyage
+	Voyage {...}
 }
 
 import javax.annotation {
@@ -78,24 +78,24 @@ shared class SampleDataGenerator() {
 		Cargo abc123 = Cargo.init {
 			trackingId = TrackingId.init("ABC123");
 			routeSpecification = RouteSpecification.init { 
-				origin = Location.hongkong; 
-				destination = Location.helsinki; 
+				origin = hongkong; 
+				destination = helsinki; 
 				arrivalDeadline = toDate("2014-03-15"); 
 			};
 		};
 		
 		abc123.assignToRoute(
 			Itinerary.init{
-				Leg.init(Voyage.hongkong_to_new_york, 
-					Location.hongkong, Location.newyork,
+				Leg.init(hongkong_to_new_york, 
+					hongkong, newyork,
 					toDate("2014-03-02"), toDate("2014-03-05")
 				),
-				Leg.init(Voyage.new_york_to_dallas, 
-					Location.newyork, Location.dallas,
+				Leg.init(new_york_to_dallas, 
+					newyork, dallas,
 					toDate("2014-03-06"), toDate("2014-03-08")
 				),
-				Leg.init(Voyage.dallas_to_helsinki, 
-					Location.dallas, Location.helsinki,
+				Leg.init(dallas_to_helsinki, 
+					dallas, helsinki,
 					toDate("2014-03-09"), toDate("2014-03-12")
 				)
 			}
@@ -119,19 +119,19 @@ shared class SampleDataGenerator() {
 	shared void loadSampleLocations() {
 		print("Loading sample locations.");
 		
-		entityManager.persist(Location.hongkong);
-		entityManager.persist(Location.melbourne);
-		entityManager.persist(Location.stockholm);
-		entityManager.persist(Location.helsinki);
-		entityManager.persist(Location.chicago);
-		entityManager.persist(Location.tokyo);
-		entityManager.persist(Location.hamburg);
-		entityManager.persist(Location.shanghai);
-		entityManager.persist(Location.rotterdam);
-		entityManager.persist(Location.gothenburg);
-		entityManager.persist(Location.hangzou);
-		entityManager.persist(Location.newyork);
-		entityManager.persist(Location.dallas);
+		entityManager.persist(hongkong);
+		entityManager.persist(melbourne);
+		entityManager.persist(stockholm);
+		entityManager.persist(helsinki);
+		entityManager.persist(chicago);
+		entityManager.persist(tokyo);
+		entityManager.persist(hamburg);
+		entityManager.persist(shanghai);
+		entityManager.persist(rotterdam);
+		entityManager.persist(gothenburg);
+		entityManager.persist(hangzou);
+		entityManager.persist(newyork);
+		entityManager.persist(dallas);
 		
 		//entityManager.flush();
 		//entityManager.clear();
@@ -148,11 +148,11 @@ shared class SampleDataGenerator() {
 	shared void loadSampleVoyages() {
 		print("Loading sample voyages.");
 		
-		entityManager.persist(Voyage.hongkong_to_new_york);
-		entityManager.persist(Voyage.new_york_to_dallas);
-		entityManager.persist(Voyage.dallas_to_helsinki);
-		entityManager.persist(Voyage.helsinki_to_hongkong);
-		entityManager.persist(Voyage.dallas_to_helsinki_alt);
+		entityManager.persist(hongkong_to_new_york);
+		entityManager.persist(new_york_to_dallas);
+		entityManager.persist(dallas_to_helsinki);
+		entityManager.persist(helsinki_to_hongkong);
+		entityManager.persist(dallas_to_helsinki_alt);
 		
 		//entityManager.flush();
 		//entityManager.clear();
