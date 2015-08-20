@@ -77,4 +77,8 @@ shared class Cargo satisfies Serializable{
 		
 	}
 	
+	shared void deriveDeliveryProgress(HandlingHistory handlingHistory) {
+		this._delivery = Delivery.derivedFrom(routeSpecification, itinerary,handlingHistory);
+	}
+	
 }

@@ -27,8 +27,11 @@ import javax.persistence {
 	manyToOne=manyToOne__FIELD,
 	joinColumn=joinColumn__FIELD,
 	temporal=temporal__FIELD,
-	TemporalType
+	TemporalType,
+	namedQuery
 }
+
+
 
 
 shared abstract class HandlingEventType() of HandlingEventTypeRequiredVoyage | HandlingEventTypeProhibitedVoyage{
@@ -52,11 +55,11 @@ shared object receive extends HandlingEventTypeProhibitedVoyage() {}
 shared object claim extends HandlingEventTypeProhibitedVoyage() {}
 shared object customs extends HandlingEventTypeProhibitedVoyage() {}
 
+shared alias HandlingEventTypeBundle<Info=Voyage> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
 
-// TODO : complete
 entity
-/*namedQuery{name = "HandlingEvent.findByTrackingId";
-	query = "Select e from HandlingEvent e where e.cargo.trackingId = :trackingId";}*/
+namedQuery{name = "HandlingEvent.findByTrackingId";
+	query = "Select e from HandlingEvent e where e.cargo.trackingId = :trackingId";}
 shared class HandlingEvent {
 	
 	// Auto-generated surrogate key
@@ -93,7 +96,7 @@ shared class HandlingEvent {
 		Date completionTime,
 		Date registrationTime,
 		Location location,
-		HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Voyage] typeAndVoyage
+		HandlingEventTypeBundle<> typeAndVoyage
 	){
 		switch(typeAndVoyage)
 		case(is HandlingEventTypeProhibitedVoyage){

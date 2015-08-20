@@ -45,7 +45,7 @@ shared class Itinerary {
 	
 	shared new empty extends init({}){}
 	
-	[Leg*] legs() => CeylonList(_legs).sequence();
+	shared [Leg*] legs() => CeylonList(_legs).sequence();
 	
 	shared Location initialDepartureLocation() 
 			=> if(nonempty legs = legs()) then legs.first.loadLocation else Location.unknown;	

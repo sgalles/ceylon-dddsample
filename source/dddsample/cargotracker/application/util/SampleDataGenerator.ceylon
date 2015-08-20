@@ -10,11 +10,26 @@ import dddsample.cargotracker.domain.model.cargo {
 	Itinerary,
 	Leg
 }
+import dddsample.cargotracker.domain.model.handling {
+	HandlingEventFactory,
+	receive,
+	load,
+	unload,
+	HandlingEventRepository
+}
 import dddsample.cargotracker.domain.model.location {
-	Location {...}
+	Location {
+		...
+	}
 }
 import dddsample.cargotracker.domain.model.voyage {
-	Voyage {...}
+	Voyage {
+		...
+	}
+}
+
+import java.util {
+	Date
 }
 
 import javax.annotation {
@@ -27,7 +42,7 @@ import javax.ejb {
 	TransactionAttributeType
 }
 import javax.inject {
-	inject = inject__SETTER
+	inject=inject__SETTER
 }
 import javax.persistence {
 	EntityManager
@@ -42,7 +57,11 @@ shared class SampleDataGenerator() {
 	inject
 	late EntityManager entityManager;
 	
+	inject
+	late HandlingEventFactory handlingEventFactory;
 	
+	inject
+	late HandlingEventRepository handlingEventRepository;
 
 	postConstruct
 	transactionAttribute(TransactionAttributeType.\iREQUIRED)
@@ -101,6 +120,30 @@ shared class SampleDataGenerator() {
 			}
 		);
 		
+		entityManager.persist(abc123);
+		
+		entityManager.persist(
+			handlingEventFactory.createHandlingEvent(
+				Date(), toDate("2014-03-01"), abc123.trackingId, 
+				hongkong.unLocode, receive)
+		);
+		
+		entityManager.persist(
+			handlingEventFactory.createHandlingEvent(
+				Date(), toDate("2014-03-02"), abc123.trackingId, 
+				hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber])
+		);
+		
+		entityManager.persist(
+			handlingEventFactory.createHandlingEvent(
+				Date(), toDate("2014-03-05"), abc123.trackingId, 
+				newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber])
+		);
+		
+
+		abc123.deriveDeliveryProgress{
+			handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(abc123.trackingId);
+		};
 		entityManager.persist(abc123);
 		
 		/*entityManager.flush();
