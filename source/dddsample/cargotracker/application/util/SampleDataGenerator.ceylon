@@ -15,7 +15,9 @@ import dddsample.cargotracker.domain.model.handling {
 	receive,
 	load,
 	unload,
-	HandlingEventRepository
+	HandlingEventRepository,
+	customs,
+	claim
 }
 import dddsample.cargotracker.domain.model.location {
 	Location {
@@ -94,58 +96,180 @@ shared class SampleDataGenerator() {
 	shared void loadSampleCargos() {
 		
 		print("Loading sample cargo data.");
-		Cargo abc123 = Cargo.init {
-			trackingId = TrackingId.init("ABC123");
-			routeSpecification = RouteSpecification.init { 
-				origin = hongkong; 
-				destination = helsinki; 
-				arrivalDeadline = toDate("2014-03-15"); 
+		
+		if(true){
+		
+			Cargo abc123 = Cargo.init {
+				trackingId = TrackingId.init("ABC123");
+				routeSpecification = RouteSpecification.init { 
+					origin = hongkong; 
+					destination = helsinki; 
+					arrivalDeadline = toDate("2014-03-15"); 
+				};
 			};
-		};
+			
+			abc123.assignToRoute(
+				Itinerary.init{
+					Leg.init(hongkong_to_new_york, 
+						hongkong, newyork,
+						toDate("2014-03-02"), toDate("2014-03-05")
+					),
+					Leg.init(new_york_to_dallas, 
+						newyork, dallas,
+						toDate("2014-03-06"), toDate("2014-03-08")
+					),
+					Leg.init(dallas_to_helsinki, 
+						dallas, helsinki,
+						toDate("2014-03-09"), toDate("2014-03-12")
+					)
+				}
+			);
+			
+			entityManager.persist(abc123);
+			
+			{
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-01"), abc123.trackingId, 
+					hongkong.unLocode, receive),
+			
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-02"), abc123.trackingId, 
+					hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber]),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-05"), abc123.trackingId, 
+					newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber])
+				
+			}.each(entityManager.persist);
+	
+			abc123.deriveDeliveryProgress{
+				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(abc123.trackingId);
+			};
+			entityManager.persist(abc123);
 		
-		abc123.assignToRoute(
-			Itinerary.init{
-				Leg.init(hongkong_to_new_york, 
-					hongkong, newyork,
-					toDate("2014-03-02"), toDate("2014-03-05")
-				),
-				Leg.init(new_york_to_dallas, 
-					newyork, dallas,
-					toDate("2014-03-06"), toDate("2014-03-08")
-				),
-				Leg.init(dallas_to_helsinki, 
-					dallas, helsinki,
-					toDate("2014-03-09"), toDate("2014-03-12")
-				)
-			}
-		);
+		}
 		
-		entityManager.persist(abc123);
-		
-		entityManager.persist(
-			handlingEventFactory.createHandlingEvent(
-				Date(), toDate("2014-03-01"), abc123.trackingId, 
-				hongkong.unLocode, receive)
-		);
-		
-		entityManager.persist(
-			handlingEventFactory.createHandlingEvent(
-				Date(), toDate("2014-03-02"), abc123.trackingId, 
-				hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber])
-		);
-		
-		entityManager.persist(
-			handlingEventFactory.createHandlingEvent(
-				Date(), toDate("2014-03-05"), abc123.trackingId, 
-				newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber])
-		);
-		
+		if(true){
+			// Cargo JKL567
+			Cargo jkl567 = Cargo.init {
+				trackingId = TrackingId.init("JKL567");
+				routeSpecification = RouteSpecification.init { 
+					origin = hangzou; 
+					destination = stockholm; 
+					arrivalDeadline = toDate("2014-03-18"); 
+				};
+			};
+			
+			jkl567.assignToRoute(
+				Itinerary.init{
+					Leg.init(hongkong_to_new_york, 
+						hangzou, newyork,
+						toDate("2014-03-03"), toDate("2014-03-05")
+					),
+					Leg.init(new_york_to_dallas, 
+						newyork, dallas,
+						toDate("2014-03-06"), toDate("2014-03-08")
+					),
+					Leg.init(dallas_to_helsinki, 
+						dallas, stockholm,
+						toDate("2014-03-09"), toDate("2014-03-11")
+					)
+				}
+			);
+			
+			entityManager.persist(jkl567);
+			
+			{
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-01"), jkl567.trackingId, 
+					hangzou.unLocode, receive),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-03"), jkl567.trackingId, 
+					hangzou.unLocode, [load, hongkong_to_new_york.voyageNumber]),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2014-03-05"), jkl567.trackingId, 
+					newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]),
+				
+				handlingEventFactory.createHandlingEvent(
+						Date(), toDate("2014-03-06"), jkl567.trackingId, 
+						newyork.unLocode, [load, hongkong_to_new_york.voyageNumber])
+				
+			}.each(entityManager.persist);
+			
+			jkl567.deriveDeliveryProgress{
+				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(jkl567.trackingId);
+			};
+			entityManager.persist(jkl567);
+			
+		}
 
-		abc123.deriveDeliveryProgress{
-			handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(abc123.trackingId);
-		};
-		entityManager.persist(abc123);
+		if(true){
+			// Cargo definition DEF789. This one will remain unrouted.
+			Cargo def789 = Cargo.init {
+				trackingId = TrackingId.init("DEF789");
+				routeSpecification = RouteSpecification.init { 
+					origin = hongkong; 
+					destination = melbourne; 
+					arrivalDeadline = toDate("2014-11-18"); 
+				};
+			};
+			entityManager.persist(def789);
+		}
 		
+		
+		if(true){
+			// Cargo definition MNO456. This one will be claimed properly.
+			Cargo mno456 = Cargo.init {
+				trackingId = TrackingId.init("MNO456");
+				routeSpecification = RouteSpecification.init { 
+					origin = newyork; 
+					destination = dallas; 
+					arrivalDeadline = toDate("2014-3-27"); 
+				};
+			};
+			
+			mno456.assignToRoute(
+				Itinerary.init{
+					Leg.init(new_york_to_dallas, 
+						newyork, dallas,
+						toDate("2013-10-24"), toDate("2013-10-25")
+					)
+				}
+			);
+			
+			entityManager.persist(mno456);
+			
+			{
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2013-10-18"), mno456.trackingId, 
+					newyork.unLocode, receive),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2013-10-24"), mno456.trackingId, 
+					newyork.unLocode, [load, new_york_to_dallas.voyageNumber]),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2013-10-25"), mno456.trackingId, 
+					dallas.unLocode, [unload, new_york_to_dallas.voyageNumber]),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2013-10-26"), mno456.trackingId, 
+					dallas.unLocode, customs),
+				
+				handlingEventFactory.createHandlingEvent(
+					Date(), toDate("2013-10-27"), mno456.trackingId, 
+					dallas.unLocode, claim)
+				
+			}.each(entityManager.persist);
+			
+			mno456.deriveDeliveryProgress{
+				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(mno456.trackingId);
+			};
+			entityManager.persist(mno456);
+			
+		}
 		/*entityManager.flush();
 		entityManager.clear();*/
 		
