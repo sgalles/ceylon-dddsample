@@ -32,7 +32,7 @@ import javax.persistence {
 }
 
 
-
+ 
 
 shared abstract class HandlingEventType() of HandlingEventTypeRequiredVoyage | HandlingEventTypeProhibitedVoyage{
 	shared formal Boolean requiresVoyage;
@@ -47,7 +47,7 @@ shared abstract class HandlingEventTypeRequiredVoyage()
 shared abstract class HandlingEventTypeProhibitedVoyage() 
 		of receive | claim |  customs extends HandlingEventType() {
 	shared actual Boolean requiresVoyage => false;
-}
+} 
 
 shared object load extends HandlingEventTypeRequiredVoyage() {}
 shared object unload extends HandlingEventTypeRequiredVoyage() {}
@@ -56,12 +56,12 @@ shared object claim extends HandlingEventTypeProhibitedVoyage() {}
 shared object customs extends HandlingEventTypeProhibitedVoyage() {}
 
 shared alias HandlingEventTypeBundle<Info=Voyage> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
-
+ 
 entity
 namedQuery{name = "HandlingEvent.findByTrackingId";
 	query = "Select e from HandlingEvent e where e.cargo.trackingId = :trackingId";}
-shared class HandlingEvent {
 	
+shared class HandlingEvent {
 	// Auto-generated surrogate key
 	id
 	generatedValue
@@ -77,7 +77,7 @@ shared class HandlingEvent {
 	
 	manyToOne
 	joinColumn{name = "location_id";}
-	Location location;
+	shared Location location;
 	
 	temporal(TemporalType.\iDATE)
 	column{name="completion";}

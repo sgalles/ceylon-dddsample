@@ -28,7 +28,7 @@ import com.redhat.ceylon.compiler.java.runtime.tools.RunnerOptions;
 
 
 public class CeylonInit implements PersistenceProvider {
-
+ 
 	//private static Boolean initialized = false;
 	
 	static {

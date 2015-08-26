@@ -36,7 +36,7 @@ shared class HandlingEventFactory() {
 	
 	inject
 	late LocationRepository locationRepository;
-	
+	 
 	shared default HandlingEvent createHandlingEvent(Date registrationTime,
 		Date completionTime, TrackingId trackingId,
 		UnLocode unlocode,
@@ -55,7 +55,7 @@ shared class HandlingEventFactory() {
 						[type, voyage];
 		
 		return HandlingEvent.init(cargo, completionTime,
-					registrationTime, location, typeAndVoyage);
+					registrationTime, location, typeAndVoyage);  
 	}
 	
 
