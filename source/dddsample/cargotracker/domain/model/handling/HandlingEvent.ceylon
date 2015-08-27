@@ -55,7 +55,7 @@ shared object receive extends HandlingEventTypeProhibitedVoyage() {}
 shared object claim extends HandlingEventTypeProhibitedVoyage() {}
 shared object customs extends HandlingEventTypeProhibitedVoyage() {}
 
-shared alias HandlingEventTypeBundle<Info=Voyage> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
+shared alias HandlingEventTypeBundle<Info> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
  
 entity
 namedQuery{name = "HandlingEvent.findByTrackingId";
@@ -96,7 +96,7 @@ shared class HandlingEvent {
 		Date completionTime,
 		Date registrationTime,
 		Location location,
-		HandlingEventTypeBundle<> typeAndVoyage
+		HandlingEventTypeBundle<Voyage> typeAndVoyage
 	){
 		switch(typeAndVoyage)
 		case(is HandlingEventTypeProhibitedVoyage){

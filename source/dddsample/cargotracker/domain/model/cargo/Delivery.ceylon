@@ -46,8 +46,8 @@ shared class Delivery {
 	joinColumn{name = "current_voyage_id";}
 	variable Voyage? _currentVoyage;
 	
-	//embedded
-	//HandlingActivity nextExpectedActivity;
+	embedded
+	HandlingActivity nextExpectedActivity;
 	
 	convert{converter = `RoutingStatusConverter`;}
 	column{name = "routing_status";} 
@@ -74,7 +74,7 @@ shared class Delivery {
 	HandlingActivity calculateNextExpectedActivity(
             RouteSpecification routeSpecification, Itinerary itinerary){
 		// TODO : temporary	!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
-		return HandlingActivity.init(customs,Location.unknown);
+		return HandlingActivity();
 	}
 	
 	shared new init(HandlingEvent? lastEvent, Itinerary itinerary, RouteSpecification routeSpecification){
@@ -83,7 +83,7 @@ shared class Delivery {
 		this.transportStatus = calculateTransportStatus(lastEvent);
 		this._lastKnownLocation = lastEvent?.location;
 		this._currentVoyage = if(transportStatus == onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
-		//this.nextExpectedActivity = calculateNextExpectedActivity(routeSpecification, itinerary);
+		this.nextExpectedActivity = calculateNextExpectedActivity(routeSpecification, itinerary);
 	}
 	
 	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){}

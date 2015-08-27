@@ -286,6 +286,7 @@ shared class SampleDataGenerator() {
 	shared void loadSampleLocations() {
 		print("Loading sample locations.");
 		
+		entityManager.persist(unknown);
 		entityManager.persist(hongkong);
 		entityManager.persist(melbourne);
 		entityManager.persist(stockholm);
