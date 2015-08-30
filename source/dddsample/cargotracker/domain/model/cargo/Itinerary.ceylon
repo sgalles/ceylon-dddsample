@@ -1,8 +1,20 @@
 
 
 
+import ceylon.interop.java {
+	CeylonList
+}
+
 import dddsample.cargotracker.application.util {
 	toJavaList
+}
+import dddsample.cargotracker.domain.model.handling {
+	HandlingEvent,
+	receive,
+	load,
+	unload,
+	claim,
+	customs
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -21,10 +33,6 @@ import javax.persistence {
 	embeddable,
 	joinColumn=joinColumn__FIELD,
 	oneToMany=oneToMany__FIELD
-}
-import ceylon.interop.java {
-
-	CeylonList
 }
 
 shared Date endOfDays = Date(Long.\iMAX_VALUE);
@@ -45,19 +53,40 @@ shared class Itinerary {
 	
 	shared new empty extends init({}){}
 	
-	shared [Leg*] legs() => CeylonList(_legs).sequence();
+	shared [Leg*] legs => CeylonList(_legs).sequence();
 	
 	shared Location initialDepartureLocation() 
-			=> if(nonempty legs = legs()) then legs.first.loadLocation else Location.unknown;	
+			=> if(nonempty legs = legs) then legs.first.loadLocation else Location.unknown;	
 	
 	shared Location finalArrivalLocation() 
-			=> if(nonempty legs = legs()) then legs.last.unloadLocation else Location.unknown;	
+			=> if(nonempty legs = legs) then legs.last.unloadLocation else Location.unknown;	
 	
 	shared Date finalArrivalDate() 
-			=> let(time = if(nonempty legs = legs()) then legs.last.unloadTime.time else endOfDays.time)
+			=> let(time = if(nonempty legs = legs) then legs.last.unloadTime.time else endOfDays.time)
 			   Date(time);
 	
-	
-	
+	shared Boolean isExpected(HandlingEvent event) {
+		
+		Boolean sameVoyageAnd(Location(Leg) locating)(Leg leg)
+			=> locating(leg).sameIdentityAs(event.location) && leg.voyage.sameIdentityAs(event.voyage);
+		
+		return if(nonempty legs = legs)
+			then (switch(event.type)
+				// Check that the first leg's origin is the event's location
+				case(receive) legs.first.loadLocation == event.location 
+				// Check that the there is one leg with same load location and
+				// voyage
+				case (load) legs.any(sameVoyageAnd(Leg.loadLocation))
+				// Check that the there is one leg with same unload location and
+				// voyage
+				case (unload) legs.any(sameVoyageAnd(Leg.unloadLocation))
+				// Check that the last leg's destination is from the event's
+				// location
+				case (claim) legs.last.unloadLocation == event.location 
+				case (customs) true
+			)
+			else false;
+	}
+		
 	
 }

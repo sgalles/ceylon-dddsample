@@ -55,11 +55,12 @@ shared class HandlingActivity {
 			this.type = typeAndVoyage[0];
 			this.voyage = typeAndVoyage[1];
 		}
+		
 	} 
 	 
 	shared new () extends init(receive, Location.unknown){}
 	
-	
+	shared new no_activity extends HandlingActivity(){}
 	 
 
 	

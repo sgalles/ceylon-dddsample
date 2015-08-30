@@ -75,6 +75,8 @@ shared class Voyage satisfies Serializable{
 		this.schedule = Schedule.init(collectedCarrierMovement);
 							
 	}
+	
+	
 			
 	shared new none extends Voyage(){}
 	
@@ -120,7 +122,10 @@ shared class Voyage satisfies Serializable{
 		MovementStep(Location.hongkong, toDate("2013-11-24", "07:00"), toDate("2013-11-28", "13:37"))
 	){}
 	
+	shared Boolean sameIdentityAs(Voyage other) 
+			=> this.voyageNumber.sameValueAs(other.voyageNumber);	
 }
 
+	
 
 shared class MovementStep(shared Location arrivalLocation, shared Date departureTime, shared Date arrivalTime){}

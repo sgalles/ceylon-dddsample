@@ -5,6 +5,9 @@ import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
 	TransportStatusConverter,
 	RoutingStatusConverter
 }
+import dddsample.cargotracker.domain.model.cargo {
+	HandlingActivity { no_activity }
+}
 import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory,
 	HandlingEvent,
@@ -46,8 +49,10 @@ shared class Delivery {
 	joinColumn{name = "current_voyage_id";}
 	variable Voyage? _currentVoyage;
 	
+	shared Boolean misdirected;
+	
 	embedded
-	HandlingActivity nextExpectedActivity;
+	shared HandlingActivity nextExpectedActivity;
 	
 	convert{converter = `RoutingStatusConverter`;}
 	column{name = "routing_status";} 
@@ -70,27 +75,69 @@ shared class Delivery {
 						case(claim) claimed
 				)
 				else not_received;
-				
-	HandlingActivity calculateNextExpectedActivity(
-            RouteSpecification routeSpecification, Itinerary itinerary){
-		// TODO : temporary	!!!!!!!!!!!!!!!!!!!!!!!!!!!!		
-		return HandlingActivity();
-	}
+	
+	
+	
+	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
+			=> routingStatus == routed && !misdirected;
+	
+	
+	
+	HandlingActivity calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary itinerary, RoutingStatus routingStatus,Boolean misdirected) 
+			=>	let(legs = itinerary.legs)
+				if(!_onTrack(routingStatus, misdirected)) then no_activity
+				else if(exists lastEvent) 
+					 then (  switch(lastEvent.type) 
+							 case(load) 
+								let(searchedLeg = legs.find(
+									(leg) => leg.loadLocation.sameIdentityAs(lastEvent.location)
+								)) 
+								if(exists leg = searchedLeg) 
+								then HandlingActivity.init([unload, leg.voyage], leg.unloadLocation) 
+								else no_activity
+							 case(unload)
+								if(nonempty legs) 
+								then let(pairedLegs = legs.paired.sequence().withTrailing([legs.last,null])) 
+									let([Leg,Leg?]? searchedPairedLeg = pairedLegs.find(
+										(pairedLeg) => let(currentLeg = pairedLeg[0]) currentLeg.unloadLocation.sameIdentityAs(lastEvent.location)
+									)) 
+									if(exists [leg, nextLeg] = searchedPairedLeg) 
+									then if(exists nextLeg) 
+										 then HandlingActivity.init([load, nextLeg.voyage], nextLeg.loadLocation)  
+										 else  HandlingActivity.init(claim, leg.unloadLocation)
+									else no_activity
+								else no_activity
+							case(receive) nothing
+							case(claim) nothing
+							case(customs) nothing
+					 )	
+					else HandlingActivity.init(receive, routeSpecification.origin); 
+
 	
 	shared new init(HandlingEvent? lastEvent, Itinerary itinerary, RouteSpecification routeSpecification){
+		
+		Boolean calculateMisdirectionStatus() 
+				=> if(exists lastEvent)  then !itinerary.isExpected(lastEvent) else false;
+		
 		this.lastEvent = lastEvent;
 		this.routingStatus = calculateRoutingStatus(itinerary,routeSpecification);
 		this.transportStatus = calculateTransportStatus(lastEvent);
 		this._lastKnownLocation = lastEvent?.location;
 		this._currentVoyage = if(transportStatus == onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
-		this.nextExpectedActivity = calculateNextExpectedActivity(routeSpecification, itinerary);
+		this.misdirected = calculateMisdirectionStatus();
+		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
+		
 	}
 	
 	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){}
 	
 	
+	
+	
 	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary itinerary, HandlingHistory handlingHistory)
 			extends init(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
+	
+	shared Boolean onTrack => _onTrack(routingStatus,misdirected);
 	
 	shared Location lastKnownLocation => _lastKnownLocation else Location.unknown;
 	assign lastKnownLocation { _lastKnownLocation = lastKnownLocation; }
@@ -98,6 +145,9 @@ shared class Delivery {
 	shared Voyage currentVoyage => _currentVoyage else Voyage.none;
 	assign currentVoyage { _currentVoyage = currentVoyage; }
 	
+	
+		
 
+	
 	
 }

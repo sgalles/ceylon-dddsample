@@ -49,7 +49,7 @@ class JpaCargoRepository() satisfies CargoRepository & Serializable{
 	
 	shared actual void store(Cargo cargo) {
 		// TODO See why cascade is not working correctly for legs.
-		for(leg in cargo.itinerary.legs()){
+		for(leg in cargo.itinerary.legs){
 			entityManager.persist(leg);
 		}
 		entityManager.persist(cargo);

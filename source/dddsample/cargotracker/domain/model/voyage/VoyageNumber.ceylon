@@ -15,15 +15,16 @@ embeddable
 shared class VoyageNumber satisfies Serializable{
 	
 	column__FIELD{name = "voyage_number";}
-	shared String idString;
+	shared String number;
 	
 	
 	
-	shared new init(String idString){
-		this.idString = idString;
+	shared new init(String number){
+		this.number = number;
 	}
 	
 	shared new() extends init(""){}
 	
+	shared Boolean sameValueAs(VoyageNumber other) => this.number == other.number;
 	
 }
