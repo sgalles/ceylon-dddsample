@@ -6,7 +6,9 @@ import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
 	RoutingStatusConverter
 }
 import dddsample.cargotracker.domain.model.cargo {
-	HandlingActivity { no_activity }
+	HandlingActivity {
+		no_activity
+	}
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory,
@@ -24,13 +26,19 @@ import dddsample.cargotracker.domain.model.voyage {
 	Voyage
 }
 
+import java.util {
+	Date
+}
+
 import javax.persistence {
 	embeddable,
 	convert=convert__FIELD,
 	column=column__FIELD,
 	manyToOne=manyToOne__FIELD,
 	joinColumn=joinColumn__FIELD,
-	embedded=embedded__FIELD
+	embedded=embedded__FIELD,
+	TemporalType,
+	temporal=temporal__FIELD
 }
 
 
@@ -48,6 +56,9 @@ shared class Delivery {
 	manyToOne
 	joinColumn{name = "current_voyage_id";}
 	variable Voyage? _currentVoyage;
+	
+	temporal(TemporalType.\iDATE)
+	Date? _eta;
 	
 	shared Boolean misdirected;
 	
@@ -81,7 +92,8 @@ shared class Delivery {
 	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
 			=> routingStatus == routed && !misdirected;
 	
-	
+	Date? calculateEta(Itinerary itinerary,RoutingStatus routingStatus, Boolean misdirected) 
+			=> if(_onTrack(routingStatus, misdirected)) then itinerary.finalArrivalDate() else null; 
 	
 	HandlingActivity calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary itinerary, RoutingStatus routingStatus,Boolean misdirected) 
 			=>	let(legs = itinerary.legs)
@@ -125,6 +137,7 @@ shared class Delivery {
 		this._lastKnownLocation = lastEvent?.location;
 		this._currentVoyage = if(transportStatus == onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
 		this.misdirected = calculateMisdirectionStatus();
+		this._eta = calculateEta(itinerary, routingStatus, misdirected);
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
 		
 	}
@@ -145,7 +158,7 @@ shared class Delivery {
 	shared Voyage currentVoyage => _currentVoyage else Voyage.none;
 	assign currentVoyage { _currentVoyage = currentVoyage; }
 	
-	
+	shared Date? estimatedTimeOfArrival => if(exists _eta) then Date(_eta.time) else null;
 		
 
 	

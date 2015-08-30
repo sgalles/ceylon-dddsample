@@ -22,11 +22,16 @@ import dddsample.cargotracker.domain.model.handling {
 	unload
 }
 
+import java.text {
+	SimpleDateFormat
+}
 import java.util {
-	JList=List
+	JList=List,
+	Date
 }
 shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingEvents) {
 	
+	String formatDate(Date d) => SimpleDateFormat("MM/dd/yyyy hh:mm a z").format(d);
 	
 	shared JList<HandlingEventViewAdapter> events => let(adapters = handlingEvents.map(HandlingEventViewAdapter)) 
 													 JavaList(ArrayList{*adapters});
@@ -49,15 +54,17 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 			=>  let(activity = cargo.delivery.nextExpectedActivity)
 				let(type = activity.type)
 				let(text = "Next expected activity is to ``metatype(activity.type).declaration.name``")
-				let(voyageNumber = activity.voyage?.voyageNumber else nothing) // TODO yuck, remove 'else nothing' here 
+				let(voyageNumber = activity.voyage?.voyageNumber else "") // TODO yuck, remove 'else ""' here 
 				(switch(type)
 				case(load) "``text`` cargo onto voyage ``voyageNumber`` in ``activity.location.name``"
 				case(unload) "``text`` cargo off of ``voyageNumber`` in ``activity.location.name``"
 				else "``text`` cargo in ``activity.location.name``"
 				);
 		
-	shared Boolean misdirected = true;
-	shared String eta = "CargoTrackingViewAdapter-eta";
+	shared Boolean misdirected => cargo.delivery.misdirected;
+	shared String eta => if(exists eta = cargo.delivery.estimatedTimeOfArrival) 
+						 then formatDate(eta)
+						 else "?";
 	
 }
 
