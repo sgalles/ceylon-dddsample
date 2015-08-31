@@ -12,6 +12,12 @@ import java.io {
 	Serializable
 }
 
+import javax.faces.application {
+	FacesMessage
+}
+import javax.faces.context {
+	FacesContext
+}
 import javax.faces.view {
 	viewScoped
 }
@@ -48,11 +54,13 @@ shared class Track() satisfies Serializable{
 					.distinctEventsByCompletionTime;
 			this.cargo = CargoTrackingViewAdapter(cargo, handlingEvents);
 		}else{
-			throw Exception("not implemented");
+			value context = FacesContext.currentInstance;
+			value message = FacesMessage("Cargo with tracking ID: ``trackingId``  not found.");
+			message.severity = FacesMessage.\iSEVERITY_ERROR;
+			context.addMessage(null, message);
+			this.cargo = null;
 		}
 		
-		//print("On try by id ``trackingId else nothing``");
-		//cargo = CargoTrackingViewAdapter();
 	}
 	
 }
