@@ -61,7 +61,7 @@ shared class Cargo satisfies Serializable{
 		this.origin = routeSpecification.origin;
 		this.routeSpecification = routeSpecification;
 		
-		this._delivery = Delivery.derivedFrom(this.routeSpecification,
+		this._delivery = Delivery.derivedFrom(routeSpecification,
                 this._itinerary, HandlingHistory.empty);
 	}
 	

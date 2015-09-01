@@ -1,6 +1,10 @@
 
 
 
+import ceylon.language.meta {
+	type
+}
+
 import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
 	TransportStatusConverter,
 	RoutingStatusConverter
@@ -76,7 +80,9 @@ shared class Delivery {
 	RoutingStatus calculateRoutingStatus(Itinerary itinerary, RouteSpecification routeSpecification) 
 			=> switch(itinerary) 
 				case(Itinerary.empty) not_routed 
-				else not_routed;
+				else if(routeSpecification.isSatisfiedBy(itinerary)) 
+					 then routed 
+					 else misrouted;
 	 
 	
 	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) 
@@ -89,8 +95,10 @@ shared class Delivery {
 	
 	
 	
-	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
-			=> routingStatus == routed && !misdirected;
+	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) {
+			print("``type(routingStatus).declaration.name`` ``misdirected``");
+			return routingStatus == routed && !misdirected;
+	}
 	
 	Date? calculateEta(Itinerary itinerary,RoutingStatus routingStatus, Boolean misdirected) 
 			=> if(_onTrack(routingStatus, misdirected)) then itinerary.finalArrivalDate() else null; 
@@ -101,9 +109,7 @@ shared class Delivery {
 				else if(exists lastEvent) 
 					 then (  switch(lastEvent.type) 
 							 case(load) 
-								let(searchedLeg = legs.find(
-									(leg) => leg.loadLocation.sameIdentityAs(lastEvent.location)
-								)) 
+								let(searchedLeg = legs.find((leg) => leg.loadLocation.sameIdentityAs(lastEvent.location))) 
 								if(exists leg = searchedLeg) 
 								then HandlingActivity.init([unload, leg.voyage], leg.unloadLocation) 
 								else no_activity
@@ -119,9 +125,12 @@ shared class Delivery {
 										 else  HandlingActivity.init(claim, leg.unloadLocation)
 									else no_activity
 								else no_activity
-							case(receive) nothing
-							case(claim) nothing
-							case(customs) nothing
+							case(receive) 
+								if(exists firstLeg = legs.first) 
+								then HandlingActivity.init([load, firstLeg.voyage], firstLeg.loadLocation)
+								else nothing // TODO : maybe legs can be non empty
+							case(claim) no_activity
+							case(customs) no_activity
 					 )	
 					else HandlingActivity.init(receive, routeSpecification.origin); 
 
@@ -139,7 +148,6 @@ shared class Delivery {
 		this.misdirected = calculateMisdirectionStatus();
 		this._eta = calculateEta(itinerary, routingStatus, misdirected);
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
-		
 	}
 	
 	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){}

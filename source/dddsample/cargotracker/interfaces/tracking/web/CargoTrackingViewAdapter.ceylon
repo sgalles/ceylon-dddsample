@@ -54,7 +54,7 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 			=>  let(activity = cargo.delivery.nextExpectedActivity)
 				let(type = activity.type)
 				let(text = "Next expected activity is to ``metatype(activity.type).declaration.name``")
-				let(voyageNumber = activity.voyage?.voyageNumber else "") // TODO yuck, remove 'else ""' here 
+				let(voyageNumber = activity.voyage?.voyageNumber?.number else "") // TODO yuck, remove 'else ""' here 
 				(switch(type)
 				case(load) "``text`` cargo onto voyage ``voyageNumber`` in ``activity.location.name``"
 				case(unload) "``text`` cargo off of ``voyageNumber`` in ``activity.location.name``"

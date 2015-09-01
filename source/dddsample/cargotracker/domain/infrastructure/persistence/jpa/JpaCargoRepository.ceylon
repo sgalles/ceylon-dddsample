@@ -38,9 +38,11 @@ class JpaCargoRepository() satisfies CargoRepository & Serializable{
 	shared actual Cargo? find(TrackingId trackingId) {
 
         try {
-            return entityManager.createNamedQuery("Cargo.findByTrackingId",javaClass<Cargo>())
+            value cargo = entityManager.createNamedQuery("Cargo.findByTrackingId",javaClass<Cargo>())
                     .setParameter("trackingId", trackingId)
                     .singleResult;
+            print("@@@@@@@@@@@@@@@@``trackingId.idString`` ``cargo.routeSpecification.origin.name``");
+            return cargo;
         } catch (NoResultException e) {
             return null;
         }
