@@ -48,7 +48,7 @@ shared class Cargo satisfies Serializable{
 	shared RouteSpecification routeSpecification;
 	
 	embedded
-	variable Itinerary _itinerary = Itinerary.empty;
+	variable Itinerary? _itinerary = null;
 	
 	embedded
 	variable Delivery _delivery;
@@ -62,19 +62,18 @@ shared class Cargo satisfies Serializable{
 		this.routeSpecification = routeSpecification;
 		
 		this._delivery = Delivery.derivedFrom(routeSpecification,
-                this._itinerary, HandlingHistory.empty);
+                this._itinerary, HandlingHistory.empty); // TODO : WAT ? this._itinerary is always here null. Strange.
 	}
 	
 	shared new() extends init(TrackingId(), RouteSpecification()){}
 	
-	shared Itinerary itinerary => _itinerary;
+	shared Itinerary? itinerary => _itinerary;
 	
 	shared Delivery delivery => _delivery;
 	
 	shared void assignToRoute(Itinerary itinerary){
 		this._itinerary = itinerary;
-		
-		
+		this._delivery = delivery.updateOnRouting(routeSpecification, itinerary);
 	}
 	
 	shared void deriveDeliveryProgress(HandlingHistory handlingHistory) {

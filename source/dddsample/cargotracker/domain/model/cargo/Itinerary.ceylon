@@ -45,33 +45,33 @@ shared class Itinerary {
 	//orderBy("load_time") TODO reactivate when the problem with antlr lib in war is solved
 	shared JList<Leg> _legs;
 	
-	shared new init({Leg*} legs){
+	shared new init({Leg+} legs){
 		this._legs = toJavaList(legs);
 	}
 	
-	shared new() extends init({}){}
+	shared new() extends init({Leg()}){}
 	
-	shared new empty extends init({}){}
-	
-	shared [Leg*] legs => CeylonList(_legs).sequence();
+	shared [Leg+] legs {
+		 assert(nonempty legs = CeylonList(_legs).sequence());
+		 return legs;
+	}
 	
 	shared Location initialDepartureLocation() 
-			=> if(nonempty legs = legs) then legs.first.loadLocation else Location.unknown;	
+			=> legs.first.loadLocation;	
 	
 	shared Location finalArrivalLocation() 
-			=> if(nonempty legs = legs) then legs.last.unloadLocation else Location.unknown;	
+			=> legs.last.unloadLocation;	
 	
 	shared Date finalArrivalDate() 
-			=> let(time = if(nonempty legs = legs) then legs.last.unloadTime.time else endOfDays.time)
-			   Date(time);
+			=> Date(legs.last.unloadTime.time);
+			   
 	
 	shared Boolean isExpected(HandlingEvent event) {
 		
 		Boolean sameVoyageAnd(Location(Leg) locating)(Leg leg)
 			=> locating(leg).sameIdentityAs(event.location) && leg.voyage.sameIdentityAs(event.voyage);
 		
-		return if(nonempty legs = legs)
-			then (switch(event.type)
+		return switch(event.type)
 				// Check that the first leg's origin is the event's location
 				case(receive) legs.first.loadLocation == event.location 
 				// Check that the there is one leg with same load location and
@@ -83,9 +83,7 @@ shared class Itinerary {
 				// Check that the last leg's destination is from the event's
 				// location
 				case (claim) legs.last.unloadLocation == event.location 
-				case (customs) true
-			)
-			else false;
+				case (customs) true;
 	}
 		
 	

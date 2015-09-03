@@ -75,12 +75,12 @@ shared class Delivery {
 	joinColumn{name = "last_event_id";} 
 	variable HandlingEvent? lastEvent;
 	
-	RoutingStatus calculateRoutingStatus(Itinerary itinerary, RouteSpecification routeSpecification) 
-			=> switch(itinerary) 
-				case(Itinerary.empty) not_routed 
-				else if(routeSpecification.isSatisfiedBy(itinerary)) 
+	RoutingStatus calculateRoutingStatus(Itinerary? itinerary, RouteSpecification routeSpecification) 
+			=> if(exists itinerary) 
+				then if(routeSpecification.isSatisfiedBy(itinerary)) 
 					 then routed 
-					 else misrouted;
+					 else misrouted
+			    else not_routed;
 	 
 	
 	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) 
@@ -98,12 +98,18 @@ shared class Delivery {
 			return routingStatus == routed && !misdirected;
 	}
 	
-	Date? calculateEta(Itinerary itinerary,RoutingStatus routingStatus, Boolean misdirected) 
-			=> if(_onTrack(routingStatus, misdirected)) then itinerary.finalArrivalDate() else null; 
+	Date? calculateEta(Itinerary? itinerary,RoutingStatus routingStatus, Boolean misdirected) 
+			=> if(_onTrack(routingStatus, misdirected)) then itinerary?.finalArrivalDate() else null; 
 	
-	HandlingActivity? calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary itinerary, RoutingStatus routingStatus,Boolean misdirected) 
-			=>	let(legs = itinerary.legs)
-				if(!_onTrack(routingStatus, misdirected)) then null
+	HandlingActivity? calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary? itinerary, RoutingStatus routingStatus,Boolean misdirected){
+			if(!_onTrack(routingStatus, misdirected)) {
+				return null;
+			}	
+			assert(exists itinerary); // TODO : this because _ontrack means there's an itinerary...try to improve to remove assert
+		
+			return	let(legs = itinerary.legs)
+				if(!_onTrack(routingStatus, misdirected)) 
+				then null
 				else if(exists lastEvent) 
 					 then (  switch(lastEvent.type) 
 							 case(load) 
@@ -112,31 +118,29 @@ shared class Delivery {
 								then HandlingActivity.init([unload, leg.voyage], leg.unloadLocation) 
 								else null
 							 case(unload)
-								if(nonempty legs) 
-								then let(pairedLegs = legs.paired.sequence().withTrailing([legs.last,null])) 
-									let([Leg,Leg?]? searchedPairedLeg = pairedLegs.find(
-										(pairedLeg) => let(currentLeg = pairedLeg[0]) currentLeg.unloadLocation.sameIdentityAs(lastEvent.location)
-									)) 
-									if(exists [leg, nextLeg] = searchedPairedLeg) 
-									then if(exists nextLeg) 
-										 then HandlingActivity.init([load, nextLeg.voyage], nextLeg.loadLocation)  
-										 else  HandlingActivity.init(claim, leg.unloadLocation)
-									else null
+								let(pairedLegs = legs.paired.sequence().withTrailing([legs.last,null])) 
+								let([Leg,Leg?]? searchedPairedLeg = pairedLegs.find(
+									(pairedLeg) => let(currentLeg = pairedLeg[0]) currentLeg.unloadLocation.sameIdentityAs(lastEvent.location)
+								)) 
+								if(exists [leg, nextLeg] = searchedPairedLeg) 
+								then if(exists nextLeg) 
+									 then HandlingActivity.init([load, nextLeg.voyage], nextLeg.loadLocation)  
+									 else  HandlingActivity.init(claim, leg.unloadLocation)
 								else null
 							case(receive) 
-								if(exists firstLeg = legs.first) 
-								then HandlingActivity.init([load, firstLeg.voyage], firstLeg.loadLocation)
-								else nothing // TODO : maybe legs can be non empty
+								let(firstLeg = legs.first) 
+								HandlingActivity.init([load, firstLeg.voyage], firstLeg.loadLocation)
 							case(claim) null
 							case(customs) null
 					 )	
 					else HandlingActivity.init(receive, routeSpecification.origin); 
+		}
 
 	
-	shared new init(HandlingEvent? lastEvent, Itinerary itinerary, RouteSpecification routeSpecification){
+	shared new init(HandlingEvent? lastEvent, Itinerary? itinerary, RouteSpecification routeSpecification){
 		
 		Boolean calculateMisdirectionStatus() 
-				=> if(exists lastEvent)  then !itinerary.isExpected(lastEvent) else false;
+				=> if(exists lastEvent,exists itinerary)  then !itinerary.isExpected(lastEvent) else false;
 		
 		this.lastEvent = lastEvent;
 		this.routingStatus = calculateRoutingStatus(itinerary,routeSpecification);
@@ -153,7 +157,7 @@ shared class Delivery {
 	
 	
 	
-	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary itinerary, HandlingHistory handlingHistory)
+	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary? itinerary, HandlingHistory handlingHistory)
 			extends init(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
 	
 	shared Boolean onTrack => _onTrack(routingStatus,misdirected);
@@ -166,7 +170,9 @@ shared class Delivery {
 	
 	shared Date? estimatedTimeOfArrival => if(exists _eta) then Date(_eta.time) else null;
 		
-
+	shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary) 
+		=> Delivery.init(this.lastEvent, itinerary, routeSpecification);
+	
 	
 	
 }
