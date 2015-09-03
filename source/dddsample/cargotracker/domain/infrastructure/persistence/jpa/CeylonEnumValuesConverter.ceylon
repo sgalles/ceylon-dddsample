@@ -46,17 +46,18 @@ shared class HandlingEventTypeConverter()
 
 
 shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter<EnumValue, JString> 
-		given EnumValue satisfies Object{
+		{
 	
-	value enums = caseValues<EnumValue>();
+	value enums = caseValues<EnumValue&Object>();
 	
 	EnumValue?(String) getEnumValueByName
 			= HashMap{*enums.map((ts) => type(ts).declaration.name->ts)}.get;
 	
-	String?(EnumValue) getNameByEnumValue
+	String?(EnumValue&Object) getNameByEnumValue
 			= HashMap{*enums.map((ts) => ts->type(ts).declaration.name)}.get;
 	
-	shared actual JString convertToDatabaseColumn(EnumValue x) => javaString(getNameByEnumValue(x) else nothing);
+	shared actual JString? convertToDatabaseColumn(EnumValue? x) 
+			=> if(exists x) then javaString(getNameByEnumValue(x) else nothing) else null;
 	
 	shared actual EnumValue convertToEntityAttribute(JString y) {
 		if(exists x = getEnumValueByName(y.string)){

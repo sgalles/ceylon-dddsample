@@ -51,15 +51,17 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 
 	
 	shared String  nextExpectedActivity 
-			=>  let(activity = cargo.delivery.nextExpectedActivity)
-				let(type = activity.type)
-				let(text = "Next expected activity is to ``metatype(activity.type).declaration.name``")
-				let(voyageNumber = activity.voyage?.voyageNumber?.number else "") // TODO yuck, remove 'else ""' here 
-				(switch(type)
-				case(load) "``text`` cargo onto voyage ``voyageNumber`` in ``activity.location.name``"
-				case(unload) "``text`` cargo off of ``voyageNumber`` in ``activity.location.name``"
-				else "``text`` cargo in ``activity.location.name``"
-				);
+			=>  if(exists activity = cargo.delivery.nextExpectedActivity)
+				then
+					let(type = activity.type)
+					let(text = "Next expected activity is to ``metatype(activity.type).declaration.name``")
+					let(voyageNumber = activity.voyage?.voyageNumber?.number else "") // TODO yuck, remove 'else ""' here 
+					(switch(type)
+						case(load) "``text`` cargo onto voyage ``voyageNumber`` in ``activity.location.name``"
+						case(unload) "``text`` cargo off of ``voyageNumber`` in ``activity.location.name``"
+						else "``text`` cargo in ``activity.location.name``"
+					)
+				else "";
 		
 	shared Boolean misdirected => cargo.delivery.misdirected;
 	shared String eta => if(exists eta = cargo.delivery.estimatedTimeOfArrival) 

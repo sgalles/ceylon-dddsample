@@ -10,9 +10,7 @@ import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
 	RoutingStatusConverter
 }
 import dddsample.cargotracker.domain.model.cargo {
-	HandlingActivity {
-		no_activity
-	}
+	HandlingActivity
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory,
@@ -67,7 +65,7 @@ shared class Delivery {
 	shared Boolean misdirected;
 	
 	embedded
-	shared HandlingActivity nextExpectedActivity;
+	shared HandlingActivity? nextExpectedActivity;
 	
 	convert{converter = `RoutingStatusConverter`;}
 	column{name = "routing_status";} 
@@ -103,16 +101,16 @@ shared class Delivery {
 	Date? calculateEta(Itinerary itinerary,RoutingStatus routingStatus, Boolean misdirected) 
 			=> if(_onTrack(routingStatus, misdirected)) then itinerary.finalArrivalDate() else null; 
 	
-	HandlingActivity calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary itinerary, RoutingStatus routingStatus,Boolean misdirected) 
+	HandlingActivity? calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary itinerary, RoutingStatus routingStatus,Boolean misdirected) 
 			=>	let(legs = itinerary.legs)
-				if(!_onTrack(routingStatus, misdirected)) then no_activity
+				if(!_onTrack(routingStatus, misdirected)) then null
 				else if(exists lastEvent) 
 					 then (  switch(lastEvent.type) 
 							 case(load) 
 								let(searchedLeg = legs.find((leg) => leg.loadLocation.sameIdentityAs(lastEvent.location))) 
 								if(exists leg = searchedLeg) 
 								then HandlingActivity.init([unload, leg.voyage], leg.unloadLocation) 
-								else no_activity
+								else null
 							 case(unload)
 								if(nonempty legs) 
 								then let(pairedLegs = legs.paired.sequence().withTrailing([legs.last,null])) 
@@ -123,14 +121,14 @@ shared class Delivery {
 									then if(exists nextLeg) 
 										 then HandlingActivity.init([load, nextLeg.voyage], nextLeg.loadLocation)  
 										 else  HandlingActivity.init(claim, leg.unloadLocation)
-									else no_activity
-								else no_activity
+									else null
+								else null
 							case(receive) 
 								if(exists firstLeg = legs.first) 
 								then HandlingActivity.init([load, firstLeg.voyage], firstLeg.loadLocation)
 								else nothing // TODO : maybe legs can be non empty
-							case(claim) no_activity
-							case(customs) no_activity
+							case(claim) null
+							case(customs) null
 					 )	
 					else HandlingActivity.init(receive, routeSpecification.origin); 
 

@@ -60,7 +60,6 @@ shared class HandlingActivity {
 	 
 	shared new () extends init(receive, Location.unknown){}
 	
-	shared new no_activity extends HandlingActivity(){}
 	 
 
 	
