@@ -32,7 +32,8 @@ import javax.persistence {
 	CascadeType,
 	embeddable,
 	joinColumn=joinColumn__FIELD,
-	oneToMany=oneToMany__FIELD
+	oneToMany=oneToMany__FIELD,
+	FetchType
 }
 
 shared Date endOfDays = Date(Long.\iMAX_VALUE);
@@ -40,7 +41,7 @@ shared Date endOfDays = Date(Long.\iMAX_VALUE);
 embeddable
 shared class Itinerary {
 	
-	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true;}
+	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
 	//orderBy("load_time") TODO reactivate when the problem with antlr lib in war is solved
 	shared JList<Leg> _legs;
@@ -73,7 +74,7 @@ shared class Itinerary {
 		
 		return switch(event.type)
 				// Check that the first leg's origin is the event's location
-				case(receive) legs.first.loadLocation == event.location 
+				case(receive) legs.first.loadLocation.sameIdentityAs(event.location)  
 				// Check that the there is one leg with same load location and
 				// voyage
 				case (load) legs.any(sameVoyageAnd(Leg.loadLocation))
@@ -82,7 +83,7 @@ shared class Itinerary {
 				case (unload) legs.any(sameVoyageAnd(Leg.unloadLocation))
 				// Check that the last leg's destination is from the event's
 				// location
-				case (claim) legs.last.unloadLocation == event.location 
+				case (claim) legs.last.unloadLocation.sameIdentityAs(event.location) 
 				case (customs) true;
 	}
 		

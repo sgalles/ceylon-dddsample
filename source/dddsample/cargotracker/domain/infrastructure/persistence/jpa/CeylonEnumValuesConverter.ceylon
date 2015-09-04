@@ -59,13 +59,15 @@ shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter
 	shared actual JString? convertToDatabaseColumn(EnumValue? x) 
 			=> if(exists x) then javaString(getNameByEnumValue(x) else nothing) else null;
 	
-	shared actual EnumValue convertToEntityAttribute(JString y) {
-		if(exists x = getEnumValueByName(y.string)){
-			return x;
-		}else{
-			throw IllegalStateException("Unable to convert string ``y`` into RoutingStatus");
+	shared actual EnumValue? convertToEntityAttribute(JString? y) {
+		if(exists y){
+			if(exists x = getEnumValueByName(y.string)){
+				return x;
+			}else{
+				throw IllegalStateException("Unable to convert string ``y`` into RoutingStatus");
+			}
 		}
-		
+		return null;
 	}
 	
 }

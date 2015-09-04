@@ -19,7 +19,10 @@ import dddsample.cargotracker.domain.model.cargo {
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
 	load,
-	unload
+	unload,
+	receive,
+	claim,
+	customs
 }
 
 import java.text {
@@ -68,11 +71,22 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 						 then formatDate(eta)
 						 else "?";
 	
+	shared class HandlingEventViewAdapter(HandlingEvent handlingEvent){
+		
+		shared Boolean expected => cargo.itinerary?.isExpected(handlingEvent) else nothing; // TODO remove 'else nothing'
+		shared String description 
+				=> switch(handlingEvent.type)
+			 	    case(load) "Loaded onto voyage ``handlingEvent.voyage.voyageNumber.number``
+			 	                in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
+			 	                " 
+					case(unload)  "Unloaded off voyage ``handlingEvent.voyage.voyageNumber.number``
+			 	                   in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
+			 	                   " 
+					case(receive) "Received in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
+					case(claim) "Claimed in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
+					case(customs) "Cleared custom in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``";
+				
+	}
+	
 }
 
-shared class HandlingEventViewAdapter(HandlingEvent handlingEvent){
-	
-	shared Boolean expected = true;
-	shared String description = "HandlingEventViewAdapter-description";
-	
-}
