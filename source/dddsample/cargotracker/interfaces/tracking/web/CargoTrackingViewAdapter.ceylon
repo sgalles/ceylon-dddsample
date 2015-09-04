@@ -84,7 +84,7 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 			 	                   " 
 					case(receive) "Received in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
 					case(claim) "Claimed in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
-					case(customs) "Cleared custom in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``";
+					case(customs) "Cleared customs in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``";
 				
 	}
 	
