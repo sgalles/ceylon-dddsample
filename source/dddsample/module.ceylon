@@ -14,7 +14,7 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import ejbapi32spec "1.0.0.Final";
 	shared import annotationsapi12spec "1.0.0.Final";
 	shared import jboss "vfs-3.2.9.Final";
-	shared import hibernatecore "4.3.10.Final";
+	//shared import hibernatecore "4.3.10.Final";
 	shared import hibernateentitymanager "4.3.10.Final";
 	//shared import undertowservlet "1.2.8.Final";
 	//shared import "org.wildfly:wildfly-spec-api" "9.0.0.Final"; 
