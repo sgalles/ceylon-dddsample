@@ -33,7 +33,8 @@ import javax.persistence {
 	embeddable,
 	joinColumn=joinColumn__FIELD,
 	oneToMany=oneToMany__FIELD,
-	FetchType
+	FetchType,
+	orderBy=orderBy__FIELD
 }
 
 shared Date endOfDays = Date(Long.\iMAX_VALUE);
@@ -43,8 +44,8 @@ shared class Itinerary {
 	
 	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
-	//orderBy("load_time") TODO reactivate when the problem with antlr lib in war is solved
-	shared JList<Leg> _legs;
+	//orderBy("load_time") //TODO reactivate when the problem with antlr lib in war is solved
+	JList<Leg> _legs;
 	
 	shared new init({Leg+} legs){
 		this._legs = toJavaList(legs);
@@ -54,7 +55,7 @@ shared class Itinerary {
 	
 	shared [Leg+] legs {
 		 assert(nonempty legs = CeylonList(_legs).sequence());
-		 return legs;
+		 return legs.sort(byIncreasing((Leg leg) => leg.loadTime.time)); // workaround for the orderBy problem
 	}
 	
 	shared Location initialDepartureLocation() 
