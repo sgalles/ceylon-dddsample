@@ -165,7 +165,7 @@ shared class Delivery {
 	shared Location lastKnownLocation => _lastKnownLocation else Location.unknown;
 	assign lastKnownLocation { _lastKnownLocation = lastKnownLocation; }
 	
-	shared Voyage currentVoyage => _currentVoyage else Voyage.none;
+	shared Voyage? currentVoyage => _currentVoyage;
 	assign currentVoyage { _currentVoyage = currentVoyage; }
 	
 	shared Date? estimatedTimeOfArrival => if(exists _eta) then Date(_eta.time) else null;

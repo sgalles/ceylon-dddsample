@@ -73,7 +73,7 @@ shared class HandlingEvent {
 	
 	manyToOne
 	joinColumn{name = "voyage_id";}
-	Voyage? _voyage;
+	shared Voyage? voyage;
 	
 	manyToOne
 	joinColumn{name = "location_id";}
@@ -101,11 +101,11 @@ shared class HandlingEvent {
 		switch(typeAndVoyage)
 		case(is HandlingEventTypeProhibitedVoyage){
 			this.type = typeAndVoyage;
-			this._voyage = null;
+			this.voyage = null;
 		}
 		case(is [HandlingEventTypeRequiredVoyage, Voyage]){
 			this.type = typeAndVoyage[0];
-			this._voyage = typeAndVoyage[1];
+			this.voyage = typeAndVoyage[1];
 		}
 		this._completionTime = if(is Date t = completionTime.clone()) then t else nothing;
 		this._registrationTime = if(is Date t = registrationTime.clone()) then t else nothing;
@@ -115,11 +115,20 @@ shared class HandlingEvent {
 	
 	shared new() extends init(Cargo(), Date(0), Date(0), Location.unknown, customs){}
 	
-	shared Voyage voyage => _voyage else Voyage.none;
-	
 	shared Date completionTime => Date(_completionTime.time);
 	
 	shared Date registrationTime => Date(_registrationTime.time);
+	
+	shared HandlingEventTypeBundle<Voyage> typeAndVoyage{
+		switch(type)
+		case(is HandlingEventTypeProhibitedVoyage){
+			return type;
+		}
+		case(is HandlingEventTypeRequiredVoyage){
+			assert(exists voyage = voyage);
+			return [type,voyage];
+		}
+	}
 	
 	
 }

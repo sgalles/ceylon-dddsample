@@ -20,9 +20,14 @@ import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
 	load,
 	unload,
+	HandlingEventTypeProhibitedVoyage,
+	HandlingEventTypeRequiredVoyage,
 	receive,
 	claim,
 	customs
+}
+import dddsample.cargotracker.domain.model.voyage {
+	Voyage
 }
 
 import java.text {
@@ -46,7 +51,8 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 	shared String statusText => let(delivery = cargo.delivery) (
 								switch(delivery.transportStatus)
 									case(in_port) "In port ``delivery.lastKnownLocation.name``"
-									case(onboard_carrier) "Onboard voyage ``delivery.currentVoyage.voyageNumber.number``"
+									// TODO : remove 'else nothing'
+									case(onboard_carrier) "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else nothing``"
 									case(claimed) "Claimed"
 									case(not_received) "Not received"
 									case(unknown) "Unknown"
@@ -75,16 +81,22 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 		
 		shared Boolean expected => cargo.itinerary?.isExpected(handlingEvent) else nothing; // TODO remove 'else nothing'
 		shared String description 
-				=> switch(handlingEvent.type)
-			 	    case(load) "Loaded onto voyage ``handlingEvent.voyage.voyageNumber.number``
-			 	                in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
-			 	                " 
-					case(unload)  "Unloaded off voyage ``handlingEvent.voyage.voyageNumber.number``
-			 	                   in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
-			 	                   " 
-					case(receive) "Received in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
-					case(claim) "Claimed in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
-					case(customs) "Cleared customs in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``";
+				=> switch(typeAndVoyage = handlingEvent.typeAndVoyage)
+					case(is  [HandlingEventTypeRequiredVoyage, Voyage]) let([type,voyage] = typeAndVoyage) 
+						(switch(type)
+						 case(load) "Loaded onto voyage ``voyage.voyageNumber.number``
+			 	                     in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
+			 	                    "
+						 case(unload) "Unloaded off voyage ``voyage.voyageNumber.number``
+			 	                       in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)`` 
+			 	                      "
+						)
+					case(is HandlingEventTypeProhibitedVoyage) let(type = typeAndVoyage) 
+						(switch(type)
+						case(receive) "Received in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
+						case(claim) "Claimed in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
+						case(customs) "Cleared customs in ``handlingEvent.location.name``, at ``formatDate(handlingEvent.completionTime)``"
+						);
 				
 	}
 	
