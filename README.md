@@ -15,7 +15,7 @@ the project execute
 * `ceylon compile`
 * `ceylon war dddsample/1.0.0  -R webapp`
 
-The war file `dddsample-1.0.0.war` is created at the root of your the project
+The war file `dddsample-1.0.0.war` is created at the root of the project
 
 *(note : at the time of writing Ceylon 1.2 is not yet available, so you may have to recompile a
 Ceylon distribution from source)* 
