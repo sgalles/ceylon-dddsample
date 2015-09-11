@@ -33,7 +33,7 @@ Wildfly 9 (`java:jboss/datasources/ExampleDS`). So this should work out of the b
 
 ###Try it
 
-* In your browser go to http://localhost:8080/dddsample-1.0.0/
+* In your browser go to [http://localhost:8080/dddsample-1.0.0/](http://localhost:8080/dddsample-1.0.0/)
 * click on the *public landing page* link
 * type a cargo name, as suggested, in the search box
 
