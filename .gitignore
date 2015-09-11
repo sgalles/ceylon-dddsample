@@ -2,3 +2,4 @@
 /.exploded
 *.war
 modules
+.README.md.html
