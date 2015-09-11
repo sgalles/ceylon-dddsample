@@ -1,4 +1,4 @@
-#DDDSample for Ceylon
+#DDDSample for Ceylon / JEE
 
 This project is a **Ceylon+JEE** port of this [Java+JEE](https://java.net/projects/cargotracker/pages/Home) 
 port of the [original Java+Spring DDDSample](http://dddsample.sourceforge.net/) project
