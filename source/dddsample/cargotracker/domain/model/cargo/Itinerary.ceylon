@@ -49,7 +49,7 @@ shared class Itinerary {
 	
 	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
-	orderBy("load_time") //TODO reactivate when the problem with antlr lib in war is solved
+	orderBy("load_time") 
 	JList<Leg> _legs;
 	
 	shared new init({Leg+} legs){
