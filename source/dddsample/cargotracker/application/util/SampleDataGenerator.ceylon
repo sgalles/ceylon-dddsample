@@ -270,16 +270,6 @@ shared class SampleDataGenerator() {
 			entityManager.persist(mno456);
 			
 		}
-		/*entityManager.flush();
-		entityManager.clear();*/
-		
-		List<Cargo> cargos =CeylonList(entityManager.createQuery("Select c from Cargo c",javaClass<Cargo>())
-			.resultList);
-		
-		for(c  in cargos){
-			print(c.trackingId);
-			
-		}
 		
 	}
 	
@@ -300,17 +290,7 @@ shared class SampleDataGenerator() {
 		entityManager.persist(hangzou);
 		entityManager.persist(newyork);
 		entityManager.persist(dallas);
-		
-		//entityManager.flush();
-		//entityManager.clear();
-		
-		List<Location> locations =CeylonList(entityManager.createQuery("Select c from Location c",javaClass<Location>())
-			.resultList);
-		
-		for(location in locations){
-			print(location.unLocode.idString);
-			
-		}
+	
 	}
 	
 	shared void loadSampleVoyages() {
@@ -322,21 +302,5 @@ shared class SampleDataGenerator() {
 		entityManager.persist(helsinki_to_hongkong);
 		entityManager.persist(dallas_to_helsinki_alt);
 		
-		//entityManager.flush();
-		//entityManager.clear();
-		
-		List<Voyage> voyages =CeylonList(entityManager.createQuery("Select c from Voyage c",javaClass<Voyage>())
-			.resultList);
-		
-		for(v in voyages){
-			print(v.schedule);
-			
-		}
-		//HONGKONG_TO_NEW_YORK
-		/*entityManager.persist(Voyage.);
-		entityManager.persist(SampleVoyages.NEW_YORK_TO_DALLAS);
-		entityManager.persist(SampleVoyages.DALLAS_TO_HELSINKI);
-		entityManager.persist(SampleVoyages.HELSINKI_TO_HONGKONG);
-		entityManager.persist(SampleVoyages.DALLAS_TO_HELSINKI_ALT);*/
 	}
 }

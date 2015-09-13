@@ -93,10 +93,9 @@ shared class Delivery {
 	
 	
 	
-	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) {
-			print("``type(routingStatus).declaration.name`` ``misdirected``");
-			return routingStatus == routed && !misdirected;
-	}
+	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
+			=> routingStatus == routed && !misdirected;
+	
 	
 	Date? calculateEta(Itinerary? itinerary,RoutingStatus routingStatus, Boolean misdirected) 
 			=> if(_onTrack(routingStatus, misdirected)) then itinerary?.finalArrivalDate() else null; 

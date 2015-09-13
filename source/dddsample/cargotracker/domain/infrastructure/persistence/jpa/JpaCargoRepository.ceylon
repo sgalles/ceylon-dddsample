@@ -41,7 +41,6 @@ class JpaCargoRepository() satisfies CargoRepository & Serializable{
             value cargo = entityManager.createNamedQuery("Cargo.findByTrackingId",javaClass<Cargo>())
                     .setParameter("trackingId", trackingId)
                     .singleResult;
-            print("@@@@@@@@@@@@@@@@``trackingId.idString`` ``cargo.routeSpecification.origin.name``");
             return cargo;
         } catch (NoResultException e) {
             return null;
