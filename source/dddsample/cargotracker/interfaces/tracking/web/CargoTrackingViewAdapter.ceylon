@@ -41,8 +41,8 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 	
 	String formatDate(Date d) => SimpleDateFormat("MM/dd/yyyy hh:mm a z").format(d);
 	
-	shared JList<HandlingEventViewAdapter> events => let(adapters = handlingEvents.map(HandlingEventViewAdapter)) 
-													 JavaList(ArrayList{*adapters});
+	shared JList<HandlingEventViewAdapter> events 
+			=> let(adapters = handlingEvents.map(HandlingEventViewAdapter))  JavaList(ArrayList{*adapters});
 	
 	
 	shared String trackingId => cargo.trackingId.idString;

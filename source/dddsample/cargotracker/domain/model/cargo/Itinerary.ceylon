@@ -77,7 +77,7 @@ shared class Itinerary {
 		
 		Boolean sameVoyageAnd(Location(Leg) locating, Voyage voyage)(Leg leg)
 			=> locating(leg).sameIdentityAs(event.location) && leg.voyage.sameIdentityAs(voyage);
-		// TODO : verifier s'il y a un bug avec nothing dans cette expression
+		
 		return switch(typeAndVoyage = event.typeAndVoyage)
 					case(is  [HandlingEventTypeRequiredVoyage, Voyage]) let([type,voyage] = typeAndVoyage) 
 						(switch(type)

@@ -22,12 +22,12 @@ import javax.faces.view {
 	viewScoped
 }
 import javax.inject {
-	named__TYPE,
+	named=named__TYPE,
 	inject__SETTER
 }
 
 
-named__TYPE
+named
 viewScoped
 shared class Track() satisfies Serializable{
 	
