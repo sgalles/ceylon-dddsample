@@ -1,10 +1,10 @@
 import dddsample.cargotracker.application.util {
 	toJavaList
 }
-import dddsample.cargotracker.domain.model.cargo {
-	Leg
-}
 
+import java.io {
+	Serializable
+}
 import java.text {
 	SimpleDateFormat
 }
@@ -18,7 +18,7 @@ import java.util {
    DTO for registering and routing a cargo.
    """
 shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadlineDate, 
-	misrouted, claimed,  lastKnownLocation, transportStatus){
+	misrouted, claimed,  lastKnownLocation, transportStatus) satisfies Serializable{
 	
 	value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 	

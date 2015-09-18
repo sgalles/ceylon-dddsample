@@ -1,6 +1,6 @@
 
 [defaults]
-encoding=Cp1252
+encoding=UTF-8
 
 
 [repositories]

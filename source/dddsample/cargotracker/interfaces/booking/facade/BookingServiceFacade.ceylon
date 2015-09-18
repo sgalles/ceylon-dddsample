@@ -1,9 +1,8 @@
-import dddsample.cargotracker.domain.model.location {
-	Location
-}
+
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute,
-	RouteCandidate
+	RouteCandidate,
+	Location
 }
 
 import java.util {
