@@ -63,6 +63,10 @@ shared class Itinerary {
 		return legs;
 	}
 	
+	shared [Leg*] legsMaybeEmpty => // TODO remove
+		CeylonList(_legs).sequence();
+	
+	
 	shared Location initialDepartureLocation() 
 			=> legs.first.loadLocation;	
 	

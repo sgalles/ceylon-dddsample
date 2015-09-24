@@ -23,7 +23,7 @@ shared object cargoRouteDtoAssembler{
 				claimed = cargo.delivery.transportStatus == claimed;
 				lastKnownLocation = let(lastKnownLocation = cargo.delivery.lastKnownLocation) "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
 				transportStatus = type(cargo.delivery.transportStatus).declaration.name;
-				legs = (cargo.itinerary else nothing).legs.map((leg) => Leg { 
+				legs = (cargo.itinerary else nothing).legsMaybeEmpty.map((leg) => Leg { 
 							voyageNumber = leg.voyage.voyageNumber.number; 
 							fromUnLocode = leg.loadLocation.unLocode.idString; 
 							fromName = leg.loadLocation.name; 

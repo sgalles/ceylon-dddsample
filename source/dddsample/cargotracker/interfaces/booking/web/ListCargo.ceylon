@@ -1,14 +1,29 @@
-import javax.faces.view {
+import dddsample.cargotracker.application.util {
+	toJavaList
+}
+import dddsample.cargotracker.interfaces.booking.facade {
+	BookingServiceFacade
+}
+import dddsample.cargotracker.interfaces.booking.facade.dto {
+	CargoRoute
+}
 
+import java.io {
+	Serializable
+}
+import java.util {
+	JList=List
+}
+
+import javax.annotation {
+	postConstruct
+}
+import javax.faces.view {
 	viewScoped
 }
 import javax.inject {
-
-	named=named__TYPE
-}
-import java.io {
-
-	Serializable
+	named=named__TYPE,
+	inject=inject__FIELD
 }
 
 """
@@ -24,6 +39,28 @@ import java.io {
 named
 viewScoped
 shared class ListCargo() satisfies Serializable{
+	
+	late List<CargoRoute> _cargos;
+	
+	inject
+	late BookingServiceFacade bookingServiceFacade;
+	
+	suppressWarnings("unusedDeclaration")
+	postConstruct
+	void init() {
+		_cargos = bookingServiceFacade.listAllCargos();
+	}
+	
+	shared JList<CargoRoute> cargos => toJavaList(_cargos);
+	
+	JList<CargoRoute> filter(Boolean(CargoRoute) predicate) => toJavaList(_cargos.filter(predicate));
+	
+	shared JList<CargoRoute> routedCargos => filter(CargoRoute.routed);
+	
+	shared JList<CargoRoute> notRoutedCargos => filter(not(CargoRoute.routed));
+	
+	shared JList<CargoRoute> claimedCargos => filter(CargoRoute.claimed);
+	
 	
 	
 }
