@@ -18,7 +18,7 @@ import java.util {
    DTO for registering and routing a cargo.
    """
 shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadlineDate, 
-	misrouted, claimed,  lastKnownLocation, transportStatus) satisfies Serializable{
+	misrouted, claimed,  lastKnownLocation, transportStatus, legs) satisfies Serializable{
 	
 	value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 	
@@ -30,12 +30,7 @@ shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadli
 	shared Boolean claimed;
 	shared String lastKnownLocation;
 	shared String transportStatus;
-	JList<Leg> _legs = toJavaList<Leg>({});
+	shared {Leg*} legs;
 	
-	shared JList<Leg> legs => Collections.unmodifiableList(_legs);
-	shared void addLeg(Leg leg){
-		_legs.add(leg);
-	}
-	
-	shared Boolean routed => !_legs.empty;
+	shared Boolean routed => !legs.empty;
 }

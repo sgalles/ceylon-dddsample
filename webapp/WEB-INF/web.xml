@@ -1,5 +1,10 @@
 <web-app>
   <distributable />
+  <env-entry>
+      <env-entry-name>graphTraversalUrl</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>http://localhost:8080/cargo-tracker/rest/graph-traversal/shortest-path</env-entry-value>
+  </env-entry>
   <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>

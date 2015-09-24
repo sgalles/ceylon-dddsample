@@ -2,10 +2,14 @@ import dddsample.cargotracker.application {
 	BookingService
 }
 import dddsample.cargotracker.domain.model.cargo {
-	CargoRepository
+	CargoRepository,
+	TrackingId,
+	Cargo
 }
 import dddsample.cargotracker.domain.model.location {
-	LocationRepository
+	LocationRepository,
+	ModelLocation=Location,
+	UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
 	VoyageRepository
@@ -17,6 +21,11 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 	RouteCandidate,
 	CargoRoute,
 	Location
+}
+import dddsample.cargotracker.interfaces.booking.facade.internal.assembler {
+	cargoRouteDtoAssembler,
+	locationDtoAssembler,
+	itineraryCandidateDtoAssembler
 }
 
 import java.io {
@@ -36,8 +45,8 @@ import javax.inject {
 applicationScoped
 shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade&Serializable{
 	
-	//inject
-	//late BookingService bookingService;
+	inject
+	late BookingService bookingService;
 	
 	inject
 	late LocationRepository locationRepository;
@@ -48,19 +57,41 @@ shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade&Serial
 	inject
 	late VoyageRepository voyageRepository;
 	
-	shared actual List<Location> listShippingLocations() => nothing;
+	shared actual List<Location> listShippingLocations(){
+		List<ModelLocation> allLocations = locationRepository.findAll();
+		return locationDtoAssembler.toDtoList(allLocations);
+	}
 	
-	shared actual void assignCargoToRoute(String trackingId, RouteCandidate route) {}
+	shared actual String bookNewCargo(String origin, String destination, Date arrivalDeadline) {
+		TrackingId trackingId = bookingService.bookNewCargo(
+			UnLocode.withCountryAndLocation(origin), 
+			UnLocode.withCountryAndLocation(destination),
+			arrivalDeadline);
+		return trackingId.idString;
+	}
 	
-	shared actual String bookNewCargo(String origin, String destination, Date arrivalDeadline) => nothing;
+	shared actual CargoRoute loadCargoForRouting(String trackingId) {
+		Cargo? cargo = cargoRepository.find(TrackingId.init(trackingId));
+		assert(exists cargo);
+		return cargoRouteDtoAssembler.toDto(cargo);
+	}
 	
-	shared actual void changeDestination(String trackingId, String destinationUnLocode) {}
+	shared actual void assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO) {
+		value itinerary = itineraryCandidateDtoAssembler.fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
+		value trackingId = TrackingId.init(trackingIdStr);
+		bookingService.assignCargoToRoute(itinerary, trackingId);
+	}
 	
-	shared actual List<CargoRoute> listAllCargos() => nothing;
+	shared actual void changeDestination(String trackingId, String destinationUnLocode) {
+		bookingService.changeDestination(TrackingId.init(trackingId), UnLocode.withCountryAndLocation(destinationUnLocode));
+	}
 	
-	shared actual CargoRoute loadCargoForRouting(String trackingId) => nothing;
+	shared actual List<CargoRoute> listAllCargos() 
+			=> cargoRepository.findAll().collect(cargoRouteDtoAssembler.toDto);
 	
-	shared actual List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) => nothing;
+	shared actual List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) 
+			=> let(itineraries = bookingService.requestPossibleRoutesForCargo(TrackingId.init(trackingId)))
+			   itineraries.collect(itineraryCandidateDtoAssembler.toDTO);	
 	
 	
 }

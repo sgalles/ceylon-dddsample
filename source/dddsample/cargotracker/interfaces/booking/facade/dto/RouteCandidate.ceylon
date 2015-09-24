@@ -13,12 +13,12 @@ import java.io {
    DTO for presenting and selecting an itinerary from a collection of
    candidates.
    """
-shared class RouteCandidate satisfies Serializable{
+shared class RouteCandidate(shared {Leg+} legs) satisfies Serializable{
 	
-	JList<Leg> _legs; 
+	/*JList<Leg> _legs; 
 	shared new({Leg*} legs){
 		_legs = toJavaList(legs); 
 	}
 	
-	shared JList<Leg> legs => Collections.unmodifiableList(_legs);
+	shared JList<Leg> legs => Collections.unmodifiableList(_legs);*/
 }

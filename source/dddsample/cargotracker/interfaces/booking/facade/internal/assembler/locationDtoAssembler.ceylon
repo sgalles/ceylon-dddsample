@@ -4,11 +4,11 @@ import dddsample.cargotracker.domain.model.location {
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	Location
 }
-object locationDtoAssembler {
+shared object locationDtoAssembler {
 	
-	Location toDto(LocationModel location) 
+	shared Location toDto(LocationModel location) 
 			=> Location(location.unLocode.idString, location.name);
 	
-	List<Location> toDtoList(List<LocationModel> allLocations) 
+	shared List<Location> toDtoList(List<LocationModel> allLocations) 
 			=> allLocations.collect(toDto).sort(byIncreasing(Location.name));
 }

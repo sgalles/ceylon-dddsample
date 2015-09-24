@@ -45,7 +45,7 @@ shared class Cargo satisfies Serializable{
 	shared Location origin;
 	
 	embedded
-	shared RouteSpecification routeSpecification;
+	shared variable RouteSpecification routeSpecification;
 	
 	embedded
 	variable Itinerary? _itinerary = null;
@@ -76,8 +76,18 @@ shared class Cargo satisfies Serializable{
 		this._delivery = delivery.updateOnRouting(routeSpecification, itinerary);
 	}
 	
+	shared void specifyNewRoute(RouteSpecification routeSpecification) {
+		this.routeSpecification = routeSpecification;
+		// Handling consistency within the Cargo aggregate synchronously
+		// TODO try to use state design pattern to remove this assert
+		// actually this is because assignToRoute must be called before AFAICT
+		assert(exists itinerary = this.itinerary); 
+		this._delivery = delivery.updateOnRouting(this.routeSpecification, itinerary);
+	}
+	
 	shared void deriveDeliveryProgress(HandlingHistory handlingHistory) {
 		this._delivery = Delivery.derivedFrom(routeSpecification, itinerary,handlingHistory);
 	}
+	
 	
 }
