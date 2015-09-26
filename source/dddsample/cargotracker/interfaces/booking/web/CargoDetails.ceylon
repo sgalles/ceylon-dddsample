@@ -38,28 +38,20 @@ import javax.inject {
    """
 named
 viewScoped
-shared class ListCargo() satisfies Serializable{
+shared class CargoDetails() satisfies Serializable{
 	
-	late List<CargoRoute> _cargos;
+	variable CargoRoute? _cargo = null;
+	shared variable String? trackingId = null;
 	
 	inject
 	late BookingServiceFacade bookingServiceFacade;
 	
-	suppressWarnings("unusedDeclaration")
-	postConstruct
-	void init() {
-		_cargos = bookingServiceFacade.listAllCargos();
+	shared CargoRoute? cargo => _cargo;
+	
+	shared void load() {
+		assert(exists trackingId = trackingId);
+		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
 	}
-	
-	shared JList<CargoRoute> cargos => toJavaList(_cargos);
-	
-	JList<CargoRoute> filteredCargos(Boolean(CargoRoute) predicate) => toJavaList(_cargos.filter(predicate));
-	
-	shared JList<CargoRoute> routedCargos => filteredCargos(CargoRoute.routed);
-	
-	shared JList<CargoRoute> notRoutedCargos => filteredCargos(not(CargoRoute.routed));
-	
-	shared JList<CargoRoute> claimedCargos => filteredCargos(CargoRoute.claimed);
 	
 	
 	

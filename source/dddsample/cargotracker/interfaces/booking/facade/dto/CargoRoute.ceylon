@@ -1,5 +1,5 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
+import ceylon.interop.java {
+	JavaList
 }
 
 import java.io {
@@ -9,16 +9,19 @@ import java.text {
 	SimpleDateFormat
 }
 import java.util {
-	Date,
 	JList=List,
-	Collections
+	Date
+}
+import dddsample.cargotracker.application.util {
+
+	toJavaList
 }
 
 """
    DTO for registering and routing a cargo.
    """
 shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadlineDate, 
-	misrouted, claimed,  lastKnownLocation, transportStatus, legs) satisfies Serializable{
+	misrouted, claimed,  lastKnownLocation, transportStatus, {Leg*} legsIt) satisfies Serializable{
 	
 	value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 	
@@ -30,7 +33,7 @@ shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadli
 	shared Boolean claimed;
 	shared String lastKnownLocation;
 	shared String transportStatus;
-	shared {Leg*} legs;
+	shared JList<Leg> legs = toJavaList(legsIt);
 	
 	shared Boolean routed => !legs.empty;
 }
