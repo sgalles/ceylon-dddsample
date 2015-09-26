@@ -12,6 +12,9 @@ import java.io {
 import java.util {
 	JList=List
 }
+import java.lang {
+	JString=String
+}
 
 import javax.faces.view {
 	viewScoped
@@ -48,7 +51,7 @@ shared class ChangeDestination() satisfies Serializable{
 	
 	shared variable String? trackingId = null;
 	
-	shared variable String? destinationUnlocode = null;
+	shared variable JString? destinationUnlocode = null;
 	
 	shared CargoRoute? cargo => _cargo;
 	
@@ -65,7 +68,7 @@ shared class ChangeDestination() satisfies Serializable{
 			exists trackingId = trackingId, 
 			exists destinationUnlocode = destinationUnlocode
 		);
-		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode);
+		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode.string);
 		return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
 	}
 	

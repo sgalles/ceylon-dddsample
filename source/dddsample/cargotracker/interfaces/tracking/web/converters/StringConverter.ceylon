@@ -15,7 +15,7 @@ import javax.faces.convert {
 
 facesConverter{forClass=`class String`; }
 shared class StringConverter() satisfies Converter{
-	getAsObject(FacesContext? facesContext, UIComponent? uIComponent, String ceylonString) 
+	shared actual String getAsObject(FacesContext? facesContext, UIComponent? uIComponent, String ceylonString) 
 			=> ceylonString;
 	
 	getAsString(FacesContext? facesContext, UIComponent? uIComponent, Object ceylonString) 

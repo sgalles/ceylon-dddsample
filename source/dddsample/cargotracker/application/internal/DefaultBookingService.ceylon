@@ -57,14 +57,14 @@ shared class DefaultBookingService() satisfies BookingService{
 		return cargo.trackingId;
 	}
 	
-	shared actual List<Itinerary> requestPossibleRoutesForCargo(TrackingId trackingId) {
+	shared actual default List<Itinerary> requestPossibleRoutesForCargo(TrackingId trackingId) {
 		Cargo? cargo = cargoRepository.find(trackingId);
 		return 	if(exists cargo) 
 				then routingService.fetchRoutesForSpecification(cargo.routeSpecification)
 				else [];
 	}
 	
-	shared actual void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
+	shared actual default void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
 		Cargo? cargo = cargoRepository.find(trackingId);
 		assert(exists cargo);
 		cargo.assignToRoute(itinerary);
@@ -72,7 +72,7 @@ shared class DefaultBookingService() satisfies BookingService{
 		/*logger.log(Level.INFO, "Assigned cargo {0} to new route", trackingId);*/
 	}
 	
-	shared actual void changeDestination(TrackingId trackingId, UnLocode unLocode) {
+	shared actual default void changeDestination(TrackingId trackingId, UnLocode unLocode) {
 		Cargo? cargo = cargoRepository.find(trackingId);
 		assert(exists cargo);
 		Location? newDestination = locationRepository.find(unLocode);
