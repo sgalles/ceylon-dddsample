@@ -51,7 +51,7 @@ shared class ChangeDestination() satisfies Serializable{
 	
 	shared variable String? trackingId = null;
 	
-	shared variable JString? destinationUnlocode = null;
+	shared variable String? destinationUnlocode = null;
 	
 	shared CargoRoute? cargo => _cargo;
 	
@@ -68,7 +68,7 @@ shared class ChangeDestination() satisfies Serializable{
 			exists trackingId = trackingId, 
 			exists destinationUnlocode = destinationUnlocode
 		);
-		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode.string);
+		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode);
 		return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
 	}
 	

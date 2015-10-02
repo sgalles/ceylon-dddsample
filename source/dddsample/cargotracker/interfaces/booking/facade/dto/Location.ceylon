@@ -1,16 +1,12 @@
 import java.io {
-
 	Serializable
 }
-import java.lang {
-	JString=String
-}
-import ceylon.interop.java {
 
-	javaString
+shared abstract class AbstractLocation<CeylonString>(shared CeylonString unLocode, String simpleName) 
+		satisfies Serializable given CeylonString satisfies String{
+	shared String name => simpleName + " (" + unLocode + ")";
 }
 
-shared class Location(String _unLocode, String simpleName) satisfies Serializable{
-	shared JString unLocode = javaString(_unLocode);
-	shared String name => simpleName + " (" + unLocode.string + ")";
-}
+shared class Location(String unLocode, String simpleName) 
+		extends AbstractLocation<String>(unLocode,simpleName){}
+
