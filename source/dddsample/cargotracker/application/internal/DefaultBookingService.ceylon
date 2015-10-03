@@ -41,10 +41,9 @@ shared class DefaultBookingService() satisfies BookingService{
 	
 	shared actual TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
 		TrackingId trackingId = cargoRepository.nextTrackingId();
-		Location? origin = locationRepository.find(originUnLocode);
-		assert(exists origin);
-		Location? destination = locationRepository.find(destinationUnLocode);
-		assert(exists destination);
+		assert(	exists origin = locationRepository.find(originUnLocode),
+		 		exists destination = locationRepository.find(destinationUnLocode)
+		);
 		RouteSpecification routeSpecification = RouteSpecification.init(origin,
 			destination, arrivalDeadline);
 		
@@ -57,26 +56,22 @@ shared class DefaultBookingService() satisfies BookingService{
 		return cargo.trackingId;
 	}
 	
-	shared actual default List<Itinerary> requestPossibleRoutesForCargo(TrackingId trackingId) {
-		Cargo? cargo = cargoRepository.find(trackingId);
-		return 	if(exists cargo) 
+	shared actual default List<Itinerary> requestPossibleRoutesForCargo(TrackingId trackingId) 
+		=> 	if(exists cargo = cargoRepository.find(trackingId)) 
 				then routingService.fetchRoutesForSpecification(cargo.routeSpecification)
 				else [];
-	}
 	
 	shared actual default void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
-		Cargo? cargo = cargoRepository.find(trackingId);
-		assert(exists cargo);
+		assert(exists cargo = cargoRepository.find(trackingId));
 		cargo.assignToRoute(itinerary);
 		cargoRepository.store(cargo);
 		/*logger.log(Level.INFO, "Assigned cargo {0} to new route", trackingId);*/
 	}
 	
 	shared actual default void changeDestination(TrackingId trackingId, UnLocode unLocode) {
-		Cargo? cargo = cargoRepository.find(trackingId);
-		assert(exists cargo);
-		Location? newDestination = locationRepository.find(unLocode);
-		assert(exists newDestination);
+		assert(exists cargo  = cargoRepository.find(trackingId),
+		       exists newDestination = locationRepository.find(unLocode)
+		);
 		
 		RouteSpecification routeSpecification = RouteSpecification.init(
 			cargo.origin, newDestination,
