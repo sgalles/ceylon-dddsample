@@ -44,7 +44,7 @@ shared class HandlingActivity {
 	
 	
 	
-	shared new init(HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Voyage] typeAndVoyage, Location location){
+	shared new init(HandlingEventTypeBundle<Voyage> typeAndVoyage, Location location){
 		this.location = location;
 		switch(typeAndVoyage) 
 		case(is HandlingEventTypeProhibitedVoyage){
