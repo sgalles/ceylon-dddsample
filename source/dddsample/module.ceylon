@@ -13,6 +13,6 @@ native("jvm")   module dddsample "1.0.0" {
 	
 	// Here to workaround some limitations of Ceylon in Wildfly, but should be remove at some point
 	shared import jbossvfs "3.2.9.Final";
-	shared import hibernateentitymanager "4.3.10.Final";
+	//shared import hibernateentitymanager "4.3.10.Final";
 	
 }
