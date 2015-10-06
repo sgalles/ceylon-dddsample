@@ -37,30 +37,26 @@ shared class Location {
 	
 	shared String name;
 	
-	shared new init(UnLocode unLocode, String name){
+	shared new (UnLocode unLocode, String name){
 		this.unLocode = unLocode;
 		this.name = name;
 	}
 	
-	shared new () extends init(UnLocode(),""){}
+	shared new unknown extends Location(UnLocode("XXXXX"), "Unknown location"){}
 	
-
-
-	shared new unknown extends init(UnLocode.withCountryAndLocation("XXXXX"), "Unknown location"){}
-	
-	shared new hongkong extends init(UnLocode.withCountryAndLocation("CNHKG"), "Hong Kong"){}
-	shared new melbourne extends init(UnLocode.withCountryAndLocation("AUMEL"), "Melbourne"){}
-	shared new stockholm extends init(UnLocode.withCountryAndLocation("SESTO"), "Stockholm"){}
-	shared new helsinki extends init(UnLocode.withCountryAndLocation("FIHEL"), "Helsinki"){}
-	shared new chicago extends init(UnLocode.withCountryAndLocation("USCHI"), "Chicago"){}
-	shared new tokyo extends init(UnLocode.withCountryAndLocation("JNTKO"), "Tokyo"){}
-	shared new hamburg extends init(UnLocode.withCountryAndLocation("DEHAM"), "Hamburg"){}
-	shared new shanghai extends init(UnLocode.withCountryAndLocation("CNSHA"), "Shanghai"){}
-	shared new rotterdam extends init(UnLocode.withCountryAndLocation("NLRTM"), "Rotterdam"){}
-	shared new gothenburg extends init(UnLocode.withCountryAndLocation("SEGOT"), "Guttenburg"){}
-	shared new hangzou extends init(UnLocode.withCountryAndLocation("CNHGH"), "Hangzhou"){}
-	shared new newyork extends init(UnLocode.withCountryAndLocation("USNYC"), "New York"){}
-	shared new dallas extends init(UnLocode.withCountryAndLocation("USDAL"), "Dallas"){}
+	shared new hongkong extends Location(UnLocode("CNHKG"), "Hong Kong"){}
+	shared new melbourne extends Location(UnLocode("AUMEL"), "Melbourne"){}
+	shared new stockholm extends Location(UnLocode("SESTO"), "Stockholm"){}
+	shared new helsinki extends Location(UnLocode("FIHEL"), "Helsinki"){}
+	shared new chicago extends Location(UnLocode("USCHI"), "Chicago"){}
+	shared new tokyo extends Location(UnLocode("JNTKO"), "Tokyo"){}
+	shared new hamburg extends Location(UnLocode("DEHAM"), "Hamburg"){}
+	shared new shanghai extends Location(UnLocode("CNSHA"), "Shanghai"){}
+	shared new rotterdam extends Location(UnLocode("NLRTM"), "Rotterdam"){}
+	shared new gothenburg extends Location(UnLocode("SEGOT"), "Guttenburg"){}
+	shared new hangzou extends Location(UnLocode("CNHGH"), "Hangzhou"){}
+	shared new newyork extends Location(UnLocode("USNYC"), "New York"){}
+	shared new dallas extends Location(UnLocode("USDAL"), "Dallas"){}
 	
 	shared Boolean sameIdentityAs(Location other) 
 			=> this.unLocode.sameValueAs(other.unLocode);

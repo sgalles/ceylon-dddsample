@@ -25,9 +25,9 @@ import javax.persistence {
 
 
 entity
-shared class Leg {
+shared class Leg(voyage, loadLocation, unloadLocation, Date loadTimeValue, Date unloadTimeValue) {
 	
-	// Auto-generated surrogate key
+	suppressWarnings("unusedDeclaration")
 	id
 	generatedValue
 	Long? id = null;
@@ -46,22 +46,13 @@ shared class Leg {
 		
 	temporal(TemporalType.\iTIMESTAMP)
 	column{name = "load_time";}
-	Date _loadTime;
+	Date _loadTime = loadTimeValue;
 	
 	temporal(TemporalType.\iTIMESTAMP)
 	column{name = "unload_time";}
-	Date _unloadTime;
+	Date _unloadTime = unloadTimeValue;
 	
-		
-	shared new init(Voyage voyage, Location loadLocation, Location unloadLocation, Date loadTime, Date unloadTime){
-		this.voyage = voyage;
-		this.loadLocation = loadLocation;
-		this.unloadLocation = unloadLocation;
-		this._loadTime = loadTime;
-		this._unloadTime = unloadTime;
-	}
-	
-	shared new() extends init(Voyage(), Location(), Location(), Date(0), Date(0)){}
+
 	
 	shared Date loadTime => Date(_loadTime.time);
 	

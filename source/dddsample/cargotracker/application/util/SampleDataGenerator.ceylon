@@ -99,26 +99,26 @@ shared class SampleDataGenerator() {
 		
 		if(true){
 		
-			Cargo abc123 = Cargo.init {
-				trackingId = TrackingId.init("ABC123");
-				routeSpecification = RouteSpecification.init { 
+			Cargo abc123 = Cargo{
+				trackingId = TrackingId("ABC123");
+				routeSpecification = RouteSpecification { 
 					origin = hongkong; 
 					destination = helsinki; 
-					arrivalDeadline = toDate("2014-03-15"); 
+					arrivalDeadlineValue = toDate("2014-03-15"); 
 				};
 			};
 			
 			abc123.assignToRoute(
-				Itinerary.init{
-					Leg.init(hongkong_to_new_york, 
+				Itinerary{
+					Leg(hongkong_to_new_york, 
 						hongkong, newyork,
 						toDate("2014-03-02"), toDate("2014-03-05")
 					),
-					Leg.init(new_york_to_dallas, 
+					Leg(new_york_to_dallas, 
 						newyork, dallas,
 						toDate("2014-03-06"), toDate("2014-03-08")
 					),
-					Leg.init(dallas_to_helsinki, 
+					Leg(dallas_to_helsinki, 
 						dallas, helsinki,
 						toDate("2014-03-09"), toDate("2014-03-12")
 					)
@@ -151,26 +151,26 @@ shared class SampleDataGenerator() {
 		
 		if(true){
 			// Cargo JKL567
-			Cargo jkl567 = Cargo.init {
-				trackingId = TrackingId.init("JKL567");
-				routeSpecification = RouteSpecification.init { 
+			Cargo jkl567 = Cargo{
+				trackingId = TrackingId("JKL567");
+				routeSpecification = RouteSpecification { 
 					origin = hangzou; 
 					destination = stockholm; 
-					arrivalDeadline = toDate("2014-03-18"); 
+					arrivalDeadlineValue = toDate("2014-03-18"); 
 				};
 			};
 			
 			jkl567.assignToRoute(
-				Itinerary.init{
-					Leg.init(hongkong_to_new_york, 
+				Itinerary{
+					Leg(hongkong_to_new_york, 
 						hangzou, newyork,
 						toDate("2014-03-03"), toDate("2014-03-05")
 					),
-					Leg.init(new_york_to_dallas, 
+					Leg(new_york_to_dallas, 
 						newyork, dallas,
 						toDate("2014-03-06"), toDate("2014-03-08")
 					),
-					Leg.init(dallas_to_helsinki, 
+					Leg(dallas_to_helsinki, 
 						dallas, stockholm,
 						toDate("2014-03-09"), toDate("2014-03-11")
 					)
@@ -207,12 +207,12 @@ shared class SampleDataGenerator() {
 
 		if(true){
 			// Cargo definition DEF789. This one will remain unrouted.
-			Cargo def789 = Cargo.init {
-				trackingId = TrackingId.init("DEF789");
-				routeSpecification = RouteSpecification.init { 
+			Cargo def789 = Cargo {
+				trackingId = TrackingId("DEF789");
+				routeSpecification = RouteSpecification { 
 					origin = hongkong; 
 					destination = melbourne; 
-					arrivalDeadline = toDate("2014-11-18"); 
+					arrivalDeadlineValue = toDate("2014-11-18"); 
 				};
 			};
 			entityManager.persist(def789);
@@ -221,18 +221,18 @@ shared class SampleDataGenerator() {
 		
 		if(true){
 			// Cargo definition MNO456. This one will be claimed properly.
-			Cargo mno456 = Cargo.init {
-				trackingId = TrackingId.init("MNO456");
-				routeSpecification = RouteSpecification.init { 
+			Cargo mno456 = Cargo {
+				trackingId = TrackingId("MNO456");
+				routeSpecification = RouteSpecification { 
 					origin = newyork; 
 					destination = dallas; 
-					arrivalDeadline = toDate("2014-3-27"); 
+					arrivalDeadlineValue = toDate("2014-3-27"); 
 				};
 			};
 			
 			mno456.assignToRoute(
-				Itinerary.init{
-					Leg.init(new_york_to_dallas, 
+				Itinerary{
+					Leg(new_york_to_dallas, 
 						newyork, dallas,
 						toDate("2013-10-24"), toDate("2013-10-25")
 					)

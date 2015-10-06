@@ -8,10 +8,6 @@ import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent
 }
 
-import java.io {
-	Serializable
-}
-
 import javax.faces.application {
 	FacesMessage
 }
@@ -47,10 +43,10 @@ shared class Track(){
 		
 	shared void onTrackById(){
 		assert(exists trackingId = trackingId);
-		Cargo? cargo = cargoRepository.find(TrackingId.init(trackingId));
+		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
 		if(exists cargo){
 			List<HandlingEvent> handlingEvents = handlingEventRepository
-					.lookupHandlingHistoryOfCargo(TrackingId.init(trackingId))
+					.lookupHandlingHistoryOfCargo(TrackingId(trackingId))
 					.distinctEventsByCompletionTime;
 			this.cargo = CargoTrackingViewAdapter(cargo, handlingEvents);
 		}else{

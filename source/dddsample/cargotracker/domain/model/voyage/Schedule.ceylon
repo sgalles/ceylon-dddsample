@@ -3,8 +3,7 @@ import dddsample.cargotracker.application.util {
 }
 
 import java.util {
-	JList=List,
-	JArrayList=ArrayList
+	JList=List
 }
 
 import javax.persistence {
@@ -20,27 +19,11 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class Schedule{
+shared class Schedule({CarrierMovement+} carrierMovementSeq){
 	
 	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
 	joinColumn{name = "voyage_id";}
-	shared variable JList<CarrierMovement> carrierMovements;
-	
-	shared new(){
-		this.carrierMovements = JArrayList<CarrierMovement>();
-	}
-	
-	shared new init({CarrierMovement+} carrierMovements){
-		this.carrierMovements = toJavaList(carrierMovements);
-	}
-	
-	// null object pattern
-	shared new empty extends Schedule(){}
-	
-	
-	
-	
-	
+	shared variable JList<CarrierMovement> carrierMovements = toJavaList(carrierMovementSeq);
 	
 	
 }

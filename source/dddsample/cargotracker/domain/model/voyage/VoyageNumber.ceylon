@@ -8,18 +8,10 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class VoyageNumber {
+shared class VoyageNumber(number) {
 	
 	column__FIELD{name = "voyage_number";}
 	shared String number;
-	
-	
-	
-	shared new init(String number){
-		this.number = number;
-	}
-	
-	shared new() extends init(""){}
 	
 	shared Boolean sameValueAs(VoyageNumber other) => this.number == other.number;
 	

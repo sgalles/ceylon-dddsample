@@ -51,7 +51,7 @@ class JpaCargoRepository() satisfies CargoRepository{
 	
 	shared actual TrackingId nextTrackingId() 
 			=> let(random = javaString(UUID.randomUUID().string.uppercased))
-				TrackingId.init(random.substring(0, random.indexOf("-"))); // TODO : Ceylonize
+				TrackingId(random.substring(0, random.indexOf("-"))); // TODO : Ceylonize
 	
 	shared actual List<Cargo> findAll() 
 			=> CeylonList(

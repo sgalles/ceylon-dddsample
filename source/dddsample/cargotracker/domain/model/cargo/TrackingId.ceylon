@@ -1,10 +1,6 @@
-import java.io {
-	Serializable
-}
-
 import javax.persistence {
 	embeddable,
-	column__FIELD
+	column=column__FIELD
 }
 
 """
@@ -12,14 +8,9 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class TrackingId{
+shared class TrackingId(idString){
 	
-	column__FIELD{name = "tracking_id"; unique = true; updatable = false;}
+	column{name = "tracking_id"; unique = true; updatable = false;}
 	shared String idString;
-	
-	shared new init(String idString){
-		this.idString = idString;
-	}
-	
-	shared new() extends init(""){}
+
 }

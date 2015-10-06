@@ -27,9 +27,10 @@ namedQueries({
 		namedQuery{name = "Cargo.findByTrackingId";
 			query = "Select c from Cargo c where c.trackingId = :trackingId";}	
 }) 
-shared class Cargo{
+shared class Cargo(trackingId, routeSpecification){
 	
 	// Auto-generated surrogate key
+	suppressWarnings("unusedDeclaration")
 	id
 	generatedValue
 	Long? id = null;
@@ -37,32 +38,23 @@ shared class Cargo{
 	embedded 
 	shared TrackingId trackingId;
 	
-	manyToOne
-	joinColumn{name = "origin_id";  updatable = false; }
-	shared Location origin;
-	
 	embedded
 	shared variable RouteSpecification routeSpecification;
 	
+	// Cargo origin never changes, even if the route specification changes.
+	// However, at creation, cargo orgin can be derived from the initial
+	// route specification.
+	manyToOne
+	joinColumn{name = "origin_id";  updatable = false; }
+	shared Location origin = routeSpecification.origin;
+		
 	embedded
 	variable Itinerary? _itinerary = null;
 	
 	embedded
-	variable Delivery _delivery;
-	
-	shared new init(TrackingId trackingId, RouteSpecification routeSpecification){
-		this.trackingId = trackingId;
-		// Cargo origin never changes, even if the route specification changes.
-		// However, at creation, cargo orgin can be derived from the initial
-		// route specification.
-		this.origin = routeSpecification.origin;
-		this.routeSpecification = routeSpecification;
-		
-		this._delivery = Delivery.derivedFrom(routeSpecification,
+	variable Delivery _delivery = Delivery.derivedFrom(routeSpecification,
                 this._itinerary, HandlingHistory.empty); // TODO : WAT ? this._itinerary is always here null. Strange.
-	}
-	
-	shared new() extends init(TrackingId(), RouteSpecification()){}
+
 	
 	shared Itinerary? itinerary => _itinerary;
 	

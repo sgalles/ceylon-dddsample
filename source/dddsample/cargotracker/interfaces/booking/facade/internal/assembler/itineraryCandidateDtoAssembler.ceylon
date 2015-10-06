@@ -1,6 +1,3 @@
-import dddsample.cargotracker.application.util {
-	toDate
-}
 import dddsample.cargotracker.domain.model.cargo {
 	ModelItinerary=Itinerary,
 	ModelLeg=Leg
@@ -27,14 +24,14 @@ shared object itineraryCandidateDtoAssembler {
 	
 	shared ModelItinerary fromDTO( RouteCandidate routeCandidateDTO, VoyageRepository voyageRepository, LocationRepository locationRepository) 
 			=>  let(dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z"))
-				ModelItinerary.init{
-				legs = routeCandidateDTO.legs.map((legDTO) =>
-					ModelLeg.init{ 
-						voyage = voyageRepository.find(VoyageNumber.init(legDTO.voyageNumber)) else nothing;
-						loadLocation = locationRepository.find(UnLocode.withCountryAndLocation(legDTO.fromUnLocode)) else nothing;
-						unloadLocation = locationRepository.find(UnLocode.withCountryAndLocation(legDTO.toUnLocode)) else nothing;
-						loadTime = dateFormat.parse(legDTO.loadTime);
-						unloadTime = dateFormat.parse(legDTO.unloadTime);
+				ModelItinerary{
+				legsInit = routeCandidateDTO.legs.map((legDTO) =>
+					ModelLeg{ 
+						voyage = voyageRepository.find(VoyageNumber(legDTO.voyageNumber)) else nothing;
+						loadLocation = locationRepository.find(UnLocode(legDTO.fromUnLocode)) else nothing;
+						unloadLocation = locationRepository.find(UnLocode(legDTO.toUnLocode)) else nothing;
+						loadTimeValue = dateFormat.parse(legDTO.loadTime);
+						unloadTimeValue = dateFormat.parse(legDTO.unloadTime);
 					}
 				);
 			};

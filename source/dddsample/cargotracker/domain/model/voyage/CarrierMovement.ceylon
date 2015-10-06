@@ -31,9 +31,13 @@ import javax.persistence {
 """
 entity
 table{name = "carrier_movement";}
-shared class CarrierMovement{
-	
+shared class CarrierMovement(
+		departureLocation,
+		arrivalLocation,
+		departureTime,
+		arrivalTime){
 
+	suppressWarnings("unusedDeclaration")
 	id
 	generatedValue
 	Long? id = null;
@@ -53,25 +57,6 @@ shared class CarrierMovement{
 	temporal(TemporalType.\iTIMESTAMP)
 	column{name = "arrival_time";}
 	shared Date arrivalTime;
-	
-	
-	
-	shared new init(
-		Location departureLocation,
-		Location arrivalLocation,
-		Date departureTime,
-		Date arrivalTime
-	){
-		this.departureLocation = departureLocation;
-		this.arrivalLocation = arrivalLocation;
-		this.departureTime = departureTime;
-		this.arrivalTime = arrivalTime;
-	}
-	
-	shared new() extends init(Location.unknown, Location.unknown, Date(0), Date(0)){}
-	
-	// null object pattern
-	shared new unknown extends init(Location.unknown, Location.unknown, Date(0), Date(0)){}
 	
 		
 }

@@ -54,7 +54,7 @@ shared class HandlingEventFactory() {
 						let(voyage = findVoyage(voyageNumber))
 						[type, voyage];
 		
-		return HandlingEvent.init(cargo, completionTime,
+		return HandlingEvent(cargo, completionTime,
 					registrationTime, location, typeAndVoyage);  
 	}
 	

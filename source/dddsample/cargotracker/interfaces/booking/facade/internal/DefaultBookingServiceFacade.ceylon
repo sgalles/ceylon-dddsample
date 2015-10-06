@@ -61,33 +61,33 @@ shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade{
 	
 	shared actual String bookNewCargo(String origin, String destination, Date arrivalDeadline) {
 		TrackingId trackingId = bookingService.bookNewCargo(
-			UnLocode.withCountryAndLocation(origin), 
-			UnLocode.withCountryAndLocation(destination),
+			UnLocode(origin), 
+			UnLocode(destination),
 			arrivalDeadline);
 		return trackingId.idString;
 	}
 	
 	shared actual CargoRoute loadCargoForRouting(String trackingId) {
-		Cargo? cargo = cargoRepository.find(TrackingId.init(trackingId));
+		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
 		assert(exists cargo);
 		return cargoRouteDtoAssembler.toDto(cargo);
 	}
 	
 	shared actual void assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO) {
 		value itinerary = itineraryCandidateDtoAssembler.fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
-		value trackingId = TrackingId.init(trackingIdStr);
+		value trackingId = TrackingId(trackingIdStr);
 		bookingService.assignCargoToRoute(itinerary, trackingId);
 	}
 	
 	shared actual void changeDestination(String trackingId, String destinationUnLocode) {
-		bookingService.changeDestination(TrackingId.init(trackingId), UnLocode.withCountryAndLocation(destinationUnLocode));
+		bookingService.changeDestination(TrackingId(trackingId), UnLocode(destinationUnLocode));
 	}
 	
 	shared actual List<CargoRoute> listAllCargos() 
 			=> cargoRepository.findAll().collect(cargoRouteDtoAssembler.toDto);
 	
 	shared actual List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) 
-			=> let(itineraries = bookingService.requestPossibleRoutesForCargo(TrackingId.init(trackingId)))
+			=> let(itineraries = bookingService.requestPossibleRoutesForCargo(TrackingId(trackingId)))
 			   itineraries.collect(itineraryCandidateDtoAssembler.toDTO);	
 	
 	

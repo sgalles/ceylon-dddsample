@@ -10,8 +10,7 @@ import dddsample.cargotracker.domain.model.cargo {
 }
 import dddsample.cargotracker.domain.model.location {
 	UnLocode,
-	LocationRepository,
-	Location
+	LocationRepository
 }
 import dddsample.cargotracker.domain.service {
 	RoutingService
@@ -44,10 +43,10 @@ shared class DefaultBookingService() satisfies BookingService{
 		assert(	exists origin = locationRepository.find(originUnLocode),
 		 		exists destination = locationRepository.find(destinationUnLocode)
 		);
-		RouteSpecification routeSpecification = RouteSpecification.init(origin,
+		RouteSpecification routeSpecification = RouteSpecification(origin,
 			destination, arrivalDeadline);
 		
-		Cargo cargo = Cargo.init(trackingId, routeSpecification);
+		Cargo cargo = Cargo(trackingId, routeSpecification);
 		
 		cargoRepository.store(cargo);
 		/*logger.log(Level.INFO, "Booked new cargo with tracking id {0}",
@@ -73,7 +72,7 @@ shared class DefaultBookingService() satisfies BookingService{
 		       exists newDestination = locationRepository.find(unLocode)
 		);
 		
-		RouteSpecification routeSpecification = RouteSpecification.init(
+		RouteSpecification routeSpecification = RouteSpecification(
 			cargo.origin, newDestination,
 			cargo.routeSpecification.arrivalDeadline);
 		cargo.specifyNewRoute(routeSpecification);

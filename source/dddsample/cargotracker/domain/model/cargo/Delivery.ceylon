@@ -1,10 +1,6 @@
 
 
 
-import ceylon.language.meta {
-	type
-}
-
 import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
 	TransportStatusConverter,
 	RoutingStatusConverter
@@ -114,7 +110,7 @@ shared class Delivery {
 							 case(load) 
 								let(searchedLeg = legs.find((leg) => leg.loadLocation.sameIdentityAs(lastEvent.location))) 
 								if(exists leg = searchedLeg) 
-								then HandlingActivity.init([unload, leg.voyage], leg.unloadLocation) 
+								then HandlingActivity([unload, leg.voyage], leg.unloadLocation) 
 								else null
 							 case(unload)
 								let(pairedLegs = legs.paired.sequence().withTrailing([legs.last,null])) 
@@ -123,20 +119,20 @@ shared class Delivery {
 								)) 
 								if(exists [leg, nextLeg] = searchedPairedLeg) 
 								then if(exists nextLeg) 
-									 then HandlingActivity.init([load, nextLeg.voyage], nextLeg.loadLocation)  
-									 else  HandlingActivity.init(claim, leg.unloadLocation)
+									 then HandlingActivity([load, nextLeg.voyage], nextLeg.loadLocation)  
+									 else  HandlingActivity(claim, leg.unloadLocation)
 								else null
 							case(receive) 
 								let(firstLeg = legs.first) 
-								HandlingActivity.init([load, firstLeg.voyage], firstLeg.loadLocation)
+								HandlingActivity([load, firstLeg.voyage], firstLeg.loadLocation)
 							case(claim) null
 							case(customs) null
 					 )	
-					else HandlingActivity.init(receive, routeSpecification.origin); 
+					else HandlingActivity(receive, routeSpecification.origin); 
 		}
 
 	
-	shared new init(HandlingEvent? lastEvent, Itinerary? itinerary, RouteSpecification routeSpecification){
+	shared new (HandlingEvent? lastEvent, Itinerary? itinerary, RouteSpecification routeSpecification){
 		
 		Boolean calculateMisdirectionStatus() 
 				=> if(exists lastEvent,exists itinerary)  then !itinerary.isExpected(lastEvent) else false;
@@ -151,13 +147,10 @@ shared class Delivery {
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
 	}
 	
-	shared new () extends init(HandlingEvent(), Itinerary(), RouteSpecification()){}
-	
-	
-	
+
 	
 	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary? itinerary, HandlingHistory handlingHistory)
-			extends init(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
+			extends Delivery(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
 	
 	shared Boolean onTrack => _onTrack(routingStatus,misdirected);
 	
@@ -170,7 +163,7 @@ shared class Delivery {
 	shared Date? estimatedTimeOfArrival => if(exists _eta) then Date(_eta.time) else null;
 		
 	shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary) 
-		=> Delivery.init(this.lastEvent, itinerary, routeSpecification);
+		=> Delivery(this.lastEvent, itinerary, routeSpecification);
 	
 	
 	

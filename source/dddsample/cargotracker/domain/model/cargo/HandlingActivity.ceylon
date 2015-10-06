@@ -8,8 +8,7 @@ import dddsample.cargotracker.domain.model.handling {
 	HandlingEventType,
 	HandlingEventTypeBundle,
 	HandlingEventTypeProhibitedVoyage,
-	HandlingEventTypeRequiredVoyage,
-	receive
+	HandlingEventTypeRequiredVoyage
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -44,7 +43,7 @@ shared class HandlingActivity {
 	
 	
 	
-	shared new init(HandlingEventTypeBundle<Voyage> typeAndVoyage, Location location){
+	shared new (HandlingEventTypeBundle<Voyage> typeAndVoyage, Location location){
 		this.location = location;
 		switch(typeAndVoyage) 
 		case(is HandlingEventTypeProhibitedVoyage){
@@ -58,7 +57,7 @@ shared class HandlingActivity {
 		
 	} 
 	 
-	shared new () extends init(receive, Location.unknown){}
+	
 	
 	 
 

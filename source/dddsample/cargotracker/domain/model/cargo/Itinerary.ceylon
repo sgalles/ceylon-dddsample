@@ -45,18 +45,12 @@ import javax.persistence {
 shared Date endOfDays = Date(Long.\iMAX_VALUE);
 
 embeddable
-shared class Itinerary {
+shared class Itinerary({Leg+} legsInit) {
 	
 	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
 	orderBy("load_time") 
-	JList<Leg> _legs;
-	
-	shared new init({Leg+} legs){
-		this._legs = toJavaList(legs);
-	}
-	
-	shared new() extends init({Leg()}){}
+	JList<Leg> _legs = toJavaList(legsInit);
 	
 	shared [Leg+] legs {
 		assert(nonempty legs = CeylonList(_legs).sequence());

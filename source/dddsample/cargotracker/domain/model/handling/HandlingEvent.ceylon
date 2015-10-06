@@ -62,7 +62,8 @@ namedQuery{name = "HandlingEvent.findByTrackingId";
 	query = "Select e from HandlingEvent e where e.cargo.trackingId = :trackingId";}
 	
 shared class HandlingEvent {
-	// Auto-generated surrogate key
+		
+	suppressWarnings("unusedDeclaration")
 	id
 	generatedValue
 	Long? id = null;
@@ -91,7 +92,7 @@ shared class HandlingEvent {
 	joinColumn{name = "cargo_id";}
 	shared Cargo cargo;
 	
-	shared new init(
+	shared new (
 		Cargo cargo,
 		Date completionTime,
 		Date registrationTime,
@@ -112,8 +113,6 @@ shared class HandlingEvent {
 		this.location = location;
 		this.cargo = cargo;
 	}
-	
-	shared new() extends init(Cargo(), Date(0), Date(0), Location.unknown, customs){}
 	
 	shared Date completionTime => Date(_completionTime.time);
 	

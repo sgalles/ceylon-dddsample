@@ -1,7 +1,3 @@
-import java.io {
-	Serializable
-}
-
 import javax.persistence {
 	embeddable
 }
@@ -11,16 +7,9 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class UnLocode{
+shared class UnLocode(String countryAndLocation){
 	
-	String unlocode;
-	
-	shared new(){
-		unlocode = "";
-	}
-	shared new withCountryAndLocation(String countryAndLocation){
-		unlocode = countryAndLocation.uppercased;
-	}
+	String unlocode =  countryAndLocation.uppercased;
 	
 	shared String idString => unlocode;
 	

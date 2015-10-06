@@ -1,10 +1,4 @@
-import ceylon.language.meta {
-	type
-}
-import ceylon.collection {
 
-	HashMap
-}
 shared abstract class TransportStatus() 
 	of not_received | in_port | onboard_carrier | claimed | unknown {
 }

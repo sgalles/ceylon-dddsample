@@ -7,6 +7,7 @@ import javax.persistence {
 }
 class DatasourceProducer() {
 	
+	suppressWarnings("unusedDeclaration")
 	produces__GETTER
 	persistenceContext__SETTER
 	late EntityManager entityManager;
