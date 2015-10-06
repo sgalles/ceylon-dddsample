@@ -1,3 +1,6 @@
+import dddsample.cargotracker.application.util {
+	toJavaList
+}
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
@@ -6,14 +9,8 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 	Location
 }
 
-import java.io {
-	Serializable
-}
 import java.util {
 	JList=List
-}
-import java.lang {
-	JString=String
 }
 
 import javax.faces.view {
@@ -22,10 +19,6 @@ import javax.faces.view {
 import javax.inject {
 	named=named__TYPE,
 	inject=inject__FIELD
-}
-import dddsample.cargotracker.application.util {
-
-	toJavaList
 }
 
 """
@@ -40,7 +33,7 @@ import dddsample.cargotracker.application.util {
    """
 named
 viewScoped
-shared class ChangeDestination() satisfies Serializable{
+shared class ChangeDestination(){
 	
 	inject
 	late BookingServiceFacade bookingServiceFacade;

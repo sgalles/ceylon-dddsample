@@ -11,7 +11,7 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class UnLocode  satisfies Serializable{
+shared class UnLocode{
 	
 	String unlocode;
 	

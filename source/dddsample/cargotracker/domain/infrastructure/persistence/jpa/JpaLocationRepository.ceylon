@@ -8,10 +8,6 @@ import dddsample.cargotracker.domain.model.voyage {
 	VoyageNumber
 }
 
-import java.io {
-	Serializable
-}
-
 import javax.enterprise.context {
 	applicationScoped
 }
@@ -25,7 +21,7 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaVoyageRepository() satisfies VoyageRepository & Serializable{
+class JpaVoyageRepository() satisfies VoyageRepository {
 	
 	inject
 	late EntityManager entityManager;

@@ -12,7 +12,7 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class TrackingId satisfies Serializable{
+shared class TrackingId{
 	
 	column__FIELD{name = "tracking_id"; unique = true; updatable = false;}
 	shared String idString;

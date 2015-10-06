@@ -1,6 +1,3 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
@@ -8,16 +5,6 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute
 }
 
-import java.io {
-	Serializable
-}
-import java.util {
-	JList=List
-}
-
-import javax.annotation {
-	postConstruct
-}
 import javax.faces.view {
 	viewScoped
 }
@@ -38,7 +25,7 @@ import javax.inject {
    """
 named
 viewScoped
-shared class CargoDetails() satisfies Serializable{
+shared class CargoDetails(){
 	
 	variable CargoRoute? _cargo = null;
 	shared variable String? trackingId = null;

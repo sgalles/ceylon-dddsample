@@ -2,9 +2,6 @@ import dddsample.cargotracker.application.util {
 	toJavaList
 }
 
-import java.io {
-	Serializable
-}
 import java.util {
 	JList=List,
 	JArrayList=ArrayList
@@ -23,7 +20,7 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class Schedule  satisfies Serializable{
+shared class Schedule{
 	
 	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
 	joinColumn{name = "voyage_id";}

@@ -1,11 +1,9 @@
-import java.io {
-	Serializable
-}
+
 
 // workaround to deactivate the automatic conversion from ceylon.language.String to java.lang.String for unLocode
 // else it causes this JSF error "Validation Error: Value is not valid" with <p:selectOneMenu/>
 shared abstract class AbstractLocation<CeylonString>(shared CeylonString unLocode, String simpleName) 
-		satisfies Serializable given CeylonString satisfies String{
+		given CeylonString satisfies String{
 	shared String name => simpleName + " (" + unLocode + ")";
 }
 

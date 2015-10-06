@@ -8,9 +8,6 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute
 }
 
-import java.io {
-	Serializable
-}
 import java.util {
 	JList=List
 }
@@ -38,7 +35,7 @@ import javax.inject {
    """
 named
 viewScoped
-shared class ListCargo() satisfies Serializable{
+shared class ListCargo(){
 	
 	late List<CargoRoute> _cargos;
 	

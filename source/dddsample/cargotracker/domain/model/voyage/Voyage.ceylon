@@ -5,9 +5,6 @@ import dddsample.cargotracker.domain.model.location {
 	Location
 }
 
-import java.io {
-	Serializable
-}
 import java.lang {
 	Long
 }
@@ -34,7 +31,7 @@ import javax.persistence {
 entity
 namedQuery{name = "Voyage.findByVoyageNumber";
 	query = "Select v from Voyage v where v.voyageNumber = :voyageNumber";}
-shared class Voyage satisfies Serializable{
+shared class Voyage{
 	
 	id__FIELD
 	generatedValue__FIELD

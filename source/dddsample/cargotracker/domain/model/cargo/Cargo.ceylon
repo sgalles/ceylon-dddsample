@@ -5,9 +5,6 @@ import dddsample.cargotracker.domain.model.location {
 	Location
 }
 
-import java.io {
-	Serializable
-}
 import java.lang {
 	Long
 }
@@ -30,7 +27,7 @@ namedQueries({
 		namedQuery{name = "Cargo.findByTrackingId";
 			query = "Select c from Cargo c where c.trackingId = :trackingId";}	
 }) 
-shared class Cargo satisfies Serializable{
+shared class Cargo{
 	
 	// Auto-generated surrogate key
 	id

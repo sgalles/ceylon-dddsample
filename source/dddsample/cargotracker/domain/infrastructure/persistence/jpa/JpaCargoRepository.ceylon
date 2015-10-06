@@ -10,9 +10,6 @@ import dddsample.cargotracker.domain.model.cargo {
 	TrackingId
 }
 
-import java.io {
-	Serializable
-}
 import java.util {
 	UUID
 }
@@ -30,7 +27,7 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaCargoRepository() satisfies CargoRepository & Serializable{
+class JpaCargoRepository() satisfies CargoRepository{
 	
 	inject
 	late EntityManager entityManager;

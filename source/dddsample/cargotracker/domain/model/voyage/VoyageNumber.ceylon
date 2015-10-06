@@ -1,7 +1,3 @@
-import java.io {
-	Serializable
-}
-
 import javax.persistence {
 	embeddable,
 	column__FIELD
@@ -12,7 +8,7 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class VoyageNumber satisfies Serializable{
+shared class VoyageNumber {
 	
 	column__FIELD{name = "voyage_number";}
 	shared String number;

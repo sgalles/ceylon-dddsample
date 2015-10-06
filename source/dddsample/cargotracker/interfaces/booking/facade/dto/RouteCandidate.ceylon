@@ -1,19 +1,9 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
-import java.util {
-	JList=List,
-	Collections
-}
-import java.io {
 
-	Serializable
-}
 """
    DTO for presenting and selecting an itinerary from a collection of
    candidates.
    """
-shared class RouteCandidate(shared {Leg+} legs) satisfies Serializable{
+shared class RouteCandidate(shared {Leg+} legs){
 	
 	/*JList<Leg> _legs; 
 	shared new({Leg*} legs){

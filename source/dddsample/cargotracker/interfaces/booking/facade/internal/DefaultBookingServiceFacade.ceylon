@@ -28,9 +28,6 @@ import dddsample.cargotracker.interfaces.booking.facade.internal.assembler {
 	itineraryCandidateDtoAssembler
 }
 
-import java.io {
-	Serializable
-}
 import java.util {
 	Date
 }
@@ -43,7 +40,7 @@ import javax.inject {
 }
 
 applicationScoped
-shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade&Serializable{
+shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade{
 	
 	inject
 	late BookingService bookingService;

@@ -1,6 +1,3 @@
-import java.io {
-	Serializable
-}
 import java.lang {
 	Long
 }
@@ -29,7 +26,7 @@ namedQueries({
 		namedQuery{name = "Location.findByUnLocode";
 			query = "Select l from Location l where l.unLocode = :unLocode";}	
 		}) 
-shared class Location satisfies Serializable{
+shared class Location {
 	
 	id
 	generatedValue

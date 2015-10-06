@@ -9,10 +9,6 @@ import dddsample.cargotracker.domain.model.location {
 	UnLocode
 }
 
-import java.io {
-	Serializable
-}
-
 import javax.enterprise.context {
 	applicationScoped
 }
@@ -26,7 +22,7 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaLocationRepository() satisfies LocationRepository & Serializable{
+class JpaLocationRepository() satisfies LocationRepository{
 	
 	inject
 	late EntityManager entityManager;

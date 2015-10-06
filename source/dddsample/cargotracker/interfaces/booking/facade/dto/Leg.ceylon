@@ -4,12 +4,8 @@ import java.text {
 import java.util {
 	Date
 }
-import java.io {
-
-	Serializable
-}
 shared class Leg(voyageNumber, fromUnLocode, String fromName, 
-				toUnLocode, toName, Date loadTimeDate, Date unloadTimeDate) satisfies Serializable{
+				toUnLocode, toName, Date loadTimeDate, Date unloadTimeDate){
 	
 	value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 	

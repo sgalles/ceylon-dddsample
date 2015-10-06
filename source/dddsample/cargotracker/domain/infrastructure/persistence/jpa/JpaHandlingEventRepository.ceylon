@@ -12,10 +12,6 @@ import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory
 }
 
-import java.io {
-	Serializable
-}
-
 import javax.enterprise.context {
 	applicationScoped
 }
@@ -28,7 +24,7 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaHandlingEventRepository() satisfies HandlingEventRepository & Serializable{
+class JpaHandlingEventRepository() satisfies HandlingEventRepository{
 	
 	inject
 	late EntityManager entityManager;

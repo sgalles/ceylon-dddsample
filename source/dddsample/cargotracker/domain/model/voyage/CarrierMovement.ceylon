@@ -2,9 +2,6 @@ import dddsample.cargotracker.domain.model.location {
 	Location
 }
 
-import java.io {
-	Serializable
-}
 import java.lang {
 	Long
 }
@@ -34,7 +31,7 @@ import javax.persistence {
 """
 entity
 table{name = "carrier_movement";}
-shared class CarrierMovement satisfies Serializable{
+shared class CarrierMovement{
 	
 
 	id

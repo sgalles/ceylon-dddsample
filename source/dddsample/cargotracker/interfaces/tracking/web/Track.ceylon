@@ -29,7 +29,7 @@ import javax.inject {
 
 named
 viewScoped
-shared class Track() satisfies Serializable{
+shared class Track(){
 	
 	inject__SETTER
 	late CargoRepository cargoRepository;
