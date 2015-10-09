@@ -3,3 +3,4 @@
 * port all comments/javadocs from original Java code
 * use new transactional annotation instead of stateless EJB ?
 * use value constructor for enum instead of enumerated case classes
+* add validation annotations

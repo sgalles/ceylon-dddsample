@@ -3,26 +3,17 @@
   <env-entry>
       <env-entry-name>graphTraversalUrl</env-entry-name>
       <env-entry-type>java.lang.String</env-entry-type>
-      <env-entry-value>http://localhost:8080/cargo-tracker/rest/graph-traversal/shortest-path</env-entry-value>
+      <env-entry-value>http://localhost:8080/dddsample-1.0.0/rest/graph-traversal/shortest-path</env-entry-value>
   </env-entry>
   <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
     
-	<!-- WildFly web.xml -->
-    <!-- added for wildfly resteasy -->
-	<context-param>
-      <param-name>resteasy.scan</param-name>
-      <param-value>true</param-value>
-   </context-param>
-   <context-param>
-      <param-name>resteasy.servlet.mapping.prefix</param-name>
-      <param-value>/rest</param-value>
-   </context-param>   
-	<listener>
-        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener>
+  <servlet-mapping>
+        <servlet-name>javax.ws.rs.core.Application</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+   </servlet-mapping>
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
