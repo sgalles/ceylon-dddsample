@@ -44,7 +44,7 @@ shared class GraphTraversalService() {
 	get
 	path("/shortest-path")
 	produces({"application/json", "application/xml; qs=.75"})
-	shared default JList<TransitPath> findShortestPath(
+	shared default TransitPaths findShortestPath(
 		queryParam("origin") JString originUnLocode,
 		queryParam("destination") JString destinationUnLocode,
 		queryParam("deadline") JString deadline
@@ -87,7 +87,7 @@ shared class GraphTraversalService() {
 			candidates.add(TransitPath(transitEdges));
 		}
 		
-		return candidates;
+		return TransitPaths(candidates);
 	}
 	
 	Date nextDate(Date date) => Date(date.time + oneDayMs
