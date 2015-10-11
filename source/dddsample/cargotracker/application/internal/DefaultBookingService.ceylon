@@ -38,7 +38,7 @@ shared class DefaultBookingService() satisfies BookingService{
 	inject
 	late RoutingService routingService;
 	
-	shared actual TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
+	shared actual default TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
 		TrackingId trackingId = cargoRepository.nextTrackingId();
 		assert(	exists origin = locationRepository.find(originUnLocode),
 		 		exists destination = locationRepository.find(destinationUnLocode)
