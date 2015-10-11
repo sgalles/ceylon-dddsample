@@ -1,5 +1,5 @@
 * add logging msg (see DefaultBookingService.java for instance)
-* Replace Ceylon List by Sequence/Sequencial in interfaces ?
+* Replace Ceylon List by Sequence/Sequencial in interfaces ? Or use JavaList instead of toJavaList at least for JSF
 * port all comments/javadocs from original Java code
 * use new transactional annotation instead of stateless EJB ?
 * use value constructor for enum instead of enumerated case classes

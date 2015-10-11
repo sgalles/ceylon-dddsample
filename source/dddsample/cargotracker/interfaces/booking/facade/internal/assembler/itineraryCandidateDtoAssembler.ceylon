@@ -25,7 +25,7 @@ shared object itineraryCandidateDtoAssembler {
 	shared ModelItinerary fromDTO( RouteCandidate routeCandidateDTO, VoyageRepository voyageRepository, LocationRepository locationRepository) 
 			=>  let(dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z"))
 				ModelItinerary{
-				legsInit = routeCandidateDTO.legs.map((legDTO) =>
+				legsInit = routeCandidateDTO.legsSequence.map((legDTO) =>
 					ModelLeg{ 
 						voyage = voyageRepository.find(VoyageNumber(legDTO.voyageNumber)) else nothing;
 						loadLocation = locationRepository.find(UnLocode(legDTO.fromUnLocode)) else nothing;
