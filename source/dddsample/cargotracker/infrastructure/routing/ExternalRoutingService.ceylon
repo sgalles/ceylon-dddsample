@@ -1,19 +1,36 @@
+import ceylon.interop.java {
+	CeylonCollection
+}
+
 import dddsample.cargotracker.domain.model.cargo {
 	Itinerary,
-	RouteSpecification
+	RouteSpecification,
+	Leg
 }
 import dddsample.cargotracker.domain.model.location {
-	LocationRepository
+	LocationRepository,
+	UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageRepository
+	VoyageRepository,
+	VoyageNumber
 }
 import dddsample.cargotracker.domain.service {
 	RoutingService
 }
+import dddsample.pathfinder.api {
+	TransitEdge,
+	TransitPath,
+	TransitPaths
+}
+
+import java.util {
+	JList=List
+}
 
 import javax.annotation {
-	resource=resource__FIELD
+	resource=resource__FIELD,
+	postConstruct
 }
 import javax.ejb {
 	stateless
@@ -23,8 +40,14 @@ import javax.inject {
 }
 import javax.ws.rs.client {
 	Client,
-	ClientBuilder
+	ClientBuilder,
+	WebTarget
 }
+import javax.ws.rs.core {
+	MediaType,
+	GenericType
+}
+
 
 """
    Our end of the routing service. This is basically a data model translation
@@ -37,7 +60,8 @@ shared class ExternalRoutingService() satisfies RoutingService{
 	resource{name = "graphTraversalUrl";}
 	late String graphTraversalUrl;
 	
-	Client jaxrsClient = ClientBuilder.newClient();
+	late Client jaxrsClient;
+	late WebTarget graphTraversalResource;
 	
 	inject
 	late LocationRepository locationRepository;
@@ -45,8 +69,47 @@ shared class ExternalRoutingService() satisfies RoutingService{
 	inject
 	late VoyageRepository voyageRepository;
 	
+	postConstruct
+	shared void init(){
+		jaxrsClient = ClientBuilder.newClient();
+		graphTraversalResource = jaxrsClient.target(graphTraversalUrl);
+	}
 	
+	shared actual default List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
+		// The RouteSpecification is picked apart and adapted to the external API.
+		String origin = routeSpecification.origin.unLocode.idString;
+		String destination = routeSpecification.destination.unLocode.idString;
+		
+		TransitPaths transitPaths = graphTraversalResource
+				.queryParam("origin", origin)
+				.queryParam("destination", destination)
+				.request(MediaType.\iAPPLICATION_JSON_TYPE)
+				.get(object extends GenericType<TransitPaths>() {});
+		
+		Boolean routeSpecificationSatisfiesBy(TransitPath transitPath){
+			Itinerary itinerary = toItinerary(transitPath);
+			// Use the specification to safe-guard against invalid itineraries
+			if (routeSpecification.isSatisfiedBy(itinerary)) {
+				return true;
+			} else {
+				print("Received itinerary that did not satisfy the route specification"); // TODO : use log level FINE
+				return false;
+			}
+		}
+
+		List<Itinerary> itineraries = CeylonCollection(transitPaths.transitPath)
+										.filter(routeSpecificationSatisfiesBy)
+										.collect(toItinerary);
+		
+		return itineraries;
+	}
 	
-	shared actual List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) => nothing;
+	Itinerary toItinerary(TransitPath transitPath) => Itinerary(transitPath.transitEdgesSeq.map(toLeg));
+	
+	Leg toLeg(TransitEdge edge) => Leg(
+                voyageRepository.find(VoyageNumber(edge.voyageNumber)) else nothing,
+                locationRepository.find(UnLocode(edge.fromUnLocode)) else nothing,
+                locationRepository.find(UnLocode(edge.toUnLocode)) else nothing,
+                edge.fromDate, edge.toDate);
 	
 }

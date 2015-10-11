@@ -75,7 +75,7 @@ shared class DefaultBookingService() satisfies BookingService{
 		RouteSpecification routeSpecification = RouteSpecification(
 			cargo.origin, newDestination,
 			cargo.routeSpecification.arrivalDeadline);
-		cargo.specifyNewRoute(routeSpecification);
+			cargo.specifyNewRoute(routeSpecification);
 		
 		cargoRepository.store(cargo);
 		

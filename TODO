@@ -4,3 +4,4 @@
 * use new transactional annotation instead of stateless EJB ?
 * use value constructor for enum instead of enumerated case classes
 * add validation annotations
+* JAXB : use Ceylon collection instead of Java ones

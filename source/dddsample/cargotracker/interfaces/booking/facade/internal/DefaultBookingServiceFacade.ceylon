@@ -54,12 +54,12 @@ shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade{
 	inject
 	late VoyageRepository voyageRepository;
 	
-	shared actual List<Location> listShippingLocations(){
+	shared actual default List<Location> listShippingLocations(){
 		List<ModelLocation> allLocations = locationRepository.findAll();
 		return locationDtoAssembler.toDtoList(allLocations);
 	}
 	
-	shared actual String bookNewCargo(String origin, String destination, Date arrivalDeadline) {
+	shared actual default String bookNewCargo(String origin, String destination, Date arrivalDeadline) {
 		TrackingId trackingId = bookingService.bookNewCargo(
 			UnLocode(origin), 
 			UnLocode(destination),
@@ -67,26 +67,26 @@ shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade{
 		return trackingId.idString;
 	}
 	
-	shared actual CargoRoute loadCargoForRouting(String trackingId) {
+	shared actual default CargoRoute loadCargoForRouting(String trackingId) {
 		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
 		assert(exists cargo);
 		return cargoRouteDtoAssembler.toDto(cargo);
 	}
 	
-	shared actual void assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO) {
+	shared actual default void assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO) {
 		value itinerary = itineraryCandidateDtoAssembler.fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
 		value trackingId = TrackingId(trackingIdStr);
 		bookingService.assignCargoToRoute(itinerary, trackingId);
 	}
 	
-	shared actual void changeDestination(String trackingId, String destinationUnLocode) {
+	shared actual default void changeDestination(String trackingId, String destinationUnLocode) {
 		bookingService.changeDestination(TrackingId(trackingId), UnLocode(destinationUnLocode));
 	}
 	
-	shared actual List<CargoRoute> listAllCargos() 
+	shared actual default List<CargoRoute> listAllCargos() 
 			=> cargoRepository.findAll().collect(cargoRouteDtoAssembler.toDto);
 	
-	shared actual List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) 
+	shared actual default List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) 
 			=> let(itineraries = bookingService.requestPossibleRoutesForCargo(TrackingId(trackingId)))
 			   itineraries.collect(itineraryCandidateDtoAssembler.toDTO);	
 	
