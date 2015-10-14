@@ -4,7 +4,7 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import java.base "7";
 	shared import javax.jaxws "7";
 	shared import javax.inject "1";
-	shared import ceylon.interop.java "1.1.1";
+	shared import ceylon.interop.java "1.2.0";
 	
 	// JEE
 	shared import hibernatejpa21api "jpa-2.1-api-1.0.0.Final";

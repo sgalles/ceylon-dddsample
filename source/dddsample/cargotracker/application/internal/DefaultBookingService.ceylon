@@ -62,8 +62,7 @@ shared class DefaultBookingService() satisfies BookingService{
 	
 	shared actual default void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
 		assert(exists cargo = cargoRepository.find(trackingId));
-		cargo.assignToRoute(itinerary);
-		cargoRepository.store(cargo);
+		cargoRepository.store(cargo,itinerary);
 		/*logger.log(Level.INFO, "Assigned cargo {0} to new route", trackingId);*/
 	}
 	

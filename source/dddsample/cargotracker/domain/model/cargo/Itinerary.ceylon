@@ -47,7 +47,7 @@ shared Date endOfDays = Date(Long.\iMAX_VALUE);
 embeddable
 shared class Itinerary({Leg+} legsInit) {
 	
-	oneToMany{cascade = {CascadeType.\iALL}; orphanRemoval = true; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
+	oneToMany{cascade = {CascadeType.\iALL}; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
 	orderBy("load_time") 
 	JList<Leg> _legs = toJavaList(legsInit);
@@ -57,15 +57,16 @@ shared class Itinerary({Leg+} legsInit) {
 		return legs;
 	}
 	
+	
 	shared [Leg*] legsMaybeEmpty => // TODO remove
 		CeylonList(_legs).sequence();
 	
 	
-	shared Location initialDepartureLocation() 
-			=> legs.first.loadLocation;	
+	shared Location? initialDepartureLocation() 
+			=> legsMaybeEmpty.first?.loadLocation;	
 	
-	shared Location finalArrivalLocation() 
-			=> legs.last.unloadLocation;	
+	shared Location? finalArrivalLocation() 
+			=> legsMaybeEmpty.last?.unloadLocation;	
 	
 	shared Date finalArrivalDate() 
 			=> Date(legs.last.unloadTime.time);

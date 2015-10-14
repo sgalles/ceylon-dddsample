@@ -7,7 +7,8 @@ import ceylon.interop.java {
 import dddsample.cargotracker.domain.model.cargo {
 	CargoRepository,
 	Cargo,
-	TrackingId
+	TrackingId,
+	Itinerary
 }
 
 import java.util {
@@ -45,7 +46,13 @@ class JpaCargoRepository() satisfies CargoRepository{
 
 	}
 	
-	shared actual void store(Cargo cargo) {
+	shared actual void store(Cargo cargo, Itinerary? newItinerary) {
+		if(exists newItinerary, exists oldItinerary = cargo.itinerary){
+			for(leg in oldItinerary.legsMaybeEmpty){
+				entityManager.remove(leg);
+			}
+			cargo.assignToRoute(newItinerary);
+		}
 		entityManager.persist(cargo);
 	}
 	
