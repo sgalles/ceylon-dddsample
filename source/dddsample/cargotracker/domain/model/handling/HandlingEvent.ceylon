@@ -1,6 +1,4 @@
-import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
-	HandlingEventTypeConverter
-}
+
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo
 }
@@ -29,6 +27,10 @@ import javax.persistence {
 	temporal=temporal__FIELD,
 	TemporalType,
 	namedQuery
+}
+import dddsample.cargotracker.infrastructure.persistence.jpa {
+
+	HandlingEventTypeConverter
 }
 
 

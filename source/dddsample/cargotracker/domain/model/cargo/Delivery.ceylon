@@ -1,10 +1,7 @@
 
 
 
-import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
-	TransportStatusConverter,
-	RoutingStatusConverter
-}
+
 import dddsample.cargotracker.domain.model.cargo {
 	HandlingActivity
 }
@@ -37,6 +34,11 @@ import javax.persistence {
 	embedded=embedded__FIELD,
 	TemporalType,
 	temporal=temporal__FIELD
+}
+import dddsample.cargotracker.infrastructure.persistence.jpa {
+
+	RoutingStatusConverter,
+	TransportStatusConverter
 }
 
 

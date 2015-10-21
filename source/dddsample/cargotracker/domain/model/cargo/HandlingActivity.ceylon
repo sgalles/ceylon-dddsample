@@ -1,9 +1,7 @@
 
 
 
-import dddsample.cargotracker.domain.infrastructure.persistence.jpa {
-	HandlingEventTypeConverter
-}
+
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEventType,
 	HandlingEventTypeBundle,
@@ -23,6 +21,10 @@ import javax.persistence {
 	column=column__FIELD,
 	manyToOne=manyToOne__FIELD,
 	joinColumn=joinColumn__FIELD
+}
+import dddsample.cargotracker.infrastructure.persistence.jpa {
+
+	HandlingEventTypeConverter
 }
 
  
