@@ -6,6 +6,9 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import javax.inject "1";
 	shared import ceylon.interop.java "1.2.0";
 	
+	// logging
+	shared import org.slf4j.api "1.6.1";
+	
 	// JEE
 	shared import hibernatejpa21api "jpa-2.1-api-1.0.0.Final";
 	shared import cdiapi "api-1.2";
@@ -16,6 +19,5 @@ native("jvm")   module dddsample "1.0.0" {
 	
 	// Here to workaround some limitations of Ceylon in Wildfly, but should be remove at some point
 	shared import jbossvfs "3.2.9.Final";
-	//shared import hibernateentitymanager "4.3.10.Final";
 	
 }

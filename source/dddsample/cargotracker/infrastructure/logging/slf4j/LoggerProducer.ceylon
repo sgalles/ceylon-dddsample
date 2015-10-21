@@ -1,0 +1,22 @@
+import javax.enterprise.context {
+	applicationScoped
+}
+import javax.enterprise.inject {
+	produces
+}
+import javax.enterprise.inject.spi {
+	InjectionPoint
+}
+
+import org.slf4j {
+	Logger,
+	LoggerFactory
+}
+
+applicationScoped
+shared class LoggerProducer() {
+	produces  
+	Logger createLogger(InjectionPoint ip){
+		return LoggerFactory.getLogger(ip.member.declaringClass);
+	}
+}

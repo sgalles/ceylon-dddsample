@@ -50,6 +50,10 @@ import javax.persistence {
 	EntityManager
 }
 
+import org.slf4j {
+	Logger
+}
+
 
 
 singleton
@@ -64,12 +68,15 @@ shared class SampleDataGenerator() {
 	
 	inject
 	late HandlingEventRepository handlingEventRepository;
+	
+	inject 
+	late Logger log;
 
 	postConstruct
 	transactionAttribute(TransactionAttributeType.\iREQUIRED)
 	shared void loadSampleData(){
 		// TODO use logs
-		print("Loading sample data.");
+		log.info("Loading sample data.");
 		unLoadAll(); //  Fail-safe in case of application restart that does not trigger a JPA schema drop.
 		loadSampleLocations();
 		loadSampleVoyages();
@@ -78,7 +85,7 @@ shared class SampleDataGenerator() {
 	
 	shared void unLoadAll() {
 		
-		print("Unloading all existing data.");
+		log.info("Unloading all existing data.");
 		// In order to remove handling events, must remove refrences in cargo.
 		// Dropping cargo first won't work since handling events have references
 		// to it.
@@ -95,7 +102,7 @@ shared class SampleDataGenerator() {
 	
 	shared void loadSampleCargos() {
 		
-		print("Loading sample cargo data.");
+		log.info("Loading sample cargo data.");
 		
 		if(true){
 		
@@ -274,7 +281,7 @@ shared class SampleDataGenerator() {
 	}
 	
 	shared void loadSampleLocations() {
-		print("Loading sample locations.");
+		log.info("Loading sample locations.");
 		
 		entityManager.persist(unknown);
 		entityManager.persist(hongkong);
@@ -294,7 +301,7 @@ shared class SampleDataGenerator() {
 	}
 	
 	shared void loadSampleVoyages() {
-		print("Loading sample voyages.");
+		log.info("Loading sample voyages.");
 		
 		entityManager.persist(hongkong_to_new_york);
 		entityManager.persist(new_york_to_dallas);
