@@ -1,3 +1,7 @@
+import dddsample.cargotracker.application {
+	ApplicationEvents
+}
+
 import javax.inject {
 	inject=inject__SETTER
 }
@@ -19,8 +23,8 @@ shared class HandlingReportService() {
 	
 	String iso8601format = "yyyy-MM-dd HH:mm";
 	
-	/*inject
-	late ApplicationEvents applicationEvents;*/
+	inject
+	late ApplicationEvents applicationEvents;
 	
 	inject
 	late Logger log;

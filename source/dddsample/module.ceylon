@@ -16,6 +16,8 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import ejbapi32spec "1.0.0.Final";
 	shared import annotationsapi12spec "1.0.0.Final";
 	shared import javaxwsrsapi "2.0";
+	shared import javaxjms.api "2.0.1";
+	shared import validation.api "1.1.0";
 	
 	// Here to workaround some limitations of Ceylon in Wildfly, but should be remove at some point
 	shared import jbossvfs "3.2.9.Final";

@@ -26,7 +26,10 @@ The created war file can be deployed into [Wildfly 9](http://wildfly.org/) (othe
 could be suported in the futur). 
 
 * Copy the war at `wildfly-9.0.0.Final/standalone/deployments`
-* Start Wildfly with the script `wildfly-9.0.0.Final/bin/standalone.sh`
+* Start Wildfly with the command   `wildfly-9.0.0.Final/bin/standalone.sh -c standalone-full.xml`
+  
+(you must explicitly use the *full* configuration because this project leverages JMS 2.0 that 
+is not available in the default configuration of Wildfly).
 
 The JPA persistent-unit of the application uses the default in memory database preconfigured in
 Wildfly 9 (`java:jboss/datasources/ExampleDS`). So this should work out of the box.
