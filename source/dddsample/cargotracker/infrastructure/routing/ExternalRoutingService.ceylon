@@ -24,10 +24,6 @@ import dddsample.pathfinder.api {
 	TransitPaths
 }
 
-import java.util {
-	JList=List
-}
-
 import javax.annotation {
 	resource=resource__FIELD,
 	postConstruct
