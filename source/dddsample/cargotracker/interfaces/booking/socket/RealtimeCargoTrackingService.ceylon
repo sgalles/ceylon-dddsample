@@ -4,6 +4,9 @@ import ceylon.collection {
 import ceylon.json {
 	Object
 }
+import ceylon.language.meta {
+	type
+}
 
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo
@@ -24,7 +27,7 @@ import javax.enterprise.event {
 	observes
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.websocket {
 	Session,
@@ -38,34 +41,35 @@ import javax.websocket.server {
 import org.slf4j {
 	Logger
 }
+
 singleton
 localBean
 serverEndpoint("/tracking")
-shared class RealtimeCargoTrackingService() {
-	
-	inject
-	late Logger logger;
+inject
+shared class RealtimeCargoTrackingService(Logger logger) {
 	
 	value sessions = HashSet<Session>(); 
 	
 	onOpen
-	shared void onOpen(Session session) {
+	shared default void onOpen(Session session) {
+		logger.info("onOpen session event");
 		sessions.add(session);
 	}
 	
 	onClose
-	shared void onClose(Session session) {
+	shared default void onClose(Session session) {
+		logger.info("onClose session event");
 		sessions.remove(session);
 	}
 	
 	shared default void onCargoInspected(observes cargoInspected Cargo cargo) {
-		logger.info("Received 'cargoInspected' event");
+		logger.info("Received 'cargoInspected' event. Current number of sessions ``sessions.size``");
 		String jsonValue = Object {
 			"trackingId" -> cargo.trackingId.idString,
 			"origin" -> cargo.origin.name,
 			"destination" -> cargo.routeSpecification.destination.name,
 			"lastKnownLocation" -> cargo.delivery.lastKnownLocation.name,
-			"transportStatus" -> cargo.delivery.transportStatus.string
+			"transportStatus" -> cargo.delivery.transportStatus.name 
 		}.string;
 		
 		for (session in sessions) {
@@ -79,3 +83,4 @@ shared class RealtimeCargoTrackingService() {
 	}
 	
 }
+

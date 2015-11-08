@@ -1,6 +1,10 @@
+import ceylon.language.meta {
+	type
+}
 
 shared abstract class TransportStatus() 
 	of not_received | in_port | onboard_carrier | claimed | unknown {
+	shared String name => type(this).declaration.name;
 }
 
 shared object not_received extends TransportStatus() {}
