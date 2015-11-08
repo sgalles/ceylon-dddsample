@@ -5,7 +5,7 @@
 
 (function() {
 
-    var ws = new WebSocket("ws://localhost:8080/cargo-tracker/tracking");
+    var ws = new WebSocket("ws://localhost:8080/dddsample-1.0.0/tracking");
     ws.onopen = function(event) {
         onConnect(event)
     };

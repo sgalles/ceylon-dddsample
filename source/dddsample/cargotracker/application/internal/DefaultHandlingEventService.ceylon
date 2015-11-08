@@ -1,7 +1,3 @@
-import ceylon.language.meta {
-	type
-}
-
 import dddsample.cargotracker.application {
 	HandlingEventService,
 	ApplicationEvents
@@ -37,7 +33,7 @@ import org.slf4j {
 	Logger
 }
 
-stateless
+stateless 
 shared class DefaultHandlingEventService() satisfies HandlingEventService {
 	
 	inject

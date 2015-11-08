@@ -20,6 +20,10 @@ import dddsample.cargotracker.domain.model.location {
 import dddsample.cargotracker.domain.model.voyage {
 	Voyage
 }
+import dddsample.cargotracker.infrastructure.persistence.jpa {
+	RoutingStatusConverter,
+	TransportStatusConverter
+}
 
 import java.util {
 	Date
@@ -34,11 +38,6 @@ import javax.persistence {
 	embedded=embedded__FIELD,
 	TemporalType,
 	temporal=temporal__FIELD
-}
-import dddsample.cargotracker.infrastructure.persistence.jpa {
-
-	RoutingStatusConverter,
-	TransportStatusConverter
 }
 
 
@@ -64,6 +63,9 @@ shared class Delivery {
 	
 	embedded
 	shared HandlingActivity? nextExpectedActivity;
+	
+	column{name = "unloaded_at_dest";}
+	shared variable Boolean unloadedAtDestination;
 	
 	convert{converter = `RoutingStatusConverter`;}
 	column{name = "routing_status";} 
@@ -133,6 +135,11 @@ shared class Delivery {
 					else HandlingActivity(receive, routeSpecification.origin); 
 		}
 
+	Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent, RouteSpecification routeSpecification) 
+			=> 	if(exists lastEvent) 
+				then unload == lastEvent.type && routeSpecification.destination.sameIdentityAs(lastEvent.location)
+				else false;
+		
 	
 	shared new (HandlingEvent? lastEvent, Itinerary? itinerary, RouteSpecification routeSpecification){
 		
@@ -147,6 +154,7 @@ shared class Delivery {
 		this.misdirected = calculateMisdirectionStatus();
 		this._eta = calculateEta(itinerary, routingStatus, misdirected);
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
+		this.unloadedAtDestination = calculateUnloadedAtDestination(lastEvent, routeSpecification);
 	}
 	
 
