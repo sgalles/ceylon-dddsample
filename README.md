@@ -48,4 +48,4 @@ Wildfly 9 (`java:jboss/datasources/ExampleDS`). So this should work out of the b
 of a Ceylon war. Instead, it uses a [modified version of this scheme](https://github.com/sgalles/ceylon-dddsample/blob/master/source/dddsample/CeylonInit.java)
 that has dependencies on Wildfly-specific libraries (the initial scheme did not work when Ceylon code was used too early during
 the container startup phase). Instead of using a servlet initialization, this alternate scheme leverages a 
-[CDI Extension](https://github.com/sgalles/ceylon-dddsample/blob/master/source/dddsample/CeylonInit.java).
+[CDI Extension](https://github.com/sgalles/ceylon-dddsample/blob/master/resource/dddsample/ROOT/META-INF/services/javax.enterprise.inject.spi.Extension).
