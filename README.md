@@ -20,7 +20,7 @@ The war file `dddsample-1.0.0.war` is created at the root of the project
 ###Deploy
 
 The created war file can be deployed into [Wildfly 9](http://wildfly.org/) (other containers
-could be suported in the futur). 
+could be supported in the futur). 
 
 * Copy the war at `wildfly-9.0.0.Final/standalone/deployments`
 * Start Wildfly with the command   `wildfly-9.0.0.Final/bin/standalone.sh -c standalone-full.xml`
