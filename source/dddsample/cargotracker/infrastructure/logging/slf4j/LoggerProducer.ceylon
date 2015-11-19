@@ -15,6 +15,7 @@ import org.slf4j {
 
 applicationScoped
 shared class LoggerProducer() {
+	suppressWarnings("unusedDeclaration")
 	produces  
 	Logger createLogger(InjectionPoint ip){
 		return LoggerFactory.getLogger(ip.member.declaringClass);

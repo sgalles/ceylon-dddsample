@@ -36,23 +36,17 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__SETTER
+	inject
 }
 
 applicationScoped
-shared class DefaultBookingServiceFacade() satisfies BookingServiceFacade{
-	
-	inject
-	late BookingService bookingService;
-	
-	inject
-	late LocationRepository locationRepository;
-	
-	inject
-	late CargoRepository cargoRepository;
-	
-	inject
-	late VoyageRepository voyageRepository;
+inject
+shared class DefaultBookingServiceFacade(
+	BookingService bookingService,
+	LocationRepository locationRepository,
+	CargoRepository cargoRepository,
+	VoyageRepository voyageRepository
+) satisfies BookingServiceFacade{
 	
 	shared actual default List<Location> listShippingLocations(){
 		List<ModelLocation> allLocations = locationRepository.findAll();

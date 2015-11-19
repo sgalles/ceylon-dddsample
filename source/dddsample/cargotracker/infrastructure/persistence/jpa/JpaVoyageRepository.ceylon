@@ -13,7 +13,7 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.persistence {
 	EntityManager,
@@ -22,10 +22,10 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaLocationRepository() satisfies LocationRepository{
-	
-	inject
-	late EntityManager entityManager;
+inject
+class JpaLocationRepository(
+	EntityManager entityManager
+) satisfies LocationRepository{
 	
 	shared actual Location? find(UnLocode unLocode) {
 

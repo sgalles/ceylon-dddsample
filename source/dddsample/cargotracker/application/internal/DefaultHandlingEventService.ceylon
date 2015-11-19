@@ -34,19 +34,13 @@ import org.slf4j {
 }
 
 stateless 
-shared class DefaultHandlingEventService() satisfies HandlingEventService {
-	
-	inject
-	late ApplicationEvents applicationEvents;
-	
-	inject
-	late HandlingEventRepository handlingEventRepository;
-	
-	inject
-	late HandlingEventFactory handlingEventFactory;
-	
-	inject 
-	late Logger logger;
+inject
+shared class DefaultHandlingEventService(
+	ApplicationEvents applicationEvents,
+	HandlingEventRepository handlingEventRepository,
+	HandlingEventFactory handlingEventFactory,
+	Logger logger
+) satisfies HandlingEventService {
 	
 	shared default actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
 		Date registrationTime = Date();

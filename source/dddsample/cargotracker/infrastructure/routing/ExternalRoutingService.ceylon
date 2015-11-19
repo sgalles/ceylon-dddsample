@@ -32,7 +32,7 @@ import javax.ejb {
 	stateless
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.ws.rs.client {
 	Client,
@@ -51,19 +51,17 @@ import javax.ws.rs.core {
    which operates in a different context from us.
    """
 stateless
-shared class ExternalRoutingService() satisfies RoutingService{
+inject
+shared class ExternalRoutingService(
+	LocationRepository locationRepository,
+	VoyageRepository voyageRepository
+) satisfies RoutingService{
 	
 	resource{name = "graphTraversalUrl";}
 	late String graphTraversalUrl;
 	
 	late Client jaxrsClient;
 	late WebTarget graphTraversalResource;
-	
-	inject
-	late LocationRepository locationRepository;
-	
-	inject
-	late VoyageRepository voyageRepository;
 	
 	postConstruct
 	shared void init(){

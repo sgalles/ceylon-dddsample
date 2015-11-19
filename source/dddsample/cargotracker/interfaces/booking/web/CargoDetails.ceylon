@@ -10,7 +10,7 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject=inject__FIELD
+	inject
 }
 
 """
@@ -25,14 +25,11 @@ import javax.inject {
    """
 named
 viewScoped
-shared class CargoDetails(){
+inject
+shared class CargoDetails(BookingServiceFacade bookingServiceFacade){
 	
 	variable CargoRoute? _cargo = null;
 	shared variable String? trackingId = null;
-	
-	inject
-	late BookingServiceFacade bookingServiceFacade;
-	
 	shared CargoRoute? cargo => _cargo;
 	
 	shared void load() {

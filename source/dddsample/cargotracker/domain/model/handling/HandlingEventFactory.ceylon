@@ -22,20 +22,16 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 
 applicationScoped
-shared class HandlingEventFactory() {
-	
-	inject
-	late CargoRepository cargoRepository;
-	
-	inject
-	late VoyageRepository voyageRepository;
-	
-	inject
-	late LocationRepository locationRepository;
+inject
+shared class HandlingEventFactory(
+	CargoRepository cargoRepository,
+	VoyageRepository voyageRepository,
+	LocationRepository locationRepository
+) {
 	 
 	shared default HandlingEvent createHandlingEvent(Date registrationTime,
 		Date completionTime, TrackingId trackingId,

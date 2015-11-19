@@ -16,7 +16,7 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject=inject__FIELD
+	inject
 }
 import dddsample.cargotracker.application.util {
 
@@ -35,10 +35,8 @@ import dddsample.cargotracker.application.util {
    """
 named
 viewScoped
-shared class ItinerarySelection(){
-	
-	inject
-	late BookingServiceFacade bookingServiceFacade;
+inject
+shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade){
 	
 	variable CargoRoute? _cargo = null;
 	variable JList<RouteCandidate>? _routeCandidates = null;

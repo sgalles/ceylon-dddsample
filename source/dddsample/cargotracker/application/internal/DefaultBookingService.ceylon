@@ -24,19 +24,15 @@ import javax.ejb {
 	stateless
 }
 import javax.inject {
-	inject=inject__SETTER
+	inject
 }
 stateless
-shared class DefaultBookingService() satisfies BookingService{
-	
-	inject
-	late LocationRepository locationRepository;
-	
-	inject
-	late CargoRepository cargoRepository;
-	
-	inject
-	late RoutingService routingService;
+inject 
+shared class DefaultBookingService(
+	LocationRepository locationRepository,
+	CargoRepository cargoRepository,
+	RoutingService routingService
+) satisfies BookingService{
 	
 	shared actual default TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
 		TrackingId trackingId = cargoRepository.nextTrackingId();

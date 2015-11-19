@@ -44,7 +44,7 @@ import javax.ejb {
 	TransactionAttributeType
 }
 import javax.inject {
-	inject=inject__SETTER
+	inject
 }
 import javax.persistence {
 	EntityManager
@@ -58,20 +58,14 @@ import org.slf4j {
 
 singleton
 startup
-shared class SampleDataGenerator() {
+inject
+shared class SampleDataGenerator(
+	EntityManager entityManager,
+	HandlingEventFactory handlingEventFactory,
+	HandlingEventRepository handlingEventRepository,
+	Logger log
+) {
 	
-	inject
-	late EntityManager entityManager;
-	
-	inject
-	late HandlingEventFactory handlingEventFactory;
-	
-	inject
-	late HandlingEventRepository handlingEventRepository;
-	
-	inject 
-	late Logger log;
-
 	postConstruct
 	transactionAttribute(TransactionAttributeType.\iREQUIRED)
 	shared void loadSampleData(){

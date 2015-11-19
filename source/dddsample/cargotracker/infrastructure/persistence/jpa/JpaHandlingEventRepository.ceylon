@@ -16,7 +16,7 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.persistence {
 	EntityManager
@@ -24,11 +24,10 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaHandlingEventRepository() satisfies HandlingEventRepository{
-	
-	inject
-	late EntityManager entityManager;
-	
+inject
+class JpaHandlingEventRepository(
+	EntityManager entityManager
+) satisfies HandlingEventRepository{
 	
 	shared actual void store(HandlingEvent event) {
 		entityManager.persist(event);

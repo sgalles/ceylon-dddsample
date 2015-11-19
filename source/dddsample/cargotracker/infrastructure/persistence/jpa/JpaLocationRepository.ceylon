@@ -12,7 +12,7 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.persistence {
 	EntityManager,
@@ -21,10 +21,10 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaVoyageRepository() satisfies VoyageRepository {
-	
-	inject
-	late EntityManager entityManager;
+inject
+class JpaVoyageRepository(
+	EntityManager entityManager
+) satisfies VoyageRepository {
 	
 	shared actual Voyage? find(VoyageNumber voyageNumber) {
 

@@ -1,15 +1,15 @@
 import javax.enterprise.inject {
-	produces__GETTER
+	produces=produces__GETTER
 }
 import javax.persistence {
-	persistenceContext__SETTER,
+	persistenceContext=persistenceContext__SETTER,
 	EntityManager
 }
 class DatasourceProducer() {
 	
 	suppressWarnings("unusedDeclaration")
-	produces__GETTER
-	persistenceContext__SETTER
+	produces
+	persistenceContext
 	late EntityManager entityManager;
 	
 	

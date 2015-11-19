@@ -19,7 +19,7 @@ import javax.enterprise.context {
 	applicationScoped
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.persistence {
 	EntityManager,
@@ -28,10 +28,10 @@ import javax.persistence {
 
 
 applicationScoped
-class JpaCargoRepository() satisfies CargoRepository{
-	
-	inject
-	late EntityManager entityManager;
+inject
+class JpaCargoRepository(
+	EntityManager entityManager
+) satisfies CargoRepository{
 	
 	shared actual Cargo? find(TrackingId trackingId) {
 

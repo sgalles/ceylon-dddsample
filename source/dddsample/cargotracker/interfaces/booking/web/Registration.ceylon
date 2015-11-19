@@ -29,7 +29,7 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject=inject__FIELD
+	inject
 }
 
 """
@@ -44,12 +44,10 @@ import javax.inject {
    """
 named
 viewScoped
-shared class Registration(){
+inject
+shared class Registration(BookingServiceFacade bookingServiceFacade){
 	
 	String format = "yyyy-MM-dd";
-	
-	inject
-	late BookingServiceFacade bookingServiceFacade;
 	
 	shared late JList<Location> locations;
 	

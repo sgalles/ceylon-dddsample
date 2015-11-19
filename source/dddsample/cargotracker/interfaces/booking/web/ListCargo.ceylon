@@ -20,7 +20,7 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject=inject__FIELD
+	inject
 }
 
 """
@@ -35,13 +35,11 @@ import javax.inject {
    """
 named
 viewScoped
-shared class ListCargo(){
+inject
+shared class ListCargo(BookingServiceFacade bookingServiceFacade){
 	
 	late List<CargoRoute> _cargos;
-	
-	inject
-	late BookingServiceFacade bookingServiceFacade;
-	
+
 	suppressWarnings("unusedDeclaration")
 	postConstruct
 	void init() {

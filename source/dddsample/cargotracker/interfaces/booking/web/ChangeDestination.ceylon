@@ -18,7 +18,7 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject=inject__FIELD
+	inject
 }
 
 """
@@ -33,15 +33,14 @@ import javax.inject {
    """
 named
 viewScoped
-shared class ChangeDestination(){
-	
-	inject
-	late BookingServiceFacade bookingServiceFacade;
+inject
+shared class ChangeDestination(
+	BookingServiceFacade bookingServiceFacade
+){
 	
 	variable CargoRoute? _cargo = null;
 	variable JList<Location>? _locations = null;
-	
-	
+		
 	shared variable String? trackingId = null;
 	
 	shared variable String? destinationUnlocode = null;
