@@ -17,13 +17,10 @@ the project execute
 
 The war file `dddsample-1.0.0.war` is created at the root of the project
 
-*(note : at the time of writing Ceylon 1.2 is not yet available, so you may have to recompile a
-Ceylon distribution from source)* 
-
 ###Deploy
 
 The created war file can be deployed into [Wildfly 9](http://wildfly.org/) (other containers
-could be suported in the futur). 
+could be supported in the futur). 
 
 * Copy the war at `wildfly-9.0.0.Final/standalone/deployments`
 * Start Wildfly with the command   `wildfly-9.0.0.Final/bin/standalone.sh -c standalone-full.xml`
@@ -46,6 +43,6 @@ Wildfly 9 (`java:jboss/datasources/ExampleDS`). So this should work out of the b
 * the project uses a private Ceylon repository for the JEE modules that were not yet available in Herd.
 * the project does not use the usual [initialization scheme](https://github.com/ceylon/ceylon-sdk/blob/master/source/com/redhat/ceylon/war/WarInitializer.java) 
 of a Ceylon war. Instead, it uses a [modified version of this scheme](https://github.com/sgalles/ceylon-dddsample/blob/master/source/dddsample/CeylonInit.java)
-that has dependencies on Wildfly-specific libraries (the initial scheme did not work when Ceylon code was used too early during
+that has dependencies on Wildfly-specific libraries (the initial scheme does not work when Ceylon code is executed too early during
 the container startup phase). Instead of using a servlet initialization, this alternate scheme leverages a 
-[PersistenceProvider](https://github.com/sgalles/ceylon-dddsample/blob/master/resource/dddsample/ROOT/META-INF/services/javax.persistence.spi.PersistenceProvider) initialization.
+[CDI Extension](https://github.com/sgalles/ceylon-dddsample/blob/master/resource/dddsample/ROOT/META-INF/services/javax.enterprise.inject.spi.Extension) to executed this startup code.
