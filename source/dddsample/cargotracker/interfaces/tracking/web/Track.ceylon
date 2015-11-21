@@ -19,19 +19,18 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject__SETTER
+	inject__SETTER,
+	inject
 }
 
 
 named
 viewScoped
-shared class Track(){
-	
-	inject__SETTER
-	late CargoRepository cargoRepository;
-	
-	inject__SETTER
-	late HandlingEventRepository handlingEventRepository;
+inject
+shared class Track(
+	CargoRepository cargoRepository,
+	HandlingEventRepository handlingEventRepository
+){
 	
 	variable String? _trackingId = null;
 	shared String? trackingId => _trackingId;
