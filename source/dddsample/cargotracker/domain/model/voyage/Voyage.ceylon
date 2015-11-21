@@ -15,9 +15,9 @@ import java.util {
 import javax.persistence {
 	entity,
 	namedQuery,
-	id__FIELD,
-	generatedValue__FIELD,
-	embedded__FIELD
+	id=id__FIELD,
+	generatedValue=generatedValue__FIELD,
+	embedded=embedded__FIELD
 }
 
 
@@ -34,14 +34,14 @@ namedQuery{name = "Voyage.findByVoyageNumber";
 shared class Voyage{
 	
 	suppressWarnings("unusedDeclaration")
-	id__FIELD
-	generatedValue__FIELD
+	id
+	generatedValue
 	Long? id = null;
 
-	embedded__FIELD
+	embedded
 	shared VoyageNumber voyageNumber;
 	
-	embedded__FIELD
+	embedded
 	shared Schedule schedule;
 	
 	shared new (VoyageNumber voyageNumber, Schedule schedule){
