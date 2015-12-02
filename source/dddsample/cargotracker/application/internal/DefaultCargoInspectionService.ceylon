@@ -11,9 +11,10 @@ import dddsample.cargotracker.domain.model.handling {
 	HandlingEventRepository,
 	HandlingHistory
 }
-import dddsample.cargotracker.infrastructure.events.cdi{
-	cargoInspected=cargoInspected__PARAMETER
+import dddsample.cargotracker.infrastructure.events.cdi {
+	cargoInspected
 }
+
 import javax.ejb {
 	stateless
 }
@@ -28,14 +29,27 @@ import org.slf4j {
 	Logger
 }
 stateless
-inject
-shared class DefaultCargoInspectionService(
-	ApplicationEvents applicationEvents,
-	CargoRepository cargoRepository,
-	HandlingEventRepository handlingEventRepository,
-	Logger logger,
-	cargoInspected Event<Cargo> cargoInspected
-) satisfies CargoInspectionService{
+shared class DefaultCargoInspectionService satisfies CargoInspectionService{
+	
+	ApplicationEvents applicationEvents;
+	CargoRepository cargoRepository;
+	HandlingEventRepository handlingEventRepository;
+	Logger logger;
+	Event<Cargo> cargoInspected;
+	
+	shared inject new ( 
+		ApplicationEvents applicationEvents,
+		CargoRepository cargoRepository,
+		HandlingEventRepository handlingEventRepository,
+		Logger logger,
+		cargoInspected Event<Cargo> cargoInspected // workaround for https://github.com/ceylon/ceylon/issues/5779
+	){
+		this.applicationEvents = applicationEvents;
+		this.cargoRepository = cargoRepository;
+		this.handlingEventRepository = handlingEventRepository;
+		this.logger = logger;
+		this.cargoInspected = cargoInspected;
+	}
 	
 	shared actual default void inspectCargo(TrackingId trackingId) {
 		logger.info("Inspecting cargo ``trackingId.idString``");

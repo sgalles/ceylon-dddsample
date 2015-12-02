@@ -4,9 +4,6 @@ import ceylon.collection {
 import ceylon.json {
 	Object
 }
-import ceylon.language.meta {
-	type
-}
 
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo
