@@ -1,9 +1,11 @@
+import dddsample.cargotracker.application.util {
+	toJavaList
+}
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute,
-	Location,
 	RouteCandidate
 }
 
@@ -17,10 +19,6 @@ import javax.faces.view {
 import javax.inject {
 	named=named__TYPE,
 	inject
-}
-import dddsample.cargotracker.application.util {
-
-	toJavaList
 }
 
 """

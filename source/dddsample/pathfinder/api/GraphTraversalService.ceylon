@@ -1,7 +1,13 @@
+import dddsample.cargotracker.application.util {
+	toJavaList
+}
 import dddsample.pathfinder.internal {
 	GraphDao
 }
 
+import java.lang {
+	JString=String
+}
 import java.util {
 	Random,
 	JList=List,
@@ -9,13 +15,7 @@ import java.util {
 	Date,
 	Collections
 }
-import java.lang{
-	JString=String
-}
 
-import javax.ejb {
-	stateless
-}
 import javax.inject {
 	inject=inject__FIELD
 }
@@ -24,10 +24,6 @@ import javax.ws.rs {
 	get,
 	produces,
 	queryParam
-}
-import dddsample.cargotracker.application.util {
-
-	toJavaList
 }
 
 Integer oneMinMs = 1000 * 60;
