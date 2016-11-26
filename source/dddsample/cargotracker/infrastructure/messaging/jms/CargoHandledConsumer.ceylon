@@ -31,7 +31,7 @@ messageDriven{ activationConfig = {
 			propertyName = "destinationLookup"; 
 			propertyValue = "java:global/jms/CargoHandledQueue";}
 		};
-		messageListenerInterface=`MessageListener`;
+		messageListenerInterface=`interface MessageListener`;
 	}
 shared class CargoHandledConsumer() satisfies MessageListener{
 	

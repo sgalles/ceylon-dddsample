@@ -70,7 +70,7 @@ shared class HandlingEvent {
 	generatedValue
 	Long? id = null;
 	
-	convert{converter = `HandlingEventTypeConverter`;}
+	convert{converter = `class HandlingEventTypeConverter`;}
 	column{name="type";}
 	shared HandlingEventType type;
 	

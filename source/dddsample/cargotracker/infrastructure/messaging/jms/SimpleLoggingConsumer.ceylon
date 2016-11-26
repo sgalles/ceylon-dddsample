@@ -24,7 +24,7 @@ messageDriven{ activationConfig = {
 			propertyName = "destinationLookup"; 
 			propertyValue = "java:global/jms/MisdirectedCargoQueue";}
 		};
-		messageListenerInterface=`MessageListener`;
+		messageListenerInterface=`interface MessageListener`;
 }
 
 shared class MisdirectedCargoConsumer() satisfies MessageListener{
@@ -45,7 +45,7 @@ messageDriven{ activationConfig = {
 			propertyName = "destinationLookup"; 
 			propertyValue = "java:global/jms/DeliveredCargoQueue";}
 		};
-		messageListenerInterface=`MessageListener`;
+		messageListenerInterface=`interface MessageListener`;
 	}
 shared class DeliveredCargoConsumer() satisfies MessageListener{
 	

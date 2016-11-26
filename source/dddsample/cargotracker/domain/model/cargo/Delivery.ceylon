@@ -44,7 +44,7 @@ import javax.persistence {
 embeddable
 shared class Delivery {
 	
-	convert{converter = `TransportStatusConverter`;}
+	convert{converter = `class TransportStatusConverter`;}
 	column{name = "transport_status";}
 	shared TransportStatus transportStatus;
 	
@@ -67,7 +67,7 @@ shared class Delivery {
 	column{name = "unloaded_at_dest";}
 	shared variable Boolean unloadedAtDestination;
 	
-	convert{converter = `RoutingStatusConverter`;}
+	convert{converter = `class RoutingStatusConverter`;}
 	column{name = "routing_status";} 
 	shared RoutingStatus routingStatus;
 	

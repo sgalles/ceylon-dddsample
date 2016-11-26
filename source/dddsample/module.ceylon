@@ -1,11 +1,11 @@
 native("jvm")   module dddsample "1.0.0" {
 	
 	// Base
-	shared import java.base "7";
-	shared import javax.jaxws "7";
+	shared import java.base "8";
+	shared import javax.jaxws "8";
 	shared import javax.inject "1";
-	shared import ceylon.interop.java "1.2.0";
-	shared import ceylon.json "1.2.0";
+	shared import ceylon.interop.java "1.3.1";
+	shared import ceylon.json "1.3.1";
 	
 	// logging
 	shared import org.slf4j.api "1.6.1";
@@ -22,6 +22,6 @@ native("jvm")   module dddsample "1.0.0" {
 	shared import websocketapi "1.1.1";
 	
 	// Here to workaround some limitations of Ceylon in Wildfly, but should be remove at some point
-	shared import jbossvfs "3.2.9.Final";
+	//shared import jbossvfs "3.2.9.Final";
 	
 }

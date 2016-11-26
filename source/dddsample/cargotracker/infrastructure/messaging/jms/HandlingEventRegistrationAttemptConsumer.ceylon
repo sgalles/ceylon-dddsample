@@ -35,7 +35,7 @@ messageDriven{ activationConfig = {
 		propertyName = "destinationLookup"; 
 		propertyValue = "java:global/jms/HandlingEventRegistrationAttemptQueue";}
 	};
-	messageListenerInterface=`MessageListener`;
+	messageListenerInterface=`interface MessageListener`;
 }
 shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListener{
 	

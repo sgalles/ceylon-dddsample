@@ -50,6 +50,10 @@ shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter
 	
 	value enums = caseValues<EnumValue&Object>();
 	
+	"No elements found for enums values. Is the metamodel initialized ?"
+	assert(nonempty enums);
+	
+	
 	EnumValue?(String) getEnumValueByName
 			= HashMap{*enums.map((ts) => type(ts).declaration.name->ts)}.get;
 	
