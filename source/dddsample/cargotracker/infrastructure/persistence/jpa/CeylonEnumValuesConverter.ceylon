@@ -45,10 +45,10 @@ shared class HandlingEventTypeConverter()
 		satisfies AttributeConverter<HandlingEventType, JString> {}
 
 
-shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter<EnumValue, JString> 
-		{
+shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter<EnumValue, JString>
+		given EnumValue satisfies Object {
 	
-	value enums = caseValues<EnumValue&Object>();
+	value enums = caseValues<EnumValue>();
 	
 	"No elements found for enums values. Is the metamodel initialized ?"
 	assert(nonempty enums);
@@ -57,7 +57,7 @@ shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter
 	EnumValue?(String) getEnumValueByName
 			= HashMap{*enums.map((ts) => type(ts).declaration.name->ts)}.get;
 	
-	String?(EnumValue&Object) getNameByEnumValue
+	String?(EnumValue) getNameByEnumValue
 			= HashMap{*enums.map((ts) => ts->type(ts).declaration.name)}.get;
 	
 	shared actual JString? convertToDatabaseColumn(EnumValue? x) 
