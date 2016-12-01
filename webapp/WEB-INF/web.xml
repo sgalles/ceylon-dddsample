@@ -37,31 +37,31 @@
      <jms-destination>
         <name>java:global/jms/CargoHandledQueue</name>
         <interface-name>javax.jms.Queue</interface-name>
-        <resource-adapter>jmsra</resource-adapter>
+        <resource-adapter>activemq-ra</resource-adapter>
         <destination-name>CargoHandledQueue</destination-name>
     </jms-destination>
     <jms-destination>
         <name>java:global/jms/MisdirectedCargoQueue</name>
         <interface-name>javax.jms.Queue</interface-name>
-        <resource-adapter>jmsra</resource-adapter>
+        <resource-adapter>activemq-ra</resource-adapter>
         <destination-name>MisdirectedCargoQueue</destination-name>
     </jms-destination>
     <jms-destination>
         <name>java:global/jms/DeliveredCargoQueue</name>
         <interface-name>javax.jms.Queue</interface-name>
-        <resource-adapter>jmsra</resource-adapter>
+        <resource-adapter>activemq-ra</resource-adapter>
         <destination-name>DeliveredCargoQueue</destination-name>
     </jms-destination>
     <jms-destination>
         <name>java:global/jms/RejectedRegistrationAttemptsQueue</name>
         <interface-name>javax.jms.Queue</interface-name>
-        <resource-adapter>jmsra</resource-adapter>
+        <resource-adapter>activemq-ra</resource-adapter>
         <destination-name>RejectedRegistrationAttemptsQueue</destination-name>
     </jms-destination>
     <jms-destination>
         <name>java:global/jms/HandlingEventRegistrationAttemptQueue</name>
         <interface-name>javax.jms.Queue</interface-name>
-        <resource-adapter>jmsra</resource-adapter>
+        <resource-adapter>activemq-ra</resource-adapter>
         <destination-name>HandlingEventRegistrationAttemptQueue</destination-name>
     </jms-destination>
 </web-app>
