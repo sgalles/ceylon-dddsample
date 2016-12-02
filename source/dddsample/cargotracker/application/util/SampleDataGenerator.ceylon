@@ -70,6 +70,8 @@ shared class SampleDataGenerator(
 	Logger log
 ) {
 	
+	value createHandlingEventFromTuple = unflatten(handlingEventFactory.createHandlingEvent);
+	
 	postConstruct
 	transactionAttribute(TransactionAttributeType.\iREQUIRED)
 	shared void loadSampleData(){
@@ -132,20 +134,12 @@ shared class SampleDataGenerator(
 			
 			entityManager.persist(abc123);
 			
-			{
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-01"), abc123.trackingId, 
-					hongkong.unLocode, receive),
-			
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-02"), abc123.trackingId, 
-					hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber]),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-05"), abc123.trackingId, 
-					newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber])
-				
-			}.each(entityManager.persist);
+			{		
+				[Date(), toDate("2014-03-01"), abc123.trackingId, hongkong.unLocode, receive],
+				[Date(), toDate("2014-03-02"), abc123.trackingId, hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber]],
+				[Date(), toDate("2014-03-05"), abc123.trackingId, newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]]
+			}.map(createHandlingEventFromTuple)
+			 .each(entityManager.persist);
 	
 			abc123.deriveDeliveryProgress{
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(abc123.trackingId);
@@ -185,23 +179,12 @@ shared class SampleDataGenerator(
 			entityManager.persist(jkl567);
 			
 			{
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-01"), jkl567.trackingId, 
-					hangzou.unLocode, receive),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-03"), jkl567.trackingId, 
-					hangzou.unLocode, [load, hongkong_to_new_york.voyageNumber]),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2014-03-05"), jkl567.trackingId, 
-					newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]),
-				
-				handlingEventFactory.createHandlingEvent(
-						Date(), toDate("2014-03-06"), jkl567.trackingId, 
-						newyork.unLocode, [load, hongkong_to_new_york.voyageNumber])
-				
-			}.each(entityManager.persist);
+				[Date(), toDate("2014-03-01"), jkl567.trackingId, hangzou.unLocode, receive],
+				[Date(), toDate("2014-03-03"), jkl567.trackingId, hangzou.unLocode, [load, hongkong_to_new_york.voyageNumber]],
+				[Date(), toDate("2014-03-05"), jkl567.trackingId, newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]],
+				[Date(), toDate("2014-03-06"), jkl567.trackingId, newyork.unLocode, [load, hongkong_to_new_york.voyageNumber]]
+			}.map(createHandlingEventFromTuple)
+			.each(entityManager.persist);
 			
 			jkl567.deriveDeliveryProgress{
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(jkl567.trackingId);
@@ -247,27 +230,13 @@ shared class SampleDataGenerator(
 			entityManager.persist(mno456);
 			
 			{
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2013-10-18"), mno456.trackingId, 
-					newyork.unLocode, receive),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2013-10-24"), mno456.trackingId, 
-					newyork.unLocode, [load, new_york_to_dallas.voyageNumber]),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2013-10-25"), mno456.trackingId, 
-					dallas.unLocode, [unload, new_york_to_dallas.voyageNumber]),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2013-10-26"), mno456.trackingId, 
-					dallas.unLocode, customs),
-				
-				handlingEventFactory.createHandlingEvent(
-					Date(), toDate("2013-10-27"), mno456.trackingId, 
-					dallas.unLocode, claim)
-				
-			}.each(entityManager.persist);
+				[Date(), toDate("2013-10-18"), mno456.trackingId, newyork.unLocode, receive],
+				[Date(), toDate("2013-10-24"), mno456.trackingId, newyork.unLocode, [load, new_york_to_dallas.voyageNumber]],
+				[Date(), toDate("2013-10-25"), mno456.trackingId, dallas.unLocode, [unload, new_york_to_dallas.voyageNumber]],
+				[Date(), toDate("2013-10-26"), mno456.trackingId, dallas.unLocode, customs],
+				[Date(), toDate("2013-10-27"), mno456.trackingId, dallas.unLocode, claim]
+			}.map(createHandlingEventFromTuple)
+			 .each(entityManager.persist);
 			
 			mno456.deriveDeliveryProgress{
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(mno456.trackingId);
@@ -280,32 +249,33 @@ shared class SampleDataGenerator(
 	
 	shared void loadSampleLocations() {
 		log.info("Loading sample locations.");
-		
-		entityManager.persist(unknown);
-		entityManager.persist(hongkong);
-		entityManager.persist(melbourne);
-		entityManager.persist(stockholm);
-		entityManager.persist(helsinki);
-		entityManager.persist(chicago);
-		entityManager.persist(tokyo);
-		entityManager.persist(hamburg);
-		entityManager.persist(shanghai);
-		entityManager.persist(rotterdam);
-		entityManager.persist(gothenburg);
-		entityManager.persist(hangzou);
-		entityManager.persist(newyork);
-		entityManager.persist(dallas);
-	
+		{
+			unknown,
+			hongkong,
+			melbourne,
+			stockholm,
+			helsinki,
+			chicago,
+			tokyo,
+			hamburg,
+			shanghai,
+			rotterdam,
+			gothenburg,
+			hangzou,
+			newyork,
+			dallas
+		}.each(entityManager.persist);
 	}
 	
 	shared void loadSampleVoyages() {
 		log.info("Loading sample voyages.");
-		
-		entityManager.persist(hongkong_to_new_york);
-		entityManager.persist(new_york_to_dallas);
-		entityManager.persist(dallas_to_helsinki);
-		entityManager.persist(helsinki_to_hongkong);
-		entityManager.persist(dallas_to_helsinki_alt);
+		{
+			hongkong_to_new_york,
+			new_york_to_dallas,
+			dallas_to_helsinki,
+			helsinki_to_hongkong,
+			dallas_to_helsinki_alt
+		}.each(entityManager.persist);	
 		
 	}
 }
