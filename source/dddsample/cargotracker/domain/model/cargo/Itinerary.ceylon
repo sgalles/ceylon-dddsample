@@ -5,9 +5,7 @@ import ceylon.interop.java {
 	CeylonList
 }
 
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
+
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
 	receive,
@@ -40,6 +38,10 @@ import javax.persistence {
 	oneToMany=oneToMany__FIELD,
 	FetchType,
 	orderBy=orderBy__FIELD
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toJavaList
 }
 
 shared Date endOfDays = Date(Long.\iMAX_VALUE);

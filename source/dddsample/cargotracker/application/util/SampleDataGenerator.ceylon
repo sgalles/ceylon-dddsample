@@ -53,6 +53,10 @@ import javax.persistence {
 import org.slf4j {
 	Logger
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toDate
+}
 
 
 

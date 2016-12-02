@@ -18,7 +18,8 @@ import javax.inject {
 	named=named__TYPE,
 	inject
 }
-import dddsample.cargotracker.application.util {
+
+import dddsample.cargotracker.infrastructure.ceylon {
 
 	toJavaList
 }

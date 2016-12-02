@@ -2,7 +2,9 @@ import ceylon.collection {
 	HashSet
 }
 
-import dddsample.cargotracker.application.util {
+
+import dddsample.cargotracker.infrastructure.ceylon {
+
 	ceylonComparison
 }
 

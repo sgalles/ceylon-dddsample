@@ -1,6 +1,4 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
+
 
 import java.text {
 	SimpleDateFormat
@@ -8,6 +6,10 @@ import java.text {
 import java.util {
 	JList=List,
 	Date
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toJavaList
 }
 
 """

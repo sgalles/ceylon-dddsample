@@ -25,7 +25,8 @@ import javax.ws.rs {
 	produces,
 	queryParam
 }
-import dddsample.cargotracker.application.util {
+
+import dddsample.cargotracker.infrastructure.ceylon {
 
 	toJavaList
 }

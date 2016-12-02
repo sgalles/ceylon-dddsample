@@ -1,6 +1,4 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
+
 
 import java.util {
 	JList=List
@@ -11,6 +9,10 @@ import javax.persistence {
 	CascadeType,
 	oneToMany=oneToMany__FIELD,
 	joinColumn=joinColumn__FIELD
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toJavaList
 }
 
 """

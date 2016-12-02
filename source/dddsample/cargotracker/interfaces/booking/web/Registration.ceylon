@@ -1,6 +1,4 @@
-import dddsample.cargotracker.application.util {
-	toJavaList
-}
+
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
@@ -30,6 +28,10 @@ import javax.faces.view {
 import javax.inject {
 	named=named__TYPE,
 	inject
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toJavaList
 }
 
 """

@@ -1,6 +1,4 @@
-import dddsample.cargotracker.application.util {
-	caseValues
-}
+
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEventTypeRequiredVoyage,
 	HandlingEventTypeBundle,
@@ -21,6 +19,10 @@ import ceylon.language.meta {
 import ceylon.collection {
 
 	HashMap
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	caseValues
 }
 
 "Transfer object for handling reports."

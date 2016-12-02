@@ -8,9 +8,7 @@ import ceylon.language.meta {
 	type
 }
 
-import dddsample.cargotracker.application.util {
-	caseValues
-}
+
 import dddsample.cargotracker.domain.model.cargo {
 	RoutingStatus,
 	TransportStatus
@@ -27,6 +25,10 @@ import java.lang {
 import javax.persistence {
 	AttributeConverter,
 	converter
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	caseValues
 }
 
 converter //{autoApply = true;}

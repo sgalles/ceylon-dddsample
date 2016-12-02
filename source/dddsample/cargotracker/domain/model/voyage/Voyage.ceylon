@@ -1,6 +1,4 @@
-import dddsample.cargotracker.application.util {
-	toDate
-}
+
 import dddsample.cargotracker.domain.model.location {
 	Location
 }
@@ -18,6 +16,10 @@ import javax.persistence {
 	id=id__FIELD,
 	generatedValue=generatedValue__FIELD,
 	embedded=embedded__FIELD
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+
+	toDate
 }
 
 
