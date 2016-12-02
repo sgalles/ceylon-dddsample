@@ -29,27 +29,15 @@ import org.slf4j {
 	Logger
 }
 stateless
-shared class DefaultCargoInspectionService satisfies CargoInspectionService{
-	
-	ApplicationEvents applicationEvents;
-	CargoRepository cargoRepository;
-	HandlingEventRepository handlingEventRepository;
-	Logger logger;
-	Event<Cargo> cargoInspected;
-	
-	shared inject new ( 
+inject
+shared class DefaultCargoInspectionService ( 
 		ApplicationEvents applicationEvents,
 		CargoRepository cargoRepository,
 		HandlingEventRepository handlingEventRepository,
 		Logger logger,
-		cargoInspected Event<Cargo> cargoInspected // workaround for https://github.com/ceylon/ceylon/issues/5779
-	){
-		this.applicationEvents = applicationEvents;
-		this.cargoRepository = cargoRepository;
-		this.handlingEventRepository = handlingEventRepository;
-		this.logger = logger;
-		this.cargoInspected = cargoInspected;
-	}
+		cargoInspected Event<Cargo> cargoInspected 
+	) satisfies CargoInspectionService{
+	
 	
 	shared actual default void inspectCargo(TrackingId trackingId) {
 		logger.info("Inspecting cargo ``trackingId.idString``");
