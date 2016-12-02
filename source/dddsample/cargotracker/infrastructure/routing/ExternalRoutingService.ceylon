@@ -69,7 +69,7 @@ shared class ExternalRoutingService(
 		graphTraversalResource = jaxrsClient.target(graphTraversalUrl);
 	}
 	
-	shared actual default List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
+	shared actual List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
 		// The RouteSpecification is picked apart and adapted to the external API.
 		String origin = routeSpecification.origin.unLocode.idString;
 		String destination = routeSpecification.destination.unLocode.idString;

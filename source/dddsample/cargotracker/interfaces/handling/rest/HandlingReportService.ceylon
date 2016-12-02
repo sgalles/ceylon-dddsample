@@ -54,7 +54,7 @@ shared class HandlingReportService() {
 	post
 	path("/reports")
 	consumes({MediaType.\iAPPLICATION_JSON})
-	shared default void submitReport(HandlingReport handlingReport) {
+	shared void submitReport(HandlingReport handlingReport) {
 		
 		Date completionTime = SimpleDateFormat(iso8601format).parse(handlingReport.completionTime);
 		HandlingEventTypeBundle<VoyageNumber> voyageBundle = handlingReport.voyageBundle();

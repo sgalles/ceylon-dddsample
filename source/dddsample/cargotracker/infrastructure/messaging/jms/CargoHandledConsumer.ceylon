@@ -41,7 +41,7 @@ shared class CargoHandledConsumer() satisfies MessageListener{
 	inject
 	late Logger logger;
 	
-	shared actual default void onMessage(Message message) {
+	shared actual void onMessage(Message message) {
 		try {
 			assert(is TextMessage message);
 			String trackingIdString = message.text;

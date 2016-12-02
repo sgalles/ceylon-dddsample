@@ -64,7 +64,7 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
 	}
 	
 	
-	shared default String? register(){
+	shared String? register(){
 		assert(	exists arrivalDeadline = arrivalDeadline, 
 				exists originUnlocode = originUnlocode, 
 				exists destinationUnlocode = destinationUnlocode);

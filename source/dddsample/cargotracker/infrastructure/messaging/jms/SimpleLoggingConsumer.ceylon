@@ -32,7 +32,7 @@ shared class MisdirectedCargoConsumer() satisfies MessageListener{
 	inject
 	late Logger logger;
 	
-	shared actual default void onMessage(Message message) {
+	shared actual void onMessage(Message message) {
 		logger.info("Received JMS message: ``message``");
 	}
 }
@@ -52,7 +52,7 @@ shared class DeliveredCargoConsumer() satisfies MessageListener{
 	inject
 	late Logger logger;
 	
-	shared actual default void onMessage(Message message) {
+	shared actual void onMessage(Message message) {
 		logger.info("Received JMS message: ``message``");
 	}
 }

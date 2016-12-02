@@ -33,7 +33,7 @@ shared class HandlingEventFactory(
 	LocationRepository locationRepository
 ) {
 	 
-	shared default HandlingEvent createHandlingEvent(Date registrationTime,
+	shared HandlingEvent createHandlingEvent(Date registrationTime,
 		Date completionTime, TrackingId trackingId,
 		UnLocode unlocode,
 		HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber) {

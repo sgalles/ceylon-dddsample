@@ -45,7 +45,7 @@ shared class GraphTraversalService() {
 	get
 	path("/shortest-path")
 	produces({"application/json", "application/xml; qs=.75"})
-	shared default TransitPaths findShortestPath(
+	shared TransitPaths findShortestPath(
 		queryParam("origin") JString originUnLocode,
 		queryParam("destination") JString destinationUnLocode,
 		queryParam("deadline") JString deadline

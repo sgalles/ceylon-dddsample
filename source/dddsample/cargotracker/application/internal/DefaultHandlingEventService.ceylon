@@ -42,7 +42,7 @@ shared class DefaultHandlingEventService(
 	Logger logger
 ) satisfies HandlingEventService {
 	
-	shared default actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
+	shared actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
 		Date registrationTime = Date();
 		/* Using a factory to create a HandlingEvent (aggregate). This is where
 		 it is determined wether the incoming data, the attempt, actually is capable

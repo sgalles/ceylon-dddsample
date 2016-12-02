@@ -45,7 +45,7 @@ shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListene
 	inject 
 	late HandlingEventService handlingEventService;
 	
-	shared actual default void onMessage(Message message) {
+	shared actual void onMessage(Message message) {
 		
 		try {
 			assert(

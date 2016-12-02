@@ -39,7 +39,7 @@ shared class DefaultCargoInspectionService (
 	) satisfies CargoInspectionService{
 	
 	
-	shared actual default void inspectCargo(TrackingId trackingId) {
+	shared actual void inspectCargo(TrackingId trackingId) {
 		logger.info("Inspecting cargo ``trackingId.idString``");
 		if (exists cargo = cargoRepository.find(trackingId)) {
 			logger.info("Found cargo ``trackingId.idString``");
