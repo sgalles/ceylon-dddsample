@@ -1,11 +1,6 @@
 
 
 
-import ceylon.interop.java {
-	CeylonList
-}
-
-
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
 	receive,
@@ -27,8 +22,7 @@ import java.lang {
 	Long
 }
 import java.util {
-	Date,
-	JList=List
+	Date
 }
 
 import javax.persistence {
@@ -39,10 +33,6 @@ import javax.persistence {
 	FetchType,
 	orderBy=orderBy__FIELD
 }
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	toJavaList
-}
 
 shared Date endOfDays = Date(Long.\iMAX_VALUE);
 
@@ -52,16 +42,16 @@ shared class Itinerary({Leg+} legsInit) {
 	oneToMany{cascade = {CascadeType.\iALL}; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
 	orderBy("load_time") 
-	JList<Leg> _legs = toJavaList(legsInit);
+	List<Leg> _legs = [*legsInit];
 	
 	shared [Leg+] legs {
-		assert(nonempty legs = CeylonList(_legs).sequence());
+		assert(nonempty legs = _legs.sequence());
 		return legs;
 	}
 	
 	
 	shared [Leg*] legsMaybeEmpty => // TODO remove
-		CeylonList(_legs).sequence();
+		_legs.sequence();
 	
 	
 	shared Location? initialDepartureLocation() 
