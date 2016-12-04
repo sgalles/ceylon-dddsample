@@ -29,7 +29,7 @@ shared class RouteSpecification(origin, destination, Date arrivalDeadlineValue) 
 	joinColumn{name = "spec_destination_id";}
 	shared Location destination;
 	
-	temporal(TemporalType.\iDATE)
+	temporal(TemporalType.date)
 	column{name = "spec_arrival_deadline";}
 	Date _arrivalDeadline = if(is Date adl = arrivalDeadlineValue.clone()) then adl else nothing;
 	

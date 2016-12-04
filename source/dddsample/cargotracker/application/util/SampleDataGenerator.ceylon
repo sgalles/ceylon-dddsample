@@ -73,7 +73,7 @@ shared class SampleDataGenerator(
 	value createHandlingEventFromTuple = unflatten(handlingEventFactory.createHandlingEvent);
 	
 	postConstruct
-	transactionAttribute(TransactionAttributeType.\iREQUIRED)
+	transactionAttribute(TransactionAttributeType.required)
 	shared void loadSampleData(){
 		// TODO use logs
 		log.info("Loading sample data.");

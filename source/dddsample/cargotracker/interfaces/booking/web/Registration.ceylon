@@ -78,7 +78,7 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
 		}else{
 			FacesContext context = FacesContext.currentInstance;
 			FacesMessage message = FacesMessage("Origin and destination cannot be the same.");
-			message.severity = FacesMessage.\iSEVERITY_ERROR;
+			message.severity = FacesMessage.severityError;
 			context.addMessage(null, message);
 			return null;
 		}

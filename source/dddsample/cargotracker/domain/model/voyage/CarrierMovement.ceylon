@@ -50,11 +50,11 @@ shared class CarrierMovement(
 	joinColumn{name = "arrival_location_id";}
 	shared Location arrivalLocation;
 	
-	temporal(TemporalType.\iTIMESTAMP)
+	temporal(TemporalType.timestamp)
 	column{name = "departure_time";}
 	shared Date departureTime;
 	
-	temporal(TemporalType.\iTIMESTAMP)
+	temporal(TemporalType.timestamp)
 	column{name = "arrival_time";}
 	shared Date arrivalTime;
 	

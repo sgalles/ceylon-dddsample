@@ -77,7 +77,7 @@ shared class ExternalRoutingService(
 		TransitPaths transitPaths = graphTraversalResource
 				.queryParam("origin", origin)
 				.queryParam("destination", destination)
-				.request(MediaType.\iAPPLICATION_JSON_TYPE)
+				.request(MediaType.applicationJsonType)
 				.get(object extends GenericType<TransitPaths>() {});
 		
 		Boolean routeSpecificationSatisfiesBy(TransitPath transitPath){

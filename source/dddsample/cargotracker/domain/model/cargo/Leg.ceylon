@@ -44,11 +44,11 @@ shared class Leg(voyage, loadLocation, unloadLocation, Date loadTimeValue, Date 
 	joinColumn{name = "unload_location_id";}
 	shared Location unloadLocation;
 		
-	temporal(TemporalType.\iTIMESTAMP)
+	temporal(TemporalType.timestamp)
 	column{name = "load_time";}
 	Date _loadTime = loadTimeValue;
 	
-	temporal(TemporalType.\iTIMESTAMP)
+	temporal(TemporalType.timestamp)
 	column{name = "unload_time";}
 	Date _unloadTime = unloadTimeValue;
 	

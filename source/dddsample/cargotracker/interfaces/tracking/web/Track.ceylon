@@ -51,7 +51,7 @@ shared class Track(
 		}else{
 			value context = FacesContext.currentInstance;
 			value message = FacesMessage("Cargo with tracking ID: ``trackingId``  not found.");
-			message.severity = FacesMessage.\iSEVERITY_ERROR;
+			message.severity = FacesMessage.severityError;
 			context.addMessage(null, message);
 			this.cargo = null;
 		}

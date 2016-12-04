@@ -56,7 +56,7 @@ shared class Delivery {
 	joinColumn{name = "current_voyage_id";}
 	variable Voyage? _currentVoyage;
 	
-	temporal(TemporalType.\iDATE)
+	temporal(TemporalType.date)
 	Date? _eta;
 	
 	shared Boolean misdirected;

@@ -15,7 +15,7 @@ import javax.persistence {
 embeddable
 shared class Schedule(carrierMovements){
 	
-	oneToMany{cascade = { CascadeType.\iALL }; orphanRemoval = true;}
+	oneToMany{cascade = { CascadeType.all }; orphanRemoval = true;}
 	joinColumn{name = "voyage_id";}
 	shared variable List<CarrierMovement> carrierMovements;
 	

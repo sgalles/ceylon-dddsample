@@ -34,12 +34,12 @@ import javax.persistence {
 	orderBy=orderBy__FIELD
 }
 
-shared Date endOfDays = Date(Long.\iMAX_VALUE);
+shared Date endOfDays = Date(Long.maxValue);
 
 embeddable
 shared class Itinerary({Leg+} legsInit) {
 	
-	oneToMany{cascade = {CascadeType.\iALL}; fetch=FetchType.\iEAGER; } // TODO : try to use LAZY
+	oneToMany{cascade = {CascadeType.all}; fetch=FetchType.eager; } // TODO : try to use LAZY
 	joinColumn{name = "cargo_id";}
 	orderBy("load_time") 
 	List<Leg> _legs = [*legsInit];

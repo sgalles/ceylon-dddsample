@@ -82,11 +82,11 @@ shared class HandlingEvent {
 	joinColumn{name = "location_id";}
 	shared Location location;
 	
-	temporal(TemporalType.\iDATE)
+	temporal(TemporalType.date)
 	column{name="completion";}
 	Date _completionTime;
 	
-	temporal(TemporalType.\iDATE)
+	temporal(TemporalType.date)
 	column{name="registration";}
 	Date _registrationTime;
 	
