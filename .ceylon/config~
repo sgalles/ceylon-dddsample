@@ -5,3 +5,6 @@ encoding=UTF-8
 
 [repositories]
 remote=http://stephane.galles.free.fr/ceylon/repo/
+
+[formattool]
+profile=default
