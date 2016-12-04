@@ -69,7 +69,7 @@ shared class Voyage{
 				= zipPairs(movementSteps.follow(departureLocation), movementSteps)
 				  .map(collectingCarrierMovement);
 				
-		this.schedule = Schedule(collectedCarrierMovement);
+		this.schedule = Schedule(collectedCarrierMovement.sequence());
 							
 	}
 	
