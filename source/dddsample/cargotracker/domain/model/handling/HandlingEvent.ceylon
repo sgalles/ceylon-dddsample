@@ -106,9 +106,9 @@ shared class HandlingEvent {
 			this.type = typeAndVoyage;
 			this.voyage = null;
 		}
-		case(is [HandlingEventTypeRequiredVoyage, Voyage]){
-			this.type = typeAndVoyage[0];
-			this.voyage = typeAndVoyage[1];
+		case([HandlingEventTypeRequiredVoyage type, Voyage voyage]){
+			this.type = type;
+			this.voyage = voyage;
 		}
 		this._completionTime = if(is Date t = completionTime.clone()) then t else nothing;
 		this._registrationTime = if(is Date t = registrationTime.clone()) then t else nothing;

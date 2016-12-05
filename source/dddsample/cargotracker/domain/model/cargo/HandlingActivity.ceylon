@@ -52,9 +52,9 @@ shared class HandlingActivity {
 			this.type = typeAndVoyage; 
 			this.voyage = null; 
 		}
-		case(is [HandlingEventTypeRequiredVoyage, Voyage]){
-			this.type = typeAndVoyage[0];
-			this.voyage = typeAndVoyage[1];
+		case([HandlingEventTypeRequiredVoyage type, Voyage voyage]){
+			this.type = type;
+			this.voyage = voyage;
 		}
 		
 	} 
