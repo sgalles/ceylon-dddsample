@@ -1,34 +1,29 @@
-import ceylon.collection {
-	HashMap
-}
-import ceylon.interop.java {
-	javaString
-}
 import ceylon.language.meta {
-	type
+    type
 }
-
+import ceylon.language.meta.model {
+    ClassOrInterface
+}
 
 import dddsample.cargotracker.domain.model.cargo {
-	RoutingStatus,
-	TransportStatus
+    RoutingStatus,
+    TransportStatus
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventType
+    HandlingEventType
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+    caseValues
 }
 
 import java.lang {
-	IllegalStateException,
-	JString=String
+    IllegalStateException,
+    JString=String
 }
 
 import javax.persistence {
-	AttributeConverter,
-	converter
-}
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	caseValues
+    AttributeConverter,
+    converter
 }
 
 converter //{autoApply = true;}
@@ -47,33 +42,44 @@ shared class HandlingEventTypeConverter()
 		satisfies AttributeConverter<HandlingEventType, JString> {}
 
 
-shared class CeylonEnumValuesConverter<EnumValue>() satisfies AttributeConverter<EnumValue, JString>
+shared class CeylonEnumValuesConverter<EnumValue>() 
+        satisfies AttributeConverter<EnumValue, JString>
 		given EnumValue satisfies Object {
 	
-	value enums = caseValues<EnumValue>();
+	"Not a class or interface type."
+	assert (is ClassOrInterface<EnumValue> enumType = `EnumValue`);
 	
-	"No elements found for enums values. Is the metamodel initialized ?"
-	assert(nonempty enums);
+	"No elements found for enum values. Is the metamodel initialized?"
+	assert (nonempty enums = caseValues(enumType));
 	
+	value nameByEnumValue
+			= enums.tabulate((val) => JString(type(val).declaration.name));
 	
-	EnumValue?(String) getEnumValueByName
-			= HashMap{*enums.map((ts) => type(ts).declaration.name->ts)}.get;
+	value enumValueByName
+			= nameByEnumValue.inverse().mapItems((key, items) => items[0]);
 	
-	String?(EnumValue) getNameByEnumValue
-			= HashMap{*enums.map((ts) => ts->type(ts).declaration.name)}.get;
-	
-	shared actual JString? convertToDatabaseColumn(EnumValue? x) 
-			=> if(exists x) then javaString(getNameByEnumValue(x) else nothing) else null;
+	shared actual JString? convertToDatabaseColumn(EnumValue? x) {
+	    if (exists x) {
+	        assert (exists name = nameByEnumValue[x]);
+	        return name;
+	    }
+	    else {
+	        return null;
+	    }
+	}
 	
 	shared actual EnumValue? convertToEntityAttribute(JString? y) {
-		if(exists y){
-			if(exists x = getEnumValueByName(y.string)){
+		if (exists y) {
+			if (exists x = enumValueByName[y]) {
 				return x;
-			}else{
+			}
+			else {
 				throw IllegalStateException("Unable to convert string ``y`` into RoutingStatus");
 			}
 		}
-		return null;
+		else {
+			return null;
+		}
 	}
 	
 }

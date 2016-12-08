@@ -47,7 +47,7 @@ viewScoped
 inject
 shared class Registration(BookingServiceFacade bookingServiceFacade){
 	
-	String format = "yyyy-MM-dd";
+	value format = SimpleDateFormat("yyyy-MM-dd");
 	
 	shared late JList<Location> locations;
 	
@@ -68,16 +68,15 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
 				exists destinationUnlocode = destinationUnlocode);
 		
 		if(originUnlocode != destinationUnlocode){
-			value trackingId =  bookingServiceFacade.bookNewCargo(
+			value trackingId = bookingServiceFacade.bookNewCargo(
                         originUnlocode,
                         destinationUnlocode,
-                        SimpleDateFormat(format).parse(arrivalDeadline));
+                        format.parse(arrivalDeadline));
 			return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
 		}else{
-			value context = FacesContext.currentInstance;
 			value message = FacesMessage("Origin and destination cannot be the same.");
 			message.severity = FacesMessage.severityError;
-			context.addMessage(null, message);
+			FacesContext.currentInstance.addMessage(null, message);
 			return null;
 		}
 	}

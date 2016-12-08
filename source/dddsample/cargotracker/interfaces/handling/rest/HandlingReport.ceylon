@@ -12,17 +12,8 @@ import dddsample.cargotracker.domain.model.voyage {
 import javax.xml.bind.annotation {
 	xmlRootElement
 }
-import ceylon.language.meta {
-
-	type
-}
-import ceylon.collection {
-
-	HashMap
-}
 import dddsample.cargotracker.infrastructure.ceylon {
-
-	caseValues
+    caseValueByName
 }
 
 "Transfer object for handling reports."
@@ -39,11 +30,7 @@ shared class HandlingReport(
 	
 	shared HandlingEventTypeBundle<VoyageNumber> voyageBundle() {
 		
-		// TODO use same transformation code both for this and JPA Converters. Cavest : there's a 'lowercased' here
-		value enums = caseValues<HandlingEventType>();
-		HandlingEventType?(String&Object) getEnumValueByName
-				= HashMap{*enums.map((ts) => type(ts).declaration.name.lowercased->ts)}.get;
-		HandlingEventType? handlingEventType = getEnumValueByName(eventType.lowercased);
+		value handlingEventType = caseValueByName(`HandlingEventType`, eventType.lowercased);
 		
 		if(exists voyageNumber = voyageNumber){
 			assert(is HandlingEventTypeRequiredVoyage eventType = handlingEventType);

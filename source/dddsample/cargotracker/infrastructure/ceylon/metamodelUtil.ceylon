@@ -1,27 +1,31 @@
+import ceylon.language.meta {
+    type
+}
 import ceylon.language.meta.declaration {
-	OpenType,
-	OpenClassOrInterfaceType
+    OpenClassOrInterfaceType
 }
 import ceylon.language.meta.model {
-	ClassOrInterface
+    ClassOrInterface
 }
 
-shared Type[] caseValues<Type>() {
-	value type =  `Type`;
-	if(is ClassOrInterface<Type> type){
-		if(nonempty caseValues = type.caseValues){
-			return caseValues;
-		}else{
-			assert(nonempty caseTypes = caseTypes<Type>());
-			return caseTypes.flatMap((caseType) => caseType.caseValues).sequence();
-		}
-	}else{
-		return [];
-	}
+shared Type[] caseValues<Type>(ClassOrInterface<Type> model) {
+    if (nonempty caseValues = model.caseValues) {
+        return caseValues;
+    }
+    else {
+        assert (nonempty caseTypes = caseTypes(model));
+        return caseTypes.flatMap(ClassOrInterface.caseValues).sequence();
+    }
 }
 
-[ClassOrInterface<Type>*] caseTypes<Type>() 
-		=> if(is ClassOrInterface<Type> type = `Type`) then type.declaration.caseTypes.collect((OpenType caseOpenType) {
-	assert(is OpenClassOrInterfaceType caseOpenType);
-	return caseOpenType.declaration.apply<Type>();
-}) else nothing;
+// TODO use same transformation code both for this and JPA Converters. 
+// Caveat : there's a 'lowercased' here
+shared Type? caseValueByName<Type>(ClassOrInterface<Type> model, String name)
+        => caseValues(model).find((val)
+            => type(val).declaration.name.lowercased == name);
+
+[ClassOrInterface<Type>*] caseTypes<Type>(ClassOrInterface<Type> model) 
+        => model.declaration.caseTypes.collect((caseOpenType) {
+           assert (is OpenClassOrInterfaceType caseOpenType);
+           return caseOpenType.declaration.apply<Type>();
+        });
