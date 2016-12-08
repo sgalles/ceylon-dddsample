@@ -4,6 +4,7 @@ import java.text {
 import java.util {
 	Date
 }
+
 shared class Leg(voyageNumber, fromUnLocode, String fromName, 
 				toUnLocode, toName, Date loadTimeDate, Date unloadTimeDate){
 	
@@ -16,7 +17,7 @@ shared class Leg(voyageNumber, fromUnLocode, String fromName,
 	shared String loadTime = dateFormat.format(loadTimeDate);
 	shared String unloadTime = dateFormat.format(unloadTimeDate);
 	
-	shared String from => fromName + " (" + fromUnLocode + ")";
-	shared String to => toUnLocode + " (" + toName + ")";
+	shared String from => "``fromName`` (``fromUnLocode``)";
+	shared String to => "``toUnLocode`` (``toName``)";
 	
 }

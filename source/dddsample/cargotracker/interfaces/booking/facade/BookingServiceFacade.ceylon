@@ -1,12 +1,12 @@
 
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	CargoRoute,
-	RouteCandidate,
-	Location
+    CargoRoute,
+    RouteCandidate,
+    Location
 }
 
 import java.util {
-	Date
+    Date
 }
 
 
@@ -14,11 +14,11 @@ import java.util {
    concerns about such things as the user interface and remoting.
    """
 shared interface BookingServiceFacade {
-	shared formal String bookNewCargo(variable String origin, variable String destination, variable Date arrivalDeadline);
-	shared formal CargoRoute loadCargoForRouting(variable String trackingId);
-	shared formal void assignCargoToRoute(variable String trackingId, variable RouteCandidate route);
-	shared formal void changeDestination(variable String trackingId, variable String destinationUnLocode);
-	shared formal List<RouteCandidate> requestPossibleRoutesForCargo(variable String trackingId);
+	shared formal String bookNewCargo(String origin, String destination, Date arrivalDeadline);
+	shared formal CargoRoute loadCargoForRouting(String trackingId);
+	shared formal void assignCargoToRoute(String trackingId, RouteCandidate route);
+	shared formal void changeDestination(String trackingId, String destinationUnLocode);
+	shared formal List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId);
 	shared formal List<Location> listShippingLocations();
 	shared formal List<CargoRoute> listAllCargos();
 }

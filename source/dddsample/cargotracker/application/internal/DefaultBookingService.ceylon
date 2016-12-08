@@ -1,31 +1,32 @@
 import dddsample.cargotracker.application {
-	BookingService
+    BookingService
 }
 import dddsample.cargotracker.domain.model.cargo {
-	Itinerary,
-	TrackingId,
-	CargoRepository,
-	RouteSpecification,
-	Cargo
+    Itinerary,
+    TrackingId,
+    CargoRepository,
+    RouteSpecification,
+    Cargo
 }
 import dddsample.cargotracker.domain.model.location {
-	UnLocode,
-	LocationRepository
+    UnLocode,
+    LocationRepository
 }
 import dddsample.cargotracker.domain.service {
-	RoutingService
+    RoutingService
 }
 
 import java.util {
-	Date
+    Date
 }
 
 import javax.ejb {
-	stateless
+    stateless
 }
 import javax.inject {
-	inject
+    inject
 }
+
 stateless
 inject 
 shared class DefaultBookingService(
@@ -35,13 +36,17 @@ shared class DefaultBookingService(
 ) satisfies BookingService{
 	
 	shared actual TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
-		assert(	exists origin = locationRepository.find(originUnLocode),
-		 		exists destination = locationRepository.find(destinationUnLocode)
-		);
+		assert (exists origin = locationRepository.find(originUnLocode),
+		 		exists destination = locationRepository.find(destinationUnLocode));
 		
-		value cargo = Cargo(
-			cargoRepository.nextTrackingId(), 
-			RouteSpecification(origin, destination, arrivalDeadline));
+		value cargo = Cargo {
+		    trackingId = cargoRepository.nextTrackingId();
+		    routeSpecification = RouteSpecification {
+		        origin = origin;
+		        destination = destination;
+		        arrivalDeadlineValue = arrivalDeadline;
+		    };
+		};
 		
 		cargoRepository.store(cargo);
 		/*logger.log(Level.INFO, "Booked new cargo with tracking id {0}",
@@ -51,25 +56,26 @@ shared class DefaultBookingService(
 	}
 	
 	shared actual List<Itinerary> requestPossibleRoutesForCargo(TrackingId trackingId) 
-		=> 	if(exists cargo = cargoRepository.find(trackingId)) 
-				then routingService.fetchRoutesForSpecification(cargo.routeSpecification)
-				else [];
+		=> if (exists cargo = cargoRepository.find(trackingId))
+		then routingService.fetchRoutesForSpecification(cargo.routeSpecification)
+		else [];
 	
 	shared actual void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
-		assert(exists cargo = cargoRepository.find(trackingId));
+		assert (exists cargo = cargoRepository.find(trackingId));
 		cargoRepository.store(cargo,itinerary);
 		/*logger.log(Level.INFO, "Assigned cargo {0} to new route", trackingId);*/
 	}
 	
 	shared actual void changeDestination(TrackingId trackingId, UnLocode unLocode) {
-		assert(exists cargo  = cargoRepository.find(trackingId),
-		       exists newDestination = locationRepository.find(unLocode)
-		);
+		assert (exists cargo  = cargoRepository.find(trackingId),
+		        exists newDestination = locationRepository.find(unLocode));
 		
-		value routeSpecification = RouteSpecification(
-			cargo.origin, newDestination,
-			cargo.routeSpecification.arrivalDeadline);
-			cargo.specifyNewRoute(routeSpecification);
+		value routeSpecification = RouteSpecification {
+		    origin = cargo.origin;
+		    destination = newDestination;
+		    arrivalDeadlineValue = cargo.routeSpecification.arrivalDeadline;
+		};
+		cargo.specifyNewRoute(routeSpecification);
 		
 		cargoRepository.store(cargo);
 		

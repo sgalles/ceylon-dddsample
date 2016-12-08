@@ -1,22 +1,22 @@
 import ceylon.interop.java {
-	CeylonList
+    CeylonList
 }
 
 import dddsample.cargotracker.domain.model.location {
-	LocationRepository,
-	Location,
-	UnLocode
+    LocationRepository,
+    Location,
+    UnLocode
 }
 
 import javax.enterprise.context {
-	applicationScoped
+    applicationScoped
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.persistence {
-	EntityManager,
-	NoResultException
+    EntityManager,
+    NoResultException
 }
 
 
@@ -27,21 +27,20 @@ class JpaLocationRepository(
 ) satisfies LocationRepository{
 	
 	shared actual Location? find(UnLocode unLocode) {
-
         try {
-            return entityManager.createNamedQuery("Location.findByUnLocode",`Location`)
-                    	.setParameter("unLocode", unLocode)
-                		.singleResult;
+            return entityManager
+				.createNamedQuery("Location.findByUnLocode",`Location`)
+				.setParameter("unLocode", unLocode)
+				.singleResult;
         } catch (NoResultException e) {
             return null;
         }
-
 	}
 	
-	shared actual List<Location> findAll() 
-			=> CeylonList(
-					entityManager.createNamedQuery("Location.findAll", `Location`)
-					.resultList
-				);
+	function locations()
+	        => entityManager.createNamedQuery("Location.findAll", `Location`)
+					.resultList;
+
+	findAll() => CeylonList(locations());
 
 }

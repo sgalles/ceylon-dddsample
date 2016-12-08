@@ -1,25 +1,23 @@
-
 import dddsample.cargotracker.interfaces.booking.facade {
-	BookingServiceFacade
+    BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	CargoRoute,
-	Location
+    CargoRoute,
+    Location
 }
 
 import java.util {
-	JList=List,
+    JList=List,
     Arrays
 }
 
 import javax.faces.view {
-	viewScoped
+    viewScoped
 }
 import javax.inject {
-	named=named__TYPE,
-	inject
+    named=named__TYPE,
+    inject
 }
-
 
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
@@ -50,16 +48,15 @@ shared class ChangeDestination(
 	shared JList<Location>? locations => _locations;
 	
 	shared void load() {
-		assert(exists trackingId = trackingId);
+		assert (exists trackingId = trackingId);
 		_locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());        
 		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
 	}
 	
 	shared String changeDestination() {
-		assert(
-			exists trackingId = trackingId, 
-			exists destinationUnlocode = destinationUnlocode
-		);
+		assert (exists trackingId = trackingId,
+				exists destinationUnlocode = destinationUnlocode);
+
 		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode);
 		return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
 	}

@@ -1,41 +1,44 @@
 import dddsample.cargotracker.application {
-	HandlingEventService
+    HandlingEventService
 }
 import dddsample.cargotracker.domain.model.handling {
-	CannotCreateHandlingEventException
+    CannotCreateHandlingEventException
 }
 import dddsample.cargotracker.interfaces.handling {
-	HandlingEventRegistrationAttempt
+    HandlingEventRegistrationAttempt
 }
 
 import javax.ejb {
-	messageDriven,
-	activationConfigProperty
+    messageDriven,
+    activationConfigProperty
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.jms {
-	MessageListener,
-	Message,
-	ObjectMessage,
-	JMSException
+    MessageListener,
+    Message,
+    ObjectMessage,
+    JMSException
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
 
 
-messageDriven{ activationConfig = {
-	activationConfigProperty{
-		propertyName = "destinationType"; 
-		propertyValue = "javax.jms.Queue";},
-	activationConfigProperty{
-		propertyName = "destinationLookup"; 
-		propertyValue = "java:global/jms/HandlingEventRegistrationAttemptQueue";}
+messageDriven {
+	activationConfig = {
+		activationConfigProperty {
+			propertyName = "destinationType";
+			propertyValue = "javax.jms.Queue";
+		},
+		activationConfigProperty {
+			propertyName = "destinationLookup";
+			propertyValue = "java:global/jms/HandlingEventRegistrationAttemptQueue";
+		}
 	};
-	messageListenerInterface=`interface MessageListener`;
+	messageListenerInterface = `interface MessageListener`;
 }
 shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListener{
 	
@@ -48,17 +51,19 @@ shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListene
 	shared actual void onMessage(Message message) {
 		
 		try {
-			assert(
-				is ObjectMessage objectMessage = message,
-				is HandlingEventRegistrationAttempt attempt = objectMessage.\iobject
-			);
+			assert (is ObjectMessage objectMessage = message,
+					is HandlingEventRegistrationAttempt attempt = objectMessage.\iobject);
+
 			log.info("JMS Listener HandlingEventRegistrationAttemptQueue received``attempt``");
-			handlingEventService.registerHandlingEvent(
-				attempt.completionTime,
-				attempt.trackingId,
-				attempt.typeAndVoyage,
-				attempt.unLocode);
-		} catch (JMSException | CannotCreateHandlingEventException e) {
+
+			handlingEventService.registerHandlingEvent {
+			    completionTime = attempt.completionTime;
+			    trackingId = attempt.trackingId;
+			    eventTypeBundle = attempt.typeAndVoyage;
+			    unLocode = attempt.unLocode;
+			};
+		}
+		catch (JMSException | CannotCreateHandlingEventException e) {
 			// Poison messages will be placed on dead-letter queue.
 			throw Exception("Error occurred processing message", e);
 			//        } catch (JMSException e) {
@@ -66,6 +71,5 @@ shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListene
 		}
 		
 	}
-	
-	
+
 }

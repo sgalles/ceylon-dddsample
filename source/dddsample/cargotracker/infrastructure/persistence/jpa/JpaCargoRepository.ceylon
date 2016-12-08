@@ -1,28 +1,28 @@
 import ceylon.interop.java {
-	javaString,
-	CeylonList
+    javaString,
+    CeylonList
 }
 
 import dddsample.cargotracker.domain.model.cargo {
-	CargoRepository,
-	Cargo,
-	TrackingId,
-	Itinerary
+    CargoRepository,
+    Cargo,
+    TrackingId,
+    Itinerary
 }
 
 import java.util {
-	UUID
+    UUID
 }
 
 import javax.enterprise.context {
-	applicationScoped
+    applicationScoped
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.persistence {
-	EntityManager,
-	NoResultException
+    EntityManager,
+    NoResultException
 }
 
 
@@ -33,21 +33,18 @@ class JpaCargoRepository(
 ) satisfies CargoRepository{
 	
 	shared actual Cargo? find(TrackingId trackingId) {
-
         try {
-            value cargo = entityManager.createNamedQuery("Cargo.findByTrackingId",`Cargo`)
+            return entityManager.createNamedQuery("Cargo.findByTrackingId",`Cargo`)
                     .setParameter("trackingId", trackingId)
                     .singleResult;
-            return cargo;
         } catch (NoResultException e) {
             return null;
         }
-
 	}
 	
 	shared actual void store(Cargo cargo, Itinerary? newItinerary) {
-		if(exists newItinerary, exists oldItinerary = cargo.itinerary){
-			for(leg in oldItinerary.legsMaybeEmpty){
+		if (exists newItinerary, exists oldItinerary = cargo.itinerary) {
+			for (leg in oldItinerary.legsMaybeEmpty){
 				entityManager.remove(leg);
 			}
 			cargo.assignToRoute(newItinerary);
@@ -55,18 +52,12 @@ class JpaCargoRepository(
 		entityManager.persist(cargo);
 	}
 	
-	shared actual TrackingId nextTrackingId() 
+	nextTrackingId()
 			=> let(random = javaString(UUID.randomUUID().string.uppercased))
-				TrackingId(random.substring(0, random.indexOf("-"))); // TODO : Ceylonize
+            TrackingId(random.substring(0, random.indexOf("-"))); // TODO : Ceylonize
 	
-	shared actual List<Cargo> findAll() 
-			=> CeylonList(
-					entityManager.createNamedQuery("Cargo.findAll", `Cargo`)
-					.resultList
-				);
-	
+	findAll()
+			=> CeylonList(entityManager.createNamedQuery("Cargo.findAll", `Cargo`)
+					.resultList);
 
-	
-
-	
 }

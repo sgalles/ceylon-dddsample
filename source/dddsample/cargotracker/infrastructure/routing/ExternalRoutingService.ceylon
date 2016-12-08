@@ -1,43 +1,42 @@
 import dddsample.cargotracker.domain.model.cargo {
-	Itinerary,
-	RouteSpecification,
-	Leg
+    Itinerary,
+    RouteSpecification,
+    Leg
 }
 import dddsample.cargotracker.domain.model.location {
-	LocationRepository,
-	UnLocode
+    LocationRepository,
+    UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageRepository,
-	VoyageNumber
+    VoyageRepository,
+    VoyageNumber
 }
 import dddsample.cargotracker.domain.service {
-	RoutingService
+    RoutingService
 }
 import dddsample.pathfinder.api {
-	TransitEdge,
-	TransitPath,
-	TransitPaths
+    TransitPath,
+    TransitPaths
 }
 
 import javax.annotation {
-	resource,
-	postConstruct
+    resource,
+    postConstruct
 }
 import javax.ejb {
-	stateless
+    stateless
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.ws.rs.client {
-	Client,
-	ClientBuilder,
-	WebTarget
+    Client,
+    ClientBuilder,
+    WebTarget
 }
 import javax.ws.rs.core {
-	MediaType,
-	GenericType
+    MediaType,
+    GenericType
 }
 
 
@@ -60,7 +59,7 @@ shared class ExternalRoutingService(
 	late WebTarget graphTraversalResource;
 	
 	postConstruct
-	shared void init(){
+	shared void init() {
 		jaxrsClient = ClientBuilder.newClient();
 		graphTraversalResource = jaxrsClient.target(graphTraversalUrl);
 	}
@@ -92,12 +91,18 @@ shared class ExternalRoutingService(
 				.collect(toItinerary);
 	}
 	
-	Itinerary toItinerary(TransitPath transitPath) => Itinerary(transitPath.transitEdgesSeq.map(toLeg));
-	
-	Leg toLeg(TransitEdge edge) => Leg(
-                voyageRepository.find(VoyageNumber(edge.voyageNumber)) else nothing,
-                locationRepository.find(UnLocode(edge.fromUnLocode)) else nothing,
-                locationRepository.find(UnLocode(edge.toUnLocode)) else nothing,
-                edge.fromDate, edge.toDate);
+	Itinerary toItinerary(TransitPath transitPath)
+			=> Itinerary(transitPath.transitEdgesSeq.map((edge) {
+			    assert (exists voyage = voyageRepository.find(VoyageNumber(edge.voyageNumber)),
+			    		exists loadLoc = locationRepository.find(UnLocode(edge.fromUnLocode)),
+			    		exists unloadLoc = locationRepository.find(UnLocode(edge.toUnLocode)));
+			    return Leg {
+					voyage = voyage;
+					loadLocation = loadLoc;
+					unloadLocation = unloadLoc;
+					loadTimeValue = edge.fromDate;
+					unloadTimeValue = edge.toDate;
+				};
+			}));
 	
 }

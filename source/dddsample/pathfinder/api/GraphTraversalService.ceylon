@@ -1,27 +1,30 @@
+import ceylon.collection {
+    ArrayList,
+    MutableList
+}
+import ceylon.interop.java {
+    CeylonMutableList
+}
+
 import dddsample.pathfinder.internal {
-	GraphDao
+    GraphDao
 }
 
 import java.util {
-	Random,
-	JList=List,
-	JArrayList=ArrayList,
-	Date,
-	Collections,
+    Random,
+    Date,
+    Collections,
     Arrays
-}
-import java.lang{
-	JString=String
 }
 
 import javax.inject {
-	inject
+    inject
 }
 import javax.ws.rs {
-	path,
-	get,
-	produces,
-	queryParam
+    path,
+    get,
+    produces,
+    queryParam
 }
 
 
@@ -34,68 +37,84 @@ shared class GraphTraversalService() {
 	
 	inject
 	late GraphDao dao;
-	Random random = Random();
+
+	value random = Random();
 	
 	get
 	path("/shortest-path")
-	produces({"application/json", "application/xml; qs=.75"})
+	produces {"application/json", "application/xml; qs=.75"}
 	shared TransitPaths findShortestPath(
-		queryParam("origin") JString originUnLocode,
-		queryParam("destination") JString destinationUnLocode,
-		queryParam("deadline") JString deadline
-	){
+		queryParam("origin") String originUnLocode,
+		queryParam("destination") String destinationUnLocode,
+		queryParam("deadline") String deadline
+	) {
 		variable Date date = nextDate(Date());
 		
-		variable JList<String> allVertices = Arrays.asList(*dao.locations);
+		variable MutableList<String> allVertices = ArrayList { *dao.locations };
 		allVertices.remove(originUnLocode);
 		allVertices.remove(destinationUnLocode);
 		
 		value candidateCount = randomNumberOfCandidates();
-		JList<TransitPath> candidates = JArrayList<TransitPath>(candidateCount);
-		for(i in 0:candidateCount){
+		MutableList<TransitPath> candidates = ArrayList<TransitPath>(candidateCount);
+		for (i in 0:candidateCount) {
 			allVertices = randomChunkOfLocations(allVertices);
-			JList<TransitEdge> transitEdges = JArrayList<TransitEdge>(allVertices.size() - 1);
-			String firstLegTo = allVertices.get(0);
+			value transitEdges = ArrayList<TransitEdge>(allVertices.size-1);
+			assert (exists firstLegTo = allVertices[0]);
 			variable Date fromDate = nextDate(date);
 			variable Date toDate = nextDate(fromDate);
 			date = nextDate(toDate);
 			
-			transitEdges.add(TransitEdge(
-				dao.voyageNumber(),
-				originUnLocode.string, firstLegTo, fromDate, toDate));
-			for(j in 0:allVertices.size() - 1){
-				String current = allVertices.get(j);
-				String next = allVertices.get(j + 1);
+			transitEdges.add(TransitEdge {
+			    voyageNumber = dao.voyageNumber();
+			    fromUnLocode = originUnLocode.string;
+			    toUnLocode = firstLegTo;
+			    fromDate = fromDate;
+			    toDate = toDate;
+			});
+
+			for (j in 0:allVertices.size-1) {
+				assert (exists current = allVertices[j],
+						exists next = allVertices[j + 1]);
 				fromDate = nextDate(date);
 				toDate = nextDate(fromDate);
 				date = nextDate(toDate);
-				transitEdges.add(TransitEdge(dao.voyageNumber(), current, next, fromDate, toDate));
+				transitEdges.add(TransitEdge {
+				    voyageNumber = dao.voyageNumber();
+				    fromUnLocode = current;
+				    toUnLocode = next;
+				    fromDate = fromDate;
+				    toDate = toDate;
+				});
 			}
 			
-			String lastLegFrom = allVertices.get(allVertices.size() - 1);
+			assert (exists lastLegFrom = allVertices[allVertices.size - 1]);
 			fromDate = nextDate(date);
 			toDate = nextDate(fromDate);
-			transitEdges.add(TransitEdge(
-				dao.voyageNumber(),
-				lastLegFrom, destinationUnLocode.string, fromDate, toDate));
+			transitEdges.add(TransitEdge {
+			    voyageNumber = dao.voyageNumber();
+			    fromUnLocode = lastLegFrom;
+			    toUnLocode = destinationUnLocode.string;
+			    fromDate = fromDate;
+			    toDate = toDate;
+			});
 			
-			candidates.add(TransitPath(transitEdges));
+			candidates.add(TransitPath(Arrays.asList(*transitEdges)));
 		}
 		
-		return TransitPaths(candidates);
+		return TransitPaths(Arrays.asList(*candidates));
 	}
 	
 	Date nextDate(Date date) => Date(date.time + oneDayMs
 		+ (random.nextInt(1000) - 500) * oneMinMs);
 	
 	Integer randomNumberOfCandidates() => 3 + random.nextInt(3);
-	
-	JList<String> randomChunkOfLocations(JList<String> allLocations){
-		Collections.shuffle(allLocations);
-		value total = allLocations.size();
+
+	MutableList<String> randomChunkOfLocations(List<String> allLocations) {
+		value list = Arrays.asList(*allLocations);
+		Collections.shuffle(list);
+		value total = list.size();
 		value chunk = if(total > 4) then 1 + Random().nextInt(5) else total;
-		return allLocations.subList(0, chunk);
+		return CeylonMutableList(list.subList(0, chunk));
 	}
-		
-	
+
 }

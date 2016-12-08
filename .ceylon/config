@@ -6,7 +6,8 @@ flatclasspath=false
 autoexportmavendependencies=false
 fullyexportmavendependencies=false
 
-
+[compiler.jvm]
+ee=true
 
 [formattool]
 profile=default

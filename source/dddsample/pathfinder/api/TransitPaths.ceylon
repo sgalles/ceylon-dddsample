@@ -1,10 +1,12 @@
-import java.util {
-	JList=List
+import javax.xml.bind.annotation {
+    xmlRootElement
 }
 
-import javax.xml.bind.annotation {
-	xmlRootElement
-}
+import java.util { JList=List }
 
 xmlRootElement
-shared class TransitPaths(shared variable JList<TransitPath> transitPath) {}
+shared class TransitPaths(transitPath) {
+
+    shared JList<TransitPath> transitPath;
+
+}

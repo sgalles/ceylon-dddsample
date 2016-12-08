@@ -1,42 +1,42 @@
 import ceylon.collection {
-	HashSet
+    HashSet
 }
 import ceylon.json {
-	Object
+    Object
 }
 
 import dddsample.cargotracker.domain.model.cargo {
-	Cargo
+    Cargo
 }
 import dddsample.cargotracker.infrastructure.events.cdi {
-	cargoInspected
+    cargoInspected
 }
 
 import java.io {
-	IOException
+    IOException
 }
 
 import javax.ejb {
-	singleton,
-	localBean
+    singleton,
+    localBean
 }
 import javax.enterprise.event {
-	observes
+    observes
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.websocket {
-	Session,
-	onOpen,
-	onClose
+    Session,
+    onOpen,
+    onClose
 }
 import javax.websocket.server {
-	serverEndpoint
+    serverEndpoint
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
 
 singleton
@@ -60,20 +60,23 @@ shared class RealtimeCargoTrackingService(Logger logger) {
 	}
 	
 	shared void onCargoInspected(observes cargoInspected Cargo cargo) {
+
 		logger.info("Received 'cargoInspected' event. Current number of sessions ``sessions.size``");
-		String jsonValue = Object {
+
+		value jsonValue = Object {
 			"trackingId" -> cargo.trackingId.idString,
 			"origin" -> cargo.origin.name,
 			"destination" -> cargo.routeSpecification.destination.name,
 			"lastKnownLocation" -> cargo.delivery.lastKnownLocation.name,
-			"transportStatus" -> cargo.delivery.transportStatus.name 
-		}.string;
+			"transportStatus" -> cargo.delivery.transportStatus.string
+		};
 		
 		for (session in sessions) {
 			try {
 				logger.info("Sending to websocket json : ``jsonValue``");
-				session.basicRemote.sendText(jsonValue);
-			} catch (IOException ex) {
+				session.basicRemote.sendText(jsonValue.string);
+			}
+			catch (IOException ex) {
 				logger.warn("Unable to publish WebSocket message", ex);
 			}
 		}

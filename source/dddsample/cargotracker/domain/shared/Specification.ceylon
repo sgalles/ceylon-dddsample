@@ -14,13 +14,13 @@ shared abstract class AbstractSpecification<Testable>() satisfies Specification<
 	
 	shared formal actual Boolean isSatisfiedBy(Testable t);
 	
-	shared actual Specification<Testable> and(Specification<Testable> specification) 
+	and(Specification<Testable> specification)
 			=> AndSpecification(this, specification);
 	
-	shared actual Specification<Testable> or(Specification<Testable> specification) 
+	or(Specification<Testable> specification)
 			=> OrSpecification(this, specification);
 	
-	shared actual Specification<Testable> not(Specification<Testable> specification) 
+	not(Specification<Testable> specification)
 			=> NotSpecification(specification);
 	
 	
@@ -29,23 +29,25 @@ shared abstract class AbstractSpecification<Testable>() satisfies Specification<
 shared class AndSpecification<Testable>(Specification<Testable> spec1, Specification<Testable>spec2) 
 		extends AbstractSpecification<Testable>(){
 	
-	shared actual Boolean isSatisfiedBy(Testable t) 
-			=> spec1.isSatisfiedBy(t) && spec2.isSatisfiedBy(t);
+	isSatisfiedBy(Testable t)
+			=> spec1.isSatisfiedBy(t)
+			&& spec2.isSatisfiedBy(t);
 	
 }
 
 shared class OrSpecification<Testable>(Specification<Testable> spec1, Specification<Testable>spec2) 
 		extends AbstractSpecification<Testable>(){
 	
-	shared actual Boolean isSatisfiedBy(Testable t) 
-			=> spec1.isSatisfiedBy(t) || spec2.isSatisfiedBy(t);
+	isSatisfiedBy(Testable t)
+			=> spec1.isSatisfiedBy(t)
+			|| spec2.isSatisfiedBy(t);
 	
 }
 
 shared class NotSpecification<Testable>(Specification<Testable> spec1) 
 		extends AbstractSpecification<Testable>(){
 	
-	shared actual Boolean isSatisfiedBy(Testable t) 
+	isSatisfiedBy(Testable t)
 			=> !spec1.isSatisfiedBy(t);
 	
 }

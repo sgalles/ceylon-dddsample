@@ -1,18 +1,18 @@
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId
+    TrackingId
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventTypeBundle
+    HandlingEventTypeBundle
 }
 import dddsample.cargotracker.domain.model.location {
-	UnLocode
+    UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageNumber
+    VoyageNumber
 }
 
 import java.util {
-	Date
+    Date
 }
 
 """
@@ -22,12 +22,19 @@ import java.util {
    It is used as a message queue element.
    """
 shared class HandlingEventRegistrationAttempt(
-	shared Date registrationTime,
-	shared Date completionTime,
-	shared TrackingId trackingId,
-	shared HandlingEventTypeBundle<VoyageNumber> typeAndVoyage,
-	shared UnLocode unLocode
+	registrationTime,
+	completionTime,
+	trackingId,
+	typeAndVoyage,
+	unLocode
 ) {
+
+	shared Date registrationTime;
+	shared Date completionTime;
+	shared TrackingId trackingId;
+	shared HandlingEventTypeBundle<VoyageNumber> typeAndVoyage;
+	shared UnLocode unLocode;
+
 	string => "registrationTime=``registrationTime``
 	           completionTime=``completionTime``
 	           trackingId=``trackingId``

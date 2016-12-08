@@ -51,11 +51,9 @@ shared class Leg(voyage, loadLocation, unloadLocation, Date loadTimeValue, Date 
 	temporal(TemporalType.timestamp)
 	column{name = "unload_time";}
 	Date _unloadTime = unloadTimeValue;
-	
-	
+
 	shared Date loadTime => Date(_loadTime.time);
 	
 	shared Date unloadTime => Date(_unloadTime.time);
-	
-	
+
 }

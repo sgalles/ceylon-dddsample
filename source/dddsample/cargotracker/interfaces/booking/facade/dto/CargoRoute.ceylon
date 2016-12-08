@@ -1,5 +1,3 @@
-
-
 import java.text {
 	SimpleDateFormat
 }
@@ -13,7 +11,7 @@ import java.util {
    DTO for registering and routing a cargo.
    """
 shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadlineDate, 
-	misrouted, claimed,  lastKnownLocation, transportStatus, {Leg*} legsIt){
+	misrouted, claimed,  lastKnownLocation, transportStatus, {Leg*} legsIt) {
 	
 	value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 	

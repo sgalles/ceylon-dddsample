@@ -1,43 +1,42 @@
 import dddsample.cargotracker.application {
-	ApplicationEvents
+    ApplicationEvents
 }
 import dddsample.cargotracker.domain.model.cargo {
-	Cargo
+    Cargo
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEvent
+    HandlingEvent
 }
 import dddsample.cargotracker.interfaces.handling {
-	HandlingEventRegistrationAttempt
+    HandlingEventRegistrationAttempt
+}
+
+import java.io {
+    Serializable
 }
 
 import javax.annotation {
-	resource
+    resource
+}
+import javax.enterprise.context {
+    applicationScoped
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.jms {
-	JMSContext,
-	Destination
+    JMSContext,
+    Destination
 }
 
 import org.slf4j {
-	Logger
-}
-import javax.enterprise.context {
-
-	applicationScoped
-}
-import java.io {
-
-	Serializable
+    Logger
 }
 
 Integer lowPriority = 0;
 
 applicationScoped
-shared class JmsApplicationEvents() satisfies ApplicationEvents{
+shared class JmsApplicationEvents() satisfies ApplicationEvents {
 	
 	inject
 	late JMSContext jmsContext;

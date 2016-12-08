@@ -1,4 +1,3 @@
-
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
@@ -31,7 +30,6 @@ import javax.inject {
 	inject
 }
 
-
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
    easily be rewritten as a thick Swing client. Completely separated from the
@@ -45,7 +43,7 @@ import javax.inject {
 named
 viewScoped
 inject
-shared class Registration(BookingServiceFacade bookingServiceFacade){
+shared class Registration(BookingServiceFacade bookingServiceFacade) {
 	
 	value format = SimpleDateFormat("yyyy-MM-dd");
 	
@@ -57,23 +55,22 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
 	
 	suppressWarnings("unusedDeclaration")
 	postConstruct
-	void init() {
-		locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
-	}
-	
-	
-	shared String? register(){
+	void init() => locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
+
+	shared String? register() {
 		assert(	exists arrivalDeadline = arrivalDeadline, 
 				exists originUnlocode = originUnlocode, 
 				exists destinationUnlocode = destinationUnlocode);
 		
-		if(originUnlocode != destinationUnlocode){
-			value trackingId = bookingServiceFacade.bookNewCargo(
-                        originUnlocode,
-                        destinationUnlocode,
-                        format.parse(arrivalDeadline));
+		if (originUnlocode != destinationUnlocode){
+			value trackingId = bookingServiceFacade.bookNewCargo {
+			    origin = originUnlocode;
+			    destination = destinationUnlocode;
+			    arrivalDeadline = format.parse(arrivalDeadline);
+			};
 			return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
-		}else{
+		}
+		else {
 			value message = FacesMessage("Origin and destination cannot be the same.");
 			message.severity = FacesMessage.severityError;
 			FacesContext.currentInstance.addMessage(null, message);

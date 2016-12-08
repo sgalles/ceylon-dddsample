@@ -1,27 +1,24 @@
 import dddsample.cargotracker.domain.model.cargo {
-	CargoRepository,
-	TrackingId,
-	Cargo
+    CargoRepository,
+    TrackingId
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventRepository,
-	HandlingEvent
+    HandlingEventRepository
 }
 
 import javax.faces.application {
-	FacesMessage
+    FacesMessage
 }
 import javax.faces.context {
-	FacesContext
+    FacesContext
 }
 import javax.faces.view {
-	viewScoped
+    viewScoped
 }
 import javax.inject {
-	named=named__TYPE,
-	inject
+    named=named__TYPE,
+    inject
 }
-
 
 named
 viewScoped
@@ -39,15 +36,19 @@ shared class Track(
 	
 	shared variable CargoTrackingViewAdapter? cargo = null;
 		
-	shared void onTrackById(){
-		assert(exists trackingId = trackingId);
-		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
-		if(exists cargo){
-			List<HandlingEvent> handlingEvents = handlingEventRepository
-					.lookupHandlingHistoryOfCargo(TrackingId(trackingId))
-					.distinctEventsByCompletionTime;
-			this.cargo = CargoTrackingViewAdapter(cargo, handlingEvents);
-		}else{
+	shared void onTrackById() {
+		assert (exists trackingId = trackingId);
+
+		if (exists cargo = cargoRepository.find(TrackingId(trackingId))) {
+			this.cargo = CargoTrackingViewAdapter {
+			    cargo = cargo;
+			    handlingEvents
+						= handlingEventRepository
+						.lookupHandlingHistoryOfCargo(TrackingId(trackingId))
+						.distinctEventsByCompletionTime;
+			};
+		}
+		else {
 			value context = FacesContext.currentInstance;
 			value message = FacesMessage("Cargo with tracking ID: ``trackingId``  not found.");
 			message.severity = FacesMessage.severityError;

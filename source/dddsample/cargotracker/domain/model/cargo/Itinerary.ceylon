@@ -5,12 +5,7 @@ import dddsample.cargotracker.domain.model.handling {
 	},
 	HandlingEventTypeProhibitedVoyage {
 		...
-	},
-	load,
-	unload,
-	receive,
-	claim,
-	customs
+	}
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -49,12 +44,10 @@ shared class Itinerary({Leg+} legsInit) {
         assert(nonempty legs = _legs.sequence());
         return legs;
     }
-    
-    
+
     shared [Leg*] legsMaybeEmpty => // TODO remove
             _legs.sequence();
-    
-    
+
     shared Location? initialDepartureLocation() 
             => legsMaybeEmpty.first?.loadLocation;	
     
@@ -63,35 +56,32 @@ shared class Itinerary({Leg+} legsInit) {
     
     shared Date finalArrivalDate() 
             => Date(legs.last.unloadTime.time);
-    
-    
+
     shared Boolean isExpected(HandlingEvent event) {
         
         Boolean sameVoyageAnd(Location(Leg) locating, Voyage voyage)(Leg leg)
                 => locating(leg).sameIdentityAs(event.location) 
                 && leg.voyage.sameIdentityAs(voyage);
         
-        return switch(typeAndVoyage = event.typeAndVoyage)
-        case(is [HandlingEventTypeRequiredVoyage, Voyage]) 
-            let([type,voyage] = typeAndVoyage) 
-            (switch(type)
-                // Check that the there is one leg with same load location and
+        switch (typeAndVoyage = event.typeAndVoyage)
+        case ([HandlingEventTypeRequiredVoyage type, Voyage voyage]) {
+            return switch (type)
+            // Check that the there is one leg with same load location and
             // voyage
-            case(load) legs.any(sameVoyageAnd(Leg.loadLocation,voyage))
+            case (load) legs.any(sameVoyageAnd(Leg.loadLocation,voyage))
             // Check that the there is one leg with same unload location and
             // voyage
-            case(unload) legs.any(sameVoyageAnd(Leg.unloadLocation,voyage))
-        )
-        case(is HandlingEventTypeProhibitedVoyage) 
-            let(type = typeAndVoyage) 
-            (switch(type)
-                // Check that the first leg's origin is the event's location
-            case(receive) legs.first.loadLocation.sameIdentityAs(event.location)  
+            case (unload) legs.any(sameVoyageAnd(Leg.unloadLocation,voyage));
+        }
+        case (is HandlingEventTypeProhibitedVoyage) {
+            return switch (typeAndVoyage)
+            // Check that the first leg's origin is the event's location
+            case(receive) legs.first.loadLocation.sameIdentityAs(event.location)
             // Check that the last leg's destination is from the event's
             // location
-            case(claim) legs.last.unloadLocation.sameIdentityAs(event.location) 
-            case(customs) true
-        );
+            case(claim) legs.last.unloadLocation.sameIdentityAs(event.location)
+            case(customs) true;
+        }
 
     }
 

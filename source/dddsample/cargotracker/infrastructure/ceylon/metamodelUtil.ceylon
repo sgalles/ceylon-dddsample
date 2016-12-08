@@ -1,6 +1,3 @@
-import ceylon.language.meta {
-    type
-}
 import ceylon.language.meta.declaration {
     OpenClassOrInterfaceType
 }
@@ -18,11 +15,9 @@ shared Type[] caseValues<Type>(ClassOrInterface<Type> model) {
     }
 }
 
-// TODO use same transformation code both for this and JPA Converters. 
-// Caveat : there's a 'lowercased' here
+// TODO use same transformation code both for this and JPA Converters.
 shared Type? caseValueByName<Type>(ClassOrInterface<Type> model, String name)
-        => caseValues(model).find((val)
-            => type(val).declaration.name.lowercased == name);
+        => caseValues(model).find((val) => val.string.equalsIgnoringCase(name));
 
 [ClassOrInterface<Type>*] caseTypes<Type>(ClassOrInterface<Type> model) 
         => model.declaration.caseTypes.collect((caseOpenType) {

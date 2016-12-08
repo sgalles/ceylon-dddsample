@@ -1,31 +1,35 @@
 import dddsample.cargotracker.domain.model.handling {
-	HandlingHistory
+    HandlingHistory
 }
 import dddsample.cargotracker.domain.model.location {
-	Location
+    Location
 }
 
 import java.lang {
-	Long
+    Long
 }
 
 import javax.persistence {
-	entity,
-	embedded,
-	id,
-	generatedValue,
-	namedQueries,
-	namedQuery,
-	manyToOne,
-	joinColumn
+    entity,
+    embedded,
+    id,
+    generatedValue,
+    namedQueries,
+    namedQuery,
+    manyToOne,
+    joinColumn
 }
 
 entity
 namedQueries {
-	namedQuery{name = "Cargo.findAll";
-		query = "Select c from Cargo c";},
-	namedQuery{name = "Cargo.findByTrackingId";
-		query = "Select c from Cargo c where c.trackingId = :trackingId";}	
+	namedQuery {
+		name = "Cargo.findAll";
+		query = "Select c from Cargo c";
+	},
+	namedQuery {
+		name = "Cargo.findByTrackingId";
+		query = "Select c from Cargo c where c.trackingId = :trackingId";
+	}
 }
 shared class Cargo(trackingId, routeSpecification){
 	
@@ -52,15 +56,18 @@ shared class Cargo(trackingId, routeSpecification){
 	variable Itinerary? _itinerary = null;
 	
 	embedded
-	variable Delivery _delivery = Delivery.derivedFrom(routeSpecification,
-                this._itinerary, HandlingHistory.empty); // TODO : WAT ? this._itinerary is always here null. Strange.
+	variable Delivery _delivery = Delivery.derivedFrom {
+	    routeSpecification = routeSpecification;
+	    itinerary = this._itinerary;
+	    handlingHistory = HandlingHistory.empty;
+	}; // TODO : WAT ? this._itinerary is always here null. Strange.
 
 	
 	shared Itinerary? itinerary => _itinerary;
 	
 	shared Delivery delivery => _delivery;
 	
-	shared void assignToRoute(Itinerary itinerary){
+	shared void assignToRoute(Itinerary itinerary) {
 		this._itinerary = itinerary;
 		this._delivery = delivery.updateOnRouting(routeSpecification, itinerary);
 	}
@@ -75,7 +82,11 @@ shared class Cargo(trackingId, routeSpecification){
 	}
 	
 	shared void deriveDeliveryProgress(HandlingHistory handlingHistory) {
-		this._delivery = Delivery.derivedFrom(routeSpecification, itinerary,handlingHistory);
+		this._delivery = Delivery.derivedFrom {
+		    routeSpecification = routeSpecification;
+		    itinerary = itinerary;
+		    handlingHistory = handlingHistory;
+		};
 	}
 	
 	

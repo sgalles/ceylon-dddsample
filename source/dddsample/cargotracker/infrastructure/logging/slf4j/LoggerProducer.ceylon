@@ -17,7 +17,6 @@ applicationScoped
 shared class LoggerProducer() {
 	suppressWarnings("unusedDeclaration")
 	produces  
-	Logger createLogger(InjectionPoint ip){
-		return LoggerFactory.getLogger(ip.member.declaringClass);
-	}
+	Logger createLogger(InjectionPoint ip)
+			=> LoggerFactory.getLogger(ip.member.declaringClass);
 }

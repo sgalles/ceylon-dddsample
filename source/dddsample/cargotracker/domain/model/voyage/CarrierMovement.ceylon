@@ -35,7 +35,7 @@ shared class CarrierMovement(
 		departureLocation,
 		arrivalLocation,
 		departureTime,
-		arrivalTime){
+		arrivalTime) {
 
 	suppressWarnings("unusedDeclaration")
 	id
@@ -57,6 +57,5 @@ shared class CarrierMovement(
 	temporal(TemporalType.timestamp)
 	column{name = "arrival_time";}
 	shared Date arrivalTime;
-	
-		
+
 }

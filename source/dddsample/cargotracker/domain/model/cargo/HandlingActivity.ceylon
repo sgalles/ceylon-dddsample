@@ -19,7 +19,6 @@ import javax.persistence {
 	joinColumn
 }
 import dddsample.cargotracker.infrastructure.persistence.jpa {
-
 	HandlingEventTypeConverter
 }
 
@@ -39,25 +38,18 @@ shared class HandlingActivity {
 	joinColumn{name = "next_expected_voyage_id";}
 	shared Voyage? voyage;
 	
-	
-	
 	shared new (HandlingEventTypeBundle<Voyage> typeAndVoyage, Location location){
 		this.location = location;
-		switch(typeAndVoyage) 
-		case(is HandlingEventTypeProhibitedVoyage){
+		switch (typeAndVoyage)
+		case (is HandlingEventTypeProhibitedVoyage) {
 			this.type = typeAndVoyage; 
 			this.voyage = null; 
 		}
-		case([HandlingEventTypeRequiredVoyage type, Voyage voyage]){
+		case ([HandlingEventTypeRequiredVoyage type, Voyage voyage]) {
 			this.type = type;
 			this.voyage = voyage;
 		}
 		
 	} 
-	 
-	
-	
-	 
 
-	
 }

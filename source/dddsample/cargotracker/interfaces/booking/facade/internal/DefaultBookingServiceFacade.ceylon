@@ -1,42 +1,39 @@
 import dddsample.cargotracker.application {
-	BookingService
+    BookingService
 }
 import dddsample.cargotracker.domain.model.cargo {
-	CargoRepository,
-	TrackingId,
-	Cargo
+    CargoRepository,
+    TrackingId
 }
 import dddsample.cargotracker.domain.model.location {
-	LocationRepository,
-	ModelLocation=Location,
-	UnLocode
+    LocationRepository,
+    UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageRepository
+    VoyageRepository
 }
 import dddsample.cargotracker.interfaces.booking.facade {
-	BookingServiceFacade
+    BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	RouteCandidate,
-	CargoRoute,
-	Location
+    RouteCandidate,
+    CargoRoute
 }
 import dddsample.cargotracker.interfaces.booking.facade.internal.assembler {
-	cargoRouteDtoAssembler,
-	locationDtoAssembler,
-	itineraryCandidateDtoAssembler
+    cargoRouteDtoAssembler,
+    locationDtoAssembler,
+    itineraryCandidateDtoAssembler
 }
 
 import java.util {
-	Date
+    Date
 }
 
 import javax.enterprise.context {
-	applicationScoped
+    applicationScoped
 }
 import javax.inject {
-	inject
+    inject
 }
 
 applicationScoped
@@ -46,43 +43,45 @@ shared class DefaultBookingServiceFacade(
 	LocationRepository locationRepository,
 	CargoRepository cargoRepository,
 	VoyageRepository voyageRepository
-) satisfies BookingServiceFacade{
+) satisfies BookingServiceFacade {
 	
-	shared actual List<Location> listShippingLocations(){
-		List<ModelLocation> allLocations = locationRepository.findAll();
-		return locationDtoAssembler.toDtoList(allLocations);
-	}
+	listShippingLocations()
+			=> locationDtoAssembler.toDtoList(locationRepository.findAll());
 	
-	shared actual String bookNewCargo(String origin, String destination, Date arrivalDeadline) {
-		TrackingId trackingId = bookingService.bookNewCargo(
-			UnLocode(origin), 
-			UnLocode(destination),
-			arrivalDeadline);
-		return trackingId.idString;
-	}
+	bookNewCargo(String origin, String destination, Date arrivalDeadline)
+			=> bookingService.bookNewCargo {
+				origin = UnLocode(origin);
+				destination = UnLocode(destination);
+				arrivalDeadline = arrivalDeadline;
+			}
+		.idString;
 	
 	shared actual CargoRoute loadCargoForRouting(String trackingId) {
-		Cargo? cargo = cargoRepository.find(TrackingId(trackingId));
-		assert(exists cargo);
+		assert (exists cargo = cargoRepository.find(TrackingId(trackingId)));
 		return cargoRouteDtoAssembler.toDto(cargo);
 	}
 	
-	shared actual void assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO) {
-		value itinerary = itineraryCandidateDtoAssembler.fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
-		value trackingId = TrackingId(trackingIdStr);
-		bookingService.assignCargoToRoute(itinerary, trackingId);
-	}
+	assignCargoToRoute(String trackingIdStr, RouteCandidate routeCandidateDTO)
+			=> bookingService.assignCargoToRoute {
+				itinerary = itineraryCandidateDtoAssembler.fromDTO {
+				    routeCandidateDTO = routeCandidateDTO;
+				    voyageRepository = voyageRepository;
+				    locationRepository = locationRepository;
+				};
+				trackingId = TrackingId(trackingIdStr);
+			};
 	
-	shared actual void changeDestination(String trackingId, String destinationUnLocode) {
-		bookingService.changeDestination(TrackingId(trackingId), UnLocode(destinationUnLocode));
-	}
+	changeDestination(String trackingId, String destinationUnLocode)
+			=> bookingService.changeDestination {
+			    trackingId = TrackingId(trackingId);
+			    unLocode = UnLocode(destinationUnLocode);
+			};
 	
-	shared actual List<CargoRoute> listAllCargos() 
+	listAllCargos()
 			=> cargoRepository.findAll().collect(cargoRouteDtoAssembler.toDto);
 	
-	shared actual List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId) 
-			=> let(itineraries = bookingService.requestPossibleRoutesForCargo(TrackingId(trackingId)))
-			   itineraries.collect(itineraryCandidateDtoAssembler.toDTO);	
-	
-	
+	requestPossibleRoutesForCargo(String trackingId)
+			=> bookingService.requestPossibleRoutesForCargo(TrackingId(trackingId))
+			.collect(itineraryCandidateDtoAssembler.toDTO);
+
 }

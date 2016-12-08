@@ -1,12 +1,13 @@
 import java.util {
 	Date
 }
+
 shared class TransitEdge(
-	shared variable String voyageNumber,
-	shared variable String fromUnLocode,
-	shared variable String toUnLocode,
-	shared variable Date fromDate,
-	shared variable Date toDate
+	shared String voyageNumber,
+	shared String fromUnLocode,
+	shared String toUnLocode,
+	shared Date fromDate,
+	shared Date toDate
 ) {
 	string =>"""TransitEdge{
 	            voyageNumber=``voyageNumber``,

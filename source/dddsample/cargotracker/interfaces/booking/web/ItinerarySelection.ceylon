@@ -33,7 +33,7 @@ import javax.inject {
 named
 viewScoped
 inject
-shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade){
+shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade) {
 	
 	variable CargoRoute? _cargo = null;
 	variable JList<RouteCandidate>? _routeCandidates = null;
@@ -44,7 +44,7 @@ shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade){
 	shared JList<RouteCandidate>? routeCandidates => _routeCandidates;
 	
 	shared void load() {
-		assert(exists trackingId = trackingId);
+		assert (exists trackingId = trackingId);
 		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
 		_routeCandidates = Arrays.asList(*bookingServiceFacade.requestPossibleRoutesForCargo(trackingId));
 	}

@@ -1,33 +1,33 @@
 import dddsample.cargotracker.application {
-	CargoInspectionService,
-	ApplicationEvents
+    CargoInspectionService,
+    ApplicationEvents
 }
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId,
-	CargoRepository,
-	Cargo
+    TrackingId,
+    CargoRepository,
+    Cargo
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventRepository,
-	HandlingHistory
+    HandlingEventRepository
 }
 import dddsample.cargotracker.infrastructure.events.cdi {
-	cargoInspected
+    cargoInspected
 }
 
 import javax.ejb {
-	stateless
+    stateless
 }
 import javax.enterprise.event {
-	Event
+    Event
 }
 import javax.inject {
-	inject
+    inject
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
+
 stateless
 inject
 shared class DefaultCargoInspectionService ( 
@@ -41,9 +41,11 @@ shared class DefaultCargoInspectionService (
 	
 	shared actual void inspectCargo(TrackingId trackingId) {
 		logger.info("Inspecting cargo ``trackingId.idString``");
+
 		if (exists cargo = cargoRepository.find(trackingId)) {
 			logger.info("Found cargo ``trackingId.idString``");
-			HandlingHistory handlingHistory = handlingEventRepository
+
+			value handlingHistory = handlingEventRepository
 					.lookupHandlingHistoryOfCargo(trackingId);
 			
 			cargo.deriveDeliveryProgress(handlingHistory);
@@ -61,10 +63,10 @@ shared class DefaultCargoInspectionService (
 			logger.info("Firing 'cargoInspected' event");
 			cargoInspected.fire(cargo);			
 			
-		}else{
+		}
+		else {
 			logger.warn("Can't inspect non-existing cargo ``trackingId``");
 		}
-		
 		
 	}
 	

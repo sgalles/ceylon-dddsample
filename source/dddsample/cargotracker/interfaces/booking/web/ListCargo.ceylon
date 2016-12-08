@@ -1,4 +1,3 @@
-
 import dddsample.cargotracker.interfaces.booking.facade {
 	BookingServiceFacade
 }
@@ -22,7 +21,6 @@ import javax.inject {
 	inject
 }
 
-
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
    easily be rewritten as a thick Swing client. Completely separated from the
@@ -36,15 +34,13 @@ import javax.inject {
 named
 viewScoped
 inject
-shared class ListCargo(BookingServiceFacade bookingServiceFacade){
+shared class ListCargo(BookingServiceFacade bookingServiceFacade) {
 	
 	late List<CargoRoute> _cargos;
 
 	suppressWarnings("unusedDeclaration")
 	postConstruct
-	void init() {
-		_cargos = bookingServiceFacade.listAllCargos();
-	}
+	void init() => _cargos = bookingServiceFacade.listAllCargos();
 	
 	shared JList<CargoRoute> cargos => Arrays.asList(*_cargos);
 	
@@ -55,7 +51,5 @@ shared class ListCargo(BookingServiceFacade bookingServiceFacade){
 	shared JList<CargoRoute> notRoutedCargos => filteredCargos(not(CargoRoute.routed));
 	
 	shared JList<CargoRoute> claimedCargos => filteredCargos(CargoRoute.claimed);
-	
-	
-	
+
 }

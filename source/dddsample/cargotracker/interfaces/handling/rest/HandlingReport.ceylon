@@ -1,47 +1,50 @@
-
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventTypeRequiredVoyage,
-	HandlingEventTypeBundle,
-	HandlingEventType,
-	HandlingEventTypeProhibitedVoyage
+    HandlingEventTypeRequiredVoyage,
+    HandlingEventTypeBundle,
+    HandlingEventType,
+    HandlingEventTypeProhibitedVoyage
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageNumber
-}
-
-import javax.xml.bind.annotation {
-	xmlRootElement
+    VoyageNumber
 }
 import dddsample.cargotracker.infrastructure.ceylon {
     caseValueByName
 }
 
+import javax.xml.bind.annotation {
+    xmlRootElement
+}
+
 "Transfer object for handling reports."
 xmlRootElement
 shared class HandlingReport(
-	shared variable String completionTime,
-	shared variable String trackingId,
-	shared variable String eventType,
-	shared variable String unLocode,
-	shared variable String? voyageNumber
+	completionTime,
+	trackingId,
+	eventType,
+	unLocode,
+	voyageNumber
 ) {
-	
-	
-	
+
+	shared String completionTime;
+	shared String trackingId;
+	shared String eventType;
+	shared String unLocode;
+	shared String? voyageNumber;
+
 	shared HandlingEventTypeBundle<VoyageNumber> voyageBundle() {
-		
-		value handlingEventType = caseValueByName(`HandlingEventType`, eventType.lowercased);
-		
-		if(exists voyageNumber = voyageNumber){
-			assert(is HandlingEventTypeRequiredVoyage eventType = handlingEventType);
+
+		assert (exists eventType = caseValueByName(`HandlingEventType`, eventType));
+
+		switch (eventType)
+		case (is HandlingEventTypeRequiredVoyage) {
+			assert (exists voyageNumber = voyageNumber);
 			return [eventType, VoyageNumber(voyageNumber)];
-		}else{
-			assert(is HandlingEventTypeProhibitedVoyage eventType = handlingEventType);
+		}
+		case (is HandlingEventTypeProhibitedVoyage) {
 			return eventType;
 		}
 	}
-	
-	
+
 	string => "HandlingReport 
 	             completionTime=``completionTime``
 	             trackingId=``trackingId``

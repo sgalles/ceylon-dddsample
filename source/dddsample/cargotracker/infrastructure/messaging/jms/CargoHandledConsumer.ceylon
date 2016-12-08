@@ -1,38 +1,41 @@
 import dddsample.cargotracker.application {
-	CargoInspectionService
+    CargoInspectionService
 }
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId
+    TrackingId
 }
 
 import javax.ejb {
-	messageDriven,
-	activationConfigProperty
+    messageDriven,
+    activationConfigProperty
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.jms {
-	MessageListener,
-	TextMessage,
-	JMSException,
-	Message
+    MessageListener,
+    TextMessage,
+    JMSException,
+    Message
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
 
-messageDriven{ activationConfig = {
-	activationConfigProperty{
-		propertyName = "destinationType"; 
-		propertyValue = "javax.jms.Queue";},
-		activationConfigProperty{
-			propertyName = "destinationLookup"; 
-			propertyValue = "java:global/jms/CargoHandledQueue";}
-		};
-		messageListenerInterface=`interface MessageListener`;
-	}
+messageDriven{
+	activationConfig = {
+		activationConfigProperty {
+			propertyName = "destinationType";
+			propertyValue = "javax.jms.Queue";
+		},
+		activationConfigProperty {
+			propertyName = "destinationLookup";
+			propertyValue = "java:global/jms/CargoHandledQueue";
+		}
+	};
+	messageListenerInterface = `interface MessageListener`;
+}
 shared class CargoHandledConsumer() satisfies MessageListener{
 	
 	inject
@@ -43,10 +46,8 @@ shared class CargoHandledConsumer() satisfies MessageListener{
 	
 	shared actual void onMessage(Message message) {
 		try {
-			assert(is TextMessage message);
-			String trackingIdString = message.text;
-			
-			cargoInspectionService.inspectCargo(TrackingId(trackingIdString));
+			assert (is TextMessage message);
+			cargoInspectionService.inspectCargo(TrackingId(message.text));
 		} catch (JMSException e) {
 			logger.error("Error procesing JMS message", e);
 		}

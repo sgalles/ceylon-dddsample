@@ -4,14 +4,8 @@ import dddsample.cargotracker.application {
 import dddsample.cargotracker.domain.model.cargo {
 	TrackingId
 }
-import dddsample.cargotracker.domain.model.handling {
-	HandlingEventTypeBundle
-}
 import dddsample.cargotracker.domain.model.location {
 	UnLocode
-}
-import dddsample.cargotracker.domain.model.voyage {
-	VoyageNumber
 }
 import dddsample.cargotracker.interfaces.handling {
 	HandlingEventRegistrationAttempt
@@ -36,35 +30,28 @@ import javax.ws.rs.core {
 	MediaType
 }
 
-import org.slf4j {
-	Logger
-}
-
-String iso8601format = "yyyy-MM-dd HH:mm";
 
 path("/handling")
 shared class HandlingReportService() {
-	
+
+	value iso8601format = SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 	inject
 	late ApplicationEvents applicationEvents;
-	
-	inject
-	late Logger log;
-	
+
 	post
 	path("/reports")
-	consumes({MediaType.applicationJson})
+	consumes {MediaType.applicationJson}
 	shared void submitReport(HandlingReport handlingReport) {
 		
-		Date completionTime = SimpleDateFormat(iso8601format).parse(handlingReport.completionTime);
-		HandlingEventTypeBundle<VoyageNumber> voyageBundle = handlingReport.voyageBundle();
-		UnLocode unLocode = UnLocode(handlingReport.unLocode);
-		TrackingId trackingId = TrackingId(handlingReport.trackingId);
-		Date registrationTime = Date();
-		
-		HandlingEventRegistrationAttempt attempt =
-				HandlingEventRegistrationAttempt(registrationTime,
-			completionTime, trackingId, voyageBundle, unLocode);
+		value attempt =
+				HandlingEventRegistrationAttempt {
+				    registrationTime = Date();
+				    completionTime = iso8601format.parse(handlingReport.completionTime);
+				    trackingId = TrackingId(handlingReport.trackingId);
+				    typeAndVoyage = handlingReport.voyageBundle();
+				    unLocode = UnLocode(handlingReport.unLocode);
+				};
 		applicationEvents.receivedHandlingEventRegistrationAttempt(attempt);
 	}
 	

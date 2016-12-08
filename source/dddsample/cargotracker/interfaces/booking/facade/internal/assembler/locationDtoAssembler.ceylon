@@ -4,6 +4,7 @@ import dddsample.cargotracker.domain.model.location {
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	Location
 }
+
 shared object locationDtoAssembler {
 	
 	shared Location toDto(LocationModel location) 

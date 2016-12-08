@@ -1,15 +1,14 @@
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId,
-	Itinerary
+    TrackingId,
+    Itinerary
 }
 import dddsample.cargotracker.domain.model.location {
-	UnLocode
+    UnLocode
 }
 
 import java.util {
-	Date
+    Date
 }
-
 
 /**
  * Cargo booking service.

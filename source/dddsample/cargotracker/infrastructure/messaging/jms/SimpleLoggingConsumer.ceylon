@@ -1,30 +1,32 @@
+import javax.ejb {
+    messageDriven,
+    activationConfigProperty
+}
+import javax.inject {
+    inject
+}
 import javax.jms {
-	MessageListener,
-	Message
+    MessageListener,
+    Message
 }
 
 import org.slf4j {
-	Logger
-}
-import javax.ejb {
-
-	messageDriven,
-	activationConfigProperty
-}
-import javax.inject {
-	inject
+    Logger
 }
 
 
-messageDriven{ activationConfig = {
-	activationConfigProperty{
-		propertyName = "destinationType"; 
-		propertyValue = "javax.jms.Queue";},
-		activationConfigProperty{
-			propertyName = "destinationLookup"; 
-			propertyValue = "java:global/jms/MisdirectedCargoQueue";}
-		};
-		messageListenerInterface=`interface MessageListener`;
+messageDriven {
+	activationConfig = {
+		activationConfigProperty {
+			propertyName = "destinationType";
+			propertyValue = "javax.jms.Queue";
+		},
+		activationConfigProperty {
+			propertyName = "destinationLookup";
+			propertyValue = "java:global/jms/MisdirectedCargoQueue";
+		}
+	};
+	messageListenerInterface = `interface MessageListener`;
 }
 
 shared class MisdirectedCargoConsumer() satisfies MessageListener{
@@ -37,16 +39,19 @@ shared class MisdirectedCargoConsumer() satisfies MessageListener{
 	}
 }
 
-messageDriven{ activationConfig = {
-	activationConfigProperty{
-		propertyName = "destinationType"; 
-		propertyValue = "javax.jms.Queue";},
+messageDriven {
+	activationConfig = {
+		activationConfigProperty {
+			propertyName = "destinationType";
+			propertyValue = "javax.jms.Queue";
+		},
 		activationConfigProperty{
 			propertyName = "destinationLookup"; 
-			propertyValue = "java:global/jms/DeliveredCargoQueue";}
-		};
-		messageListenerInterface=`interface MessageListener`;
-	}
+			propertyValue = "java:global/jms/DeliveredCargoQueue";
+		}
+	};
+	messageListenerInterface=`interface MessageListener`;
+}
 shared class DeliveredCargoConsumer() satisfies MessageListener{
 	
 	inject

@@ -2,10 +2,8 @@ import ceylon.collection {
 	HashSet
 }
 
-
 shared class HandlingHistory {
-	
-	
+
 	shared HandlingEvent[] allHandlingEvents;
 	
 	shared new ({HandlingEvent*} allHandlingEvents){
@@ -20,7 +18,5 @@ shared class HandlingHistory {
 	
 	shared HandlingEvent? mostRecentlyCompletedEvent 
 			=> distinctEventsByCompletionTime.last;
-	
-	
-	
+
 }

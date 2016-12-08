@@ -1,67 +1,57 @@
-import ceylon.interop.java {
-	CeylonList
-}
-
 import dddsample.cargotracker.domain.model.cargo {
-	Cargo,
-	TrackingId,
-	RouteSpecification,
-	Itinerary,
-	Leg
+    Cargo,
+    TrackingId,
+    RouteSpecification,
+    Itinerary,
+    Leg
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventFactory,
-	HandlingEventRepository,
-	HandlingEventTypeRequiredVoyage {
-		...
-	},
-	HandlingEventTypeProhibitedVoyage {
-		...
-	},
-	receive,
-	load,
-	unload,
-	customs,
-	claim
+    HandlingEventFactory,
+    HandlingEventRepository,
+    HandlingEventTypeRequiredVoyage {
+        ...
+    },
+    HandlingEventTypeProhibitedVoyage {
+        ...
+    }
 }
 import dddsample.cargotracker.domain.model.location {
-	Location {
-		...
-	}
+    Location {
+        ...
+    }
 }
 import dddsample.cargotracker.domain.model.voyage {
-	Voyage {
-		...
-	}
+    Voyage {
+        ...
+    }
 }
 import dddsample.cargotracker.infrastructure.ceylon {
-	toDate
+    toDate
 }
 
 import java.util {
-	Date
+    Date
 }
 
 import javax.annotation {
-	postConstruct
+    postConstruct
 }
 import javax.ejb {
-	singleton,
-	startup,
-	transactionAttribute,
-	TransactionAttributeType
+    singleton,
+    startup,
+    transactionAttribute,
+    TransactionAttributeType
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.persistence {
-	EntityManager
+    EntityManager
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
-
 
 
 singleton
@@ -78,7 +68,7 @@ shared class SampleDataGenerator(
 	
 	postConstruct
 	transactionAttribute(TransactionAttributeType.required)
-	shared void loadSampleData(){
+	shared void loadSampleData() {
 		// TODO use logs
 		log.info("Loading sample data.");
 		unLoadAll(); //  Fail-safe in case of application restart that does not trigger a JPA schema drop.
@@ -94,10 +84,11 @@ shared class SampleDataGenerator(
 		// Dropping cargo first won't work since handling events have references
 		// to it.
 		// TODO See if there is a better way to do this.
-		List<Cargo> cargos =CeylonList(entityManager.createQuery("Select c from Cargo c",`Cargo`)
-				.resultList);
+		value cargos
+				= entityManager.createQuery("Select c from Cargo c", `Cargo`)
+				.resultList;
 		
-		for(cargo in cargos){
+		for (cargo in cargos) {
 			
 		}
 		entityManager.createQuery("Delete from Cargo").executeUpdate();
@@ -108,9 +99,9 @@ shared class SampleDataGenerator(
 		
 		log.info("Loading sample cargo data.");
 		
-		if(true){
+		if (true) {
 		
-			Cargo abc123 = Cargo{
+			Cargo abc123 = Cargo {
 				trackingId = TrackingId("ABC123");
 				routeSpecification = RouteSpecification { 
 					origin = hongkong; 
@@ -120,19 +111,28 @@ shared class SampleDataGenerator(
 			};
 			
 			abc123.assignToRoute(
-				Itinerary{
-					Leg(hongkong_to_new_york, 
-						hongkong, newyork,
-						toDate("2014-03-02"), toDate("2014-03-05")
-					),
-					Leg(new_york_to_dallas, 
-						newyork, dallas,
-						toDate("2014-03-06"), toDate("2014-03-08")
-					),
-					Leg(dallas_to_helsinki, 
-						dallas, helsinki,
-						toDate("2014-03-09"), toDate("2014-03-12")
-					)
+				Itinerary {
+					Leg {
+					    voyage = hongkong_to_new_york;
+					    loadLocation = hongkong;
+					    unloadLocation = newyork;
+					    loadTimeValue = toDate("2014-03-02");
+					    unloadTimeValue = toDate("2014-03-05");
+					},
+					Leg {
+					    voyage = new_york_to_dallas;
+					    loadLocation = newyork;
+					    unloadLocation = dallas;
+					    loadTimeValue = toDate("2014-03-06");
+					    unloadTimeValue = toDate("2014-03-08");
+					},
+					Leg {
+					    voyage = dallas_to_helsinki;
+					    loadLocation = dallas;
+					    unloadLocation = helsinki;
+					    loadTimeValue = toDate("2014-03-09");
+					    unloadTimeValue = toDate("2014-03-12");
+					}
 				}
 			);
 			
@@ -142,19 +142,20 @@ shared class SampleDataGenerator(
 				[Date(), toDate("2014-03-01"), abc123.trackingId, hongkong.unLocode, receive],
 				[Date(), toDate("2014-03-02"), abc123.trackingId, hongkong.unLocode, [load, hongkong_to_new_york.voyageNumber]],
 				[Date(), toDate("2014-03-05"), abc123.trackingId, newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]]
-			}.map(createHandlingEventFromTuple)
-			 .each(entityManager.persist);
+			}
+				.map(createHandlingEventFromTuple)
+			 	.each(entityManager.persist);
 	
-			abc123.deriveDeliveryProgress{
+			abc123.deriveDeliveryProgress {
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(abc123.trackingId);
 			};
 			entityManager.persist(abc123);
 		
 		}
 		
-		if(true){
+		if (true) {
 			// Cargo JKL567
-			Cargo jkl567 = Cargo{
+			Cargo jkl567 = Cargo {
 				trackingId = TrackingId("JKL567");
 				routeSpecification = RouteSpecification { 
 					origin = hangzou; 
@@ -164,19 +165,28 @@ shared class SampleDataGenerator(
 			};
 			
 			jkl567.assignToRoute(
-				Itinerary{
-					Leg(hongkong_to_new_york, 
-						hangzou, newyork,
-						toDate("2014-03-03"), toDate("2014-03-05")
-					),
-					Leg(new_york_to_dallas, 
-						newyork, dallas,
-						toDate("2014-03-06"), toDate("2014-03-08")
-					),
-					Leg(dallas_to_helsinki, 
-						dallas, stockholm,
-						toDate("2014-03-09"), toDate("2014-03-11")
-					)
+				Itinerary {
+					Leg {
+					    voyage = hongkong_to_new_york;
+					    loadLocation = hangzou;
+					    unloadLocation = newyork;
+					    loadTimeValue = toDate("2014-03-03");
+					    unloadTimeValue = toDate("2014-03-05");
+					},
+					Leg {
+					    voyage = new_york_to_dallas;
+					    loadLocation = newyork;
+					    unloadLocation = dallas;
+					    loadTimeValue = toDate("2014-03-06");
+					    unloadTimeValue = toDate("2014-03-08");
+					},
+					Leg {
+					    voyage = dallas_to_helsinki;
+					    loadLocation = dallas;
+					    unloadLocation = stockholm;
+					    loadTimeValue = toDate("2014-03-09");
+					    unloadTimeValue = toDate("2014-03-11");
+					}
 				}
 			);
 			
@@ -187,8 +197,9 @@ shared class SampleDataGenerator(
 				[Date(), toDate("2014-03-03"), jkl567.trackingId, hangzou.unLocode, [load, hongkong_to_new_york.voyageNumber]],
 				[Date(), toDate("2014-03-05"), jkl567.trackingId, newyork.unLocode, [unload, hongkong_to_new_york.voyageNumber]],
 				[Date(), toDate("2014-03-06"), jkl567.trackingId, newyork.unLocode, [load, hongkong_to_new_york.voyageNumber]]
-			}.map(createHandlingEventFromTuple)
-			.each(entityManager.persist);
+			}
+				.map(createHandlingEventFromTuple)
+				.each(entityManager.persist);
 			
 			jkl567.deriveDeliveryProgress{
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(jkl567.trackingId);
@@ -197,7 +208,7 @@ shared class SampleDataGenerator(
 			
 		}
 
-		if(true){
+		if (true) {
 			// Cargo definition DEF789. This one will remain unrouted.
 			Cargo def789 = Cargo {
 				trackingId = TrackingId("DEF789");
@@ -211,7 +222,7 @@ shared class SampleDataGenerator(
 		}
 		
 		
-		if(true){
+		if (true) {
 			// Cargo definition MNO456. This one will be claimed properly.
 			Cargo mno456 = Cargo {
 				trackingId = TrackingId("MNO456");
@@ -224,10 +235,13 @@ shared class SampleDataGenerator(
 			
 			mno456.assignToRoute(
 				Itinerary{
-					Leg(new_york_to_dallas, 
-						newyork, dallas,
-						toDate("2013-10-24"), toDate("2013-10-25")
-					)
+					Leg {
+					    voyage = new_york_to_dallas;
+					    loadLocation = newyork;
+					    unloadLocation = dallas;
+					    loadTimeValue = toDate("2013-10-24");
+					    unloadTimeValue = toDate("2013-10-25");
+					}
 				}
 			);
 			
@@ -239,8 +253,9 @@ shared class SampleDataGenerator(
 				[Date(), toDate("2013-10-25"), mno456.trackingId, dallas.unLocode, [unload, new_york_to_dallas.voyageNumber]],
 				[Date(), toDate("2013-10-26"), mno456.trackingId, dallas.unLocode, customs],
 				[Date(), toDate("2013-10-27"), mno456.trackingId, dallas.unLocode, claim]
-			}.map(createHandlingEventFromTuple)
-			 .each(entityManager.persist);
+			}
+				.map(createHandlingEventFromTuple)
+			 	.each(entityManager.persist);
 			
 			mno456.deriveDeliveryProgress{
 				handlingHistory = handlingEventRepository.lookupHandlingHistoryOfCargo(mno456.trackingId);
@@ -268,7 +283,8 @@ shared class SampleDataGenerator(
 			hangzou,
 			newyork,
 			dallas
-		}.each(entityManager.persist);
+		}
+			.each(entityManager.persist);
 	}
 	
 	shared void loadSampleVoyages() {
@@ -279,7 +295,8 @@ shared class SampleDataGenerator(
 			dallas_to_helsinki,
 			helsinki_to_hongkong,
 			dallas_to_helsinki_alt
-		}.each(entityManager.persist);	
+		}
+			.each(entityManager.persist);
 		
 	}
 }

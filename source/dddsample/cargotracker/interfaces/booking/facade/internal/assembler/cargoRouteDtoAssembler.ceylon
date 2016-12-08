@@ -1,29 +1,36 @@
 import ceylon.language.meta {
-	type
+    type
 }
 
 import dddsample.cargotracker.domain.model.cargo {
-	CargoModel=Cargo,
-	misrouted,
-	claimed
+    CargoModel=Cargo,
+    RoutingStatus,
+    TransportStatus
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	CargoRoute,
-	Leg
+    CargoRoute,
+    Leg
 }
 
-shared object cargoRouteDtoAssembler{
-	shared CargoRoute toDto(CargoModel cargo) 
-			=> CargoRoute {
+shared object cargoRouteDtoAssembler {
+
+	shared CargoRoute toDto(CargoModel cargo) {
+		assert (exists it = cargo.itinerary);
+	    return CargoRoute {
 				trackingId = cargo.trackingId.idString;
 				origin =  "``cargo.origin.name`` (``cargo.origin.unLocode.idString``)";
-				finalDestination = let(destination = cargo.routeSpecification.destination) "``destination.name`` (``destination.unLocode.idString``)";
+				finalDestination
+						= let (destination = cargo.routeSpecification.destination)
+						"``destination.name`` (``destination.unLocode.idString``)";
 				arrivalDeadlineDate = cargo.routeSpecification.arrivalDeadline;
-				misrouted = cargo.delivery.routingStatus == misrouted;
-				claimed = cargo.delivery.transportStatus == claimed;
-				lastKnownLocation = let(lastKnownLocation = cargo.delivery.lastKnownLocation) "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
+				misrouted = cargo.delivery.routingStatus == RoutingStatus.misrouted;
+				claimed = cargo.delivery.transportStatus == TransportStatus.claimed;
+				lastKnownLocation
+						= let (lastKnownLocation = cargo.delivery.lastKnownLocation)
+						"``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
 				transportStatus = type(cargo.delivery.transportStatus).declaration.name;
-				legsIt = (cargo.itinerary else nothing).legsMaybeEmpty.map((leg) => Leg { 
+				legsIt = it.legsMaybeEmpty.map((leg)
+						=> Leg {
 							voyageNumber = leg.voyage.voyageNumber.number; 
 							fromUnLocode = leg.loadLocation.unLocode.idString; 
 							fromName = leg.loadLocation.name; 
@@ -33,6 +40,6 @@ shared object cargoRouteDtoAssembler{
 							unloadTimeDate = leg.unloadTime;
 						});
 			};
-	
-		 
+	}
+
 }

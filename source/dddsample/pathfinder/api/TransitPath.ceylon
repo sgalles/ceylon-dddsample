@@ -1,17 +1,18 @@
 import java.util {
-	JList=List
+    JList=List
 }
 
 import javax.xml.bind.annotation {
-	xmlTransient
+    xmlTransient
 }
 
-shared class TransitPath(shared variable JList<TransitEdge> transitEdges) {
+shared class TransitPath(transitEdges) {
+
+    shared JList<TransitEdge> transitEdges;
 	
 	xmlTransient
 	shared [TransitEdge+] transitEdgesSeq {
-		value transitEdgesSeq = [*transitEdges];
-		assert(nonempty transitEdgesSeq); 
+		assert (nonempty transitEdgesSeq = [*transitEdges]);
 		return transitEdgesSeq;
 	}
 	

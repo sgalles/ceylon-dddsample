@@ -1,6 +1,3 @@
-import ceylon.language.meta {
-    type
-}
 import ceylon.language.meta.model {
     ClassOrInterface
 }
@@ -53,7 +50,7 @@ shared class CeylonEnumValuesConverter<EnumValue>()
 	assert (nonempty enums = caseValues(enumType));
 	
 	value nameByEnumValue
-			= enums.tabulate((val) => JString(type(val).declaration.name));
+			= enums.tabulate((val) => JString(val.string));
 	
 	value enumValueByName
 			= nameByEnumValue.inverse().mapItems((key, items) => items[0]);

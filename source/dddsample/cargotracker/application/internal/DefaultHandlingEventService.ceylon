@@ -1,36 +1,35 @@
 import dddsample.cargotracker.application {
-	HandlingEventService,
-	ApplicationEvents
+    HandlingEventService,
+    ApplicationEvents
 }
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId
+    TrackingId
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventTypeBundle,
-	HandlingEventRepository,
-	HandlingEventFactory,
-	HandlingEvent
+    HandlingEventTypeBundle,
+    HandlingEventRepository,
+    HandlingEventFactory
 }
 import dddsample.cargotracker.domain.model.location {
-	UnLocode
+    UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageNumber
+    VoyageNumber
 }
 
 import java.util {
-	Date
+    Date
 }
 
 import javax.ejb {
-	stateless
+    stateless
 }
 import javax.inject {
-	inject
+    inject
 }
 
 import org.slf4j {
-	Logger
+    Logger
 }
 
 stateless 
@@ -47,8 +46,13 @@ shared class DefaultHandlingEventService(
 		/* Using a factory to create a HandlingEvent (aggregate). This is where
 		 it is determined wether the incoming data, the attempt, actually is capable
 		 of representing a real handling event. */
-		HandlingEvent event = handlingEventFactory.createHandlingEvent(
-			registrationTime, completionTime, trackingId, unLocode, typeAndVoyageNumber);
+		value event = handlingEventFactory.createHandlingEvent {
+		    registrationTime = registrationTime;
+		    completionTime = completionTime;
+		    trackingId = trackingId;
+		    unlocode = unLocode;
+		    typeAndVoyageNumber = typeAndVoyageNumber;
+		};
 		
 		/* Store the new handling event, which updates the persistent
 		 state of the handling event aggregate (but not the cargo aggregate -

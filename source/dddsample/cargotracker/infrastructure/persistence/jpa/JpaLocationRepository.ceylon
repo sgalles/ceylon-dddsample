@@ -1,18 +1,18 @@
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageRepository,
-	Voyage,
-	VoyageNumber
+    VoyageRepository,
+    Voyage,
+    VoyageNumber
 }
 
 import javax.enterprise.context {
-	applicationScoped
+    applicationScoped
 }
 import javax.inject {
-	inject
+    inject
 }
 import javax.persistence {
-	EntityManager,
-	NoResultException
+    EntityManager,
+    NoResultException
 }
 
 
@@ -23,15 +23,15 @@ class JpaVoyageRepository(
 ) satisfies VoyageRepository {
 	
 	shared actual Voyage? find(VoyageNumber voyageNumber) {
-
         try {
-            return entityManager.createNamedQuery("Voyage.findByVoyageNumber", `Voyage`)
-						        .setParameter("voyageNumber", voyageNumber).singleResult;
-        } catch (NoResultException e) {
+            return entityManager
+				.createNamedQuery("Voyage.findByVoyageNumber", `Voyage`)
+				.setParameter("voyageNumber", voyageNumber)
+				.singleResult;
+        }
+        catch (NoResultException e) {
             return null;
         }
-
 	}
-	
 	
 }

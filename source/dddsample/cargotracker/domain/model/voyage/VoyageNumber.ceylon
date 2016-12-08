@@ -13,6 +13,7 @@ shared class VoyageNumber(number) {
 	column{name = "voyage_number";}
 	shared String number;
 	
-	shared Boolean sameValueAs(VoyageNumber other) => this.number == other.number;
+	shared Boolean sameValueAs(VoyageNumber other)
+			=> this.number == other.number;
 	
 }

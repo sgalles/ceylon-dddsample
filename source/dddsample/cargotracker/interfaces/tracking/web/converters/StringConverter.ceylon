@@ -1,21 +1,22 @@
 import ceylon.language {
-	CeylonString=String
+    CeylonString=String
 }
 
 import javax.faces.component {
-	UIComponent
+    UIComponent
 }
 import javax.faces.context {
-	FacesContext
+    FacesContext
 }
 import javax.faces.convert {
-	Converter,
-	facesConverter
+    Converter,
+    facesConverter
 }
 
 facesConverter{forClass=`class String`; }
-shared class StringConverter() satisfies Converter{
-	shared actual String getAsObject(FacesContext? facesContext, UIComponent? uIComponent, String ceylonString) 
+shared class StringConverter() satisfies Converter {
+
+	getAsObject(FacesContext? facesContext, UIComponent? uIComponent, String ceylonString)
 			=> ceylonString;
 	
 	getAsString(FacesContext? facesContext, UIComponent? uIComponent, Object ceylonString) 

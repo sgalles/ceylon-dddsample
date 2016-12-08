@@ -15,7 +15,6 @@ import java.util {
 	Date
 }
 
-
 "Registers a handling event in the system, and notifies interested parties
  that a cargo has been handled."
 shared interface HandlingEventService {

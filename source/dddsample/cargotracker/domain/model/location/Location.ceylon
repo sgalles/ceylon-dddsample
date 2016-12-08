@@ -1,16 +1,15 @@
 import java.lang {
-	Long
+    Long
 }
 
 import javax.persistence {
-	entity,
-	namedQueries,
-	namedQuery,
-	id,
-	generatedValue,
-	embedded
+    entity,
+    namedQueries,
+    namedQuery,
+    id,
+    generatedValue,
+    embedded
 }
-
 
 """
    A location in our model is stops on a journey, such as cargo origin or
@@ -20,12 +19,15 @@ import javax.persistence {
    
 """
 entity
-namedQueries({
-	namedQuery{name = "Location.findAll";
+namedQueries {
+	namedQuery{
+		name = "Location.findAll";
 		query = "Select l from Location l";},
-		namedQuery{name = "Location.findByUnLocode";
-			query = "Select l from Location l where l.unLocode = :unLocode";}	
-		}) 
+	namedQuery {
+		name = "Location.findByUnLocode";
+		query = "Select l from Location l where l.unLocode = :unLocode";
+	}
+}
 shared class Location {
 	
 	id
@@ -37,7 +39,7 @@ shared class Location {
 	
 	shared String name;
 	
-	shared new (UnLocode unLocode, String name){
+	shared new (UnLocode unLocode, String name) {
 		this.unLocode = unLocode;
 		this.name = name;
 	}
