@@ -6,9 +6,9 @@ import javax.persistence {
 	entity,
 	namedQueries,
 	namedQuery,
-	id=id__FIELD,
-	generatedValue=generatedValue__FIELD,
-	embedded=embedded__FIELD
+	id,
+	generatedValue,
+	embedded
 }
 
 

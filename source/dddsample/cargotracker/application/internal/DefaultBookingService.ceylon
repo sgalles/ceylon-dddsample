@@ -35,14 +35,13 @@ shared class DefaultBookingService(
 ) satisfies BookingService{
 	
 	shared actual TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
-		TrackingId trackingId = cargoRepository.nextTrackingId();
 		assert(	exists origin = locationRepository.find(originUnLocode),
 		 		exists destination = locationRepository.find(destinationUnLocode)
 		);
-		RouteSpecification routeSpecification = RouteSpecification(origin,
-			destination, arrivalDeadline);
 		
-		Cargo cargo = Cargo(trackingId, routeSpecification);
+		value cargo = Cargo(
+			cargoRepository.nextTrackingId(), 
+			RouteSpecification(origin, destination, arrivalDeadline));
 		
 		cargoRepository.store(cargo);
 		/*logger.log(Level.INFO, "Booked new cargo with tracking id {0}",
@@ -67,7 +66,7 @@ shared class DefaultBookingService(
 		       exists newDestination = locationRepository.find(unLocode)
 		);
 		
-		RouteSpecification routeSpecification = RouteSpecification(
+		value routeSpecification = RouteSpecification(
 			cargo.origin, newDestination,
 			cargo.routeSpecification.arrivalDeadline);
 			cargo.specifyNewRoute(routeSpecification);

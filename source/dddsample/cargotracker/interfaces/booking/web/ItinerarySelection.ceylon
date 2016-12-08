@@ -3,12 +3,12 @@ import dddsample.cargotracker.interfaces.booking.facade {
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute,
-	Location,
 	RouteCandidate
 }
 
 import java.util {
-	JList=List
+	JList=List,
+    Arrays
 }
 
 import javax.faces.view {
@@ -19,10 +19,6 @@ import javax.inject {
 	inject
 }
 
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	toJavaList
-}
 
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
@@ -50,7 +46,7 @@ shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade){
 	shared void load() {
 		assert(exists trackingId = trackingId);
 		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
-		_routeCandidates = toJavaList(bookingServiceFacade.requestPossibleRoutesForCargo(trackingId));
+		_routeCandidates = Arrays.asList(*bookingServiceFacade.requestPossibleRoutesForCargo(trackingId));
 	}
 	
 	shared String assignItinerary(Integer routeIndex) {

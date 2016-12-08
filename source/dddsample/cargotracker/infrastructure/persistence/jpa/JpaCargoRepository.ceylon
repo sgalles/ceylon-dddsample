@@ -1,5 +1,4 @@
 import ceylon.interop.java {
-	javaClass,
 	javaString,
 	CeylonList
 }
@@ -36,7 +35,7 @@ class JpaCargoRepository(
 	shared actual Cargo? find(TrackingId trackingId) {
 
         try {
-            value cargo = entityManager.createNamedQuery("Cargo.findByTrackingId",javaClass<Cargo>())
+            value cargo = entityManager.createNamedQuery("Cargo.findByTrackingId",`Cargo`)
                     .setParameter("trackingId", trackingId)
                     .singleResult;
             return cargo;
@@ -62,7 +61,7 @@ class JpaCargoRepository(
 	
 	shared actual List<Cargo> findAll() 
 			=> CeylonList(
-					entityManager.createNamedQuery("Cargo.findAll", javaClass<Cargo>())
+					entityManager.createNamedQuery("Cargo.findAll", `Cargo`)
 					.resultList
 				);
 	

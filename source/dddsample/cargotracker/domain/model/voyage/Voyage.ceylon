@@ -13,9 +13,9 @@ import java.util {
 import javax.persistence {
 	entity,
 	namedQuery,
-	id=id__FIELD,
-	generatedValue=generatedValue__FIELD,
-	embedded=embedded__FIELD
+	id,
+	generatedValue,
+	embedded
 }
 import dddsample.cargotracker.infrastructure.ceylon {
 

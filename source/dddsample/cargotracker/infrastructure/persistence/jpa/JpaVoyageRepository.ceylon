@@ -1,5 +1,4 @@
 import ceylon.interop.java {
-	javaClass,
 	CeylonList
 }
 
@@ -30,7 +29,7 @@ class JpaLocationRepository(
 	shared actual Location? find(UnLocode unLocode) {
 
         try {
-            return entityManager.createNamedQuery("Location.findByUnLocode",javaClass<Location>())
+            return entityManager.createNamedQuery("Location.findByUnLocode",`Location`)
                     	.setParameter("unLocode", unLocode)
                 		.singleResult;
         } catch (NoResultException e) {
@@ -41,7 +40,7 @@ class JpaLocationRepository(
 	
 	shared actual List<Location> findAll() 
 			=> CeylonList(
-					entityManager.createNamedQuery("Location.findAll", javaClass<Location>())
+					entityManager.createNamedQuery("Location.findAll", `Location`)
 					.resultList
 				);
 

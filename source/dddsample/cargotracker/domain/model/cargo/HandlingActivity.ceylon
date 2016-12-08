@@ -1,7 +1,3 @@
-
-
-
-
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEventType,
 	HandlingEventTypeBundle,
@@ -17,10 +13,10 @@ import dddsample.cargotracker.domain.model.voyage {
 
 import javax.persistence {
 	embeddable,
-	convert=convert__FIELD,
-	column=column__FIELD,
-	manyToOne=manyToOne__FIELD,
-	joinColumn=joinColumn__FIELD
+	convert,
+	column,
+	manyToOne,
+	joinColumn
 }
 import dddsample.cargotracker.infrastructure.persistence.jpa {
 

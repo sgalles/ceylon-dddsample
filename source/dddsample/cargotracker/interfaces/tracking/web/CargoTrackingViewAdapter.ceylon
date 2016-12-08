@@ -10,21 +10,12 @@ import ceylon.language.meta {
 
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo,
-	in_port,
-	onboard_carrier,
-	claimed,
-	not_received,
-	unknown
+    TransportStatus
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
-	load,
-	unload,
-	HandlingEventTypeProhibitedVoyage,
-	HandlingEventTypeRequiredVoyage,
-	receive,
-	claim,
-	customs
+	HandlingEventTypeProhibitedVoyage {...},
+	HandlingEventTypeRequiredVoyage {...}
 }
 import dddsample.cargotracker.domain.model.voyage {
 	Voyage
@@ -37,6 +28,7 @@ import java.util {
 	JList=List,
 	Date
 }
+
 shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingEvents) {
 	
 	String formatDate(Date d) => SimpleDateFormat("MM/dd/yyyy hh:mm a z").format(d);
@@ -50,12 +42,12 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 	shared String destination => cargo.routeSpecification.destination.name;
 	shared String statusText => let(delivery = cargo.delivery) (
 								switch(delivery.transportStatus)
-									case(in_port) "In port ``delivery.lastKnownLocation.name``"
+									case(TransportStatus.in_port) "In port ``delivery.lastKnownLocation.name``"
 									// TODO : remove 'else nothing'
-									case(onboard_carrier) "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else nothing``"
-									case(claimed) "Claimed"
-									case(not_received) "Not received"
-									case(unknown) "Unknown"
+									case(TransportStatus.onboard_carrier) "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else nothing``"
+									case(TransportStatus.claimed) "Claimed"
+									case(TransportStatus.not_received) "Not received"
+									case(TransportStatus.unknown) "Unknown"
 								);
 
 	

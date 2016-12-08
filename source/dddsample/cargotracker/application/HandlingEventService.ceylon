@@ -2,7 +2,6 @@ import dddsample.cargotracker.domain.model.cargo {
 	TrackingId
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventType,
 	HandlingEventTypeBundle
 }
 import dddsample.cargotracker.domain.model.location {

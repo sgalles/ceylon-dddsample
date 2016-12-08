@@ -1,6 +1,6 @@
 import javax.persistence {
 	embeddable,
-	column__FIELD
+	column
 }
 
 """
@@ -10,7 +10,7 @@ import javax.persistence {
 embeddable
 shared class VoyageNumber(number) {
 	
-	column__FIELD{name = "voyage_number";}
+	column{name = "voyage_number";}
 	shared String number;
 	
 	shared Boolean sameValueAs(VoyageNumber other) => this.number == other.number;

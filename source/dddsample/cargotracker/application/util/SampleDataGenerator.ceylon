@@ -1,5 +1,4 @@
 import ceylon.interop.java {
-	javaClass,
 	CeylonList
 }
 
@@ -12,12 +11,9 @@ import dddsample.cargotracker.domain.model.cargo {
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEventFactory,
-	receive,
-	load,
-	unload,
 	HandlingEventRepository,
-	customs,
-	claim
+	HandlingEventTypeRequiredVoyage {...},
+	HandlingEventTypeProhibitedVoyage {...}
 }
 import dddsample.cargotracker.domain.model.location {
 	Location {
@@ -54,7 +50,6 @@ import org.slf4j {
 	Logger
 }
 import dddsample.cargotracker.infrastructure.ceylon {
-
 	toDate
 }
 
@@ -90,7 +85,7 @@ shared class SampleDataGenerator(
 		// Dropping cargo first won't work since handling events have references
 		// to it.
 		// TODO See if there is a better way to do this.
-		List<Cargo> cargos =CeylonList(entityManager.createQuery("Select c from Cargo c",javaClass<Cargo>())
+		List<Cargo> cargos =CeylonList(entityManager.createQuery("Select c from Cargo c",`Cargo`)
 				.resultList);
 		
 		for(cargo in cargos){

@@ -7,7 +7,8 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 }
 
 import java.util {
-	JList=List
+	JList=List,
+    Arrays
 }
 
 import javax.annotation {
@@ -20,10 +21,7 @@ import javax.inject {
 	named=named__TYPE,
 	inject
 }
-import dddsample.cargotracker.infrastructure.ceylon {
 
-	toJavaList
-}
 
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
@@ -48,9 +46,9 @@ shared class ListCargo(BookingServiceFacade bookingServiceFacade){
 		_cargos = bookingServiceFacade.listAllCargos();
 	}
 	
-	shared JList<CargoRoute> cargos => toJavaList(_cargos);
+	shared JList<CargoRoute> cargos => Arrays.asList(*_cargos);
 	
-	JList<CargoRoute> filteredCargos(Boolean(CargoRoute) predicate) => toJavaList(_cargos.filter(predicate));
+	function filteredCargos(Boolean(CargoRoute) predicate) => Arrays.asList(*_cargos.filter(predicate));
 	
 	shared JList<CargoRoute> routedCargos => filteredCargos(CargoRoute.routed);
 	

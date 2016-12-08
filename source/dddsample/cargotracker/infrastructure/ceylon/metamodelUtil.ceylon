@@ -5,6 +5,7 @@ import ceylon.language.meta.declaration {
 import ceylon.language.meta.model {
 	ClassOrInterface
 }
+
 shared Type[] caseValues<Type>() {
 	value type =  `Type`;
 	if(is ClassOrInterface<Type> type){

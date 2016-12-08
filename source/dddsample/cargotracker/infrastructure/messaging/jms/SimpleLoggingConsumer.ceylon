@@ -12,7 +12,7 @@ import javax.ejb {
 	activationConfigProperty
 }
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 
 

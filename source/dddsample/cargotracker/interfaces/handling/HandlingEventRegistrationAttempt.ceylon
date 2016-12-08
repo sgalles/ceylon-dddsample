@@ -28,10 +28,10 @@ shared class HandlingEventRegistrationAttempt(
 	shared HandlingEventTypeBundle<VoyageNumber> typeAndVoyage,
 	shared UnLocode unLocode
 ) {
-	string => String(
-			"registrationTime=``registrationTime``
+	string => "registrationTime=``registrationTime``
 	           completionTime=``completionTime``
 	           trackingId=``trackingId``
 	           typeAndVoyage=``typeAndVoyage``
-	           unLocode=``unLocode``".filter(not(Character.equals('\n'))));
+	           unLocode=``unLocode``"
+			.replace("\n","");
 }

@@ -40,7 +40,7 @@ shared class HandlingEventFactory(
 		
 		Cargo cargo = findCargo(trackingId);
 		Location location = findLocation(unlocode);
-		HandlingEventTypeBundle<Voyage>  typeAndVoyage 
+		value typeAndVoyage
 				=  switch(typeAndVoyageNumber)
 					case(is HandlingEventTypeProhibitedVoyage) 
 						let(type = typeAndVoyageNumber)

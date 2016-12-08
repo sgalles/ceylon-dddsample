@@ -1,7 +1,3 @@
-import ceylon.interop.java {
-	CeylonCollection
-}
-
 import dddsample.cargotracker.domain.model.cargo {
 	Itinerary,
 	RouteSpecification,
@@ -25,7 +21,7 @@ import dddsample.pathfinder.api {
 }
 
 import javax.annotation {
-	resource=resource__FIELD,
+	resource,
 	postConstruct
 }
 import javax.ejb {
@@ -74,14 +70,14 @@ shared class ExternalRoutingService(
 		String origin = routeSpecification.origin.unLocode.idString;
 		String destination = routeSpecification.destination.unLocode.idString;
 		
-		TransitPaths transitPaths = graphTraversalResource
+		value transitPaths = graphTraversalResource
 				.queryParam("origin", origin)
 				.queryParam("destination", destination)
 				.request(MediaType.applicationJsonType)
 				.get(object extends GenericType<TransitPaths>() {});
 		
-		Boolean routeSpecificationSatisfiesBy(TransitPath transitPath){
-			Itinerary itinerary = toItinerary(transitPath);
+		function routeSpecificationSatisfiesBy(TransitPath transitPath){
+			value itinerary = toItinerary(transitPath);
 			// Use the specification to safe-guard against invalid itineraries
 			if (routeSpecification.isSatisfiedBy(itinerary)) {
 				return true;
@@ -90,12 +86,10 @@ shared class ExternalRoutingService(
 				return false;
 			}
 		}
-
-		List<Itinerary> itineraries = CeylonCollection(transitPaths.transitPath)
-										.filter(routeSpecificationSatisfiesBy)
-										.collect(toItinerary);
 		
-		return itineraries;
+		return [*transitPaths.transitPath]
+				.filter(routeSpecificationSatisfiesBy)
+				.collect(toItinerary);
 	}
 	
 	Itinerary toItinerary(TransitPath transitPath) => Itinerary(transitPath.transitEdgesSeq.map(toLeg));

@@ -12,10 +12,10 @@ import dddsample.cargotracker.interfaces.handling {
 }
 
 import javax.annotation {
-	resource=resource__SETTER
+	resource
 }
 import javax.inject {
-	inject=inject__SETTER
+	inject
 }
 import javax.jms {
 	JMSContext,

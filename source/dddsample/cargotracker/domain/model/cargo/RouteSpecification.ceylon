@@ -10,11 +10,11 @@ import java.util {
 }
 
 import javax.persistence {
-	joinColumn=joinColumn__FIELD,
+	joinColumn,
 	TemporalType,
-	manyToOne=manyToOne__FIELD,
-	temporal=temporal__FIELD,
-	column=column__FIELD,
+	manyToOne,
+	temporal,
+	column,
 	embeddable
 }
 
@@ -35,7 +35,7 @@ shared class RouteSpecification(origin, destination, Date arrivalDeadlineValue) 
 	
 	shared Date arrivalDeadline => Date(_arrivalDeadline.time);
 	
-	shared actual Boolean isSatisfiedBy(Itinerary itinerary) 
+	isSatisfiedBy(Itinerary itinerary) 
 			=> origin.sameIdentityAs(itinerary.initialDepartureLocation())
                 && destination.sameIdentityAs(itinerary.finalArrivalLocation())
                 && arrivalDeadline.after(itinerary.finalArrivalDate());

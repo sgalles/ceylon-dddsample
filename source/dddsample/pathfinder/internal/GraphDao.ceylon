@@ -9,7 +9,7 @@ import javax.enterprise.context {
 applicationScoped
 shared class GraphDao() {
 
-	Random random = Random();
+	value random = Random();
 	
 	[String+] voyages = ["0100S", "0200T", "0300A", "0301S", "0400S"];
 	

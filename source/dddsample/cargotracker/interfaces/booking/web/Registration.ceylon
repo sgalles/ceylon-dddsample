@@ -10,7 +10,8 @@ import java.text {
 	SimpleDateFormat
 }
 import java.util {
-	JList=List
+	JList=List,
+    Arrays
 }
 
 import javax.annotation {
@@ -29,10 +30,7 @@ import javax.inject {
 	named=named__TYPE,
 	inject
 }
-import dddsample.cargotracker.infrastructure.ceylon {
 
-	toJavaList
-}
 
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
@@ -60,7 +58,7 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
 	suppressWarnings("unusedDeclaration")
 	postConstruct
 	void init() {
-		locations = toJavaList(bookingServiceFacade.listShippingLocations());
+		locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
 	}
 	
 	
@@ -76,8 +74,8 @@ shared class Registration(BookingServiceFacade bookingServiceFacade){
                         SimpleDateFormat(format).parse(arrivalDeadline));
 			return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
 		}else{
-			FacesContext context = FacesContext.currentInstance;
-			FacesMessage message = FacesMessage("Origin and destination cannot be the same.");
+			value context = FacesContext.currentInstance;
+			value message = FacesMessage("Origin and destination cannot be the same.");
 			message.severity = FacesMessage.severityError;
 			context.addMessage(null, message);
 			return null;

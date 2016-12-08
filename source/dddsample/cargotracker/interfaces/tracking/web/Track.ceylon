@@ -19,7 +19,6 @@ import javax.faces.view {
 }
 import javax.inject {
 	named=named__TYPE,
-	inject__SETTER,
 	inject
 }
 

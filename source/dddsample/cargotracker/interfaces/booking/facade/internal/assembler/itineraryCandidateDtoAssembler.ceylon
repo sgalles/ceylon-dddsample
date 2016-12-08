@@ -18,6 +18,7 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 import java.text {
 	SimpleDateFormat
 }
+
 shared object itineraryCandidateDtoAssembler {
 	
 	shared RouteCandidate toDTO(ModelItinerary itinerary) => RouteCandidate(itinerary.legs.map(toLegDTO));

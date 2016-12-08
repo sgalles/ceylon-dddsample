@@ -1,5 +1,5 @@
 import javax.enterprise.inject {
-	produces=produces__GETTER
+	produces
 }
 import javax.persistence {
 	persistenceContext=persistenceContext__SETTER,

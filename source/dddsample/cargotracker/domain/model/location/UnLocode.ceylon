@@ -9,7 +9,7 @@ import javax.persistence {
 embeddable
 shared class UnLocode(String countryAndLocation){
 	
-	String unlocode =  countryAndLocation.uppercased;
+	String unlocode = countryAndLocation.uppercased;
 	
 	shared String idString => unlocode;
 	

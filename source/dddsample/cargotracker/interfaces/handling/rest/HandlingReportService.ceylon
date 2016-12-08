@@ -25,7 +25,7 @@ import java.util {
 }
 
 import javax.inject {
-	inject=inject__SETTER
+	inject
 }
 import javax.ws.rs {
 	path,

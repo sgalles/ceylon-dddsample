@@ -1,6 +1,6 @@
 import javax.persistence {
 	embeddable,
-	column=column__FIELD
+	column
 }
 
 """

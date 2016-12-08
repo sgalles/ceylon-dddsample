@@ -7,17 +7,15 @@ import java.util {
 	JList=List,
 	JArrayList=ArrayList,
 	Date,
-	Collections
+	Collections,
+    Arrays
 }
 import java.lang{
 	JString=String
 }
 
-import javax.ejb {
-	stateless
-}
 import javax.inject {
-	inject=inject__FIELD
+	inject
 }
 import javax.ws.rs {
 	path,
@@ -26,10 +24,6 @@ import javax.ws.rs {
 	queryParam
 }
 
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	toJavaList
-}
 
 Integer oneMinMs = 1000 * 60;
 Integer oneDayMs = oneMinMs * 60 * 24;
@@ -52,7 +46,7 @@ shared class GraphTraversalService() {
 	){
 		variable Date date = nextDate(Date());
 		
-		variable JList<String> allVertices = toJavaList(dao.locations);
+		variable JList<String> allVertices = Arrays.asList(*dao.locations);
 		allVertices.remove(originUnLocode);
 		allVertices.remove(destinationUnLocode);
 		

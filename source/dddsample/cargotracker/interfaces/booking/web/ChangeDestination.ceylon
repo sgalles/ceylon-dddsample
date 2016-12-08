@@ -8,7 +8,8 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 }
 
 import java.util {
-	JList=List
+	JList=List,
+    Arrays
 }
 
 import javax.faces.view {
@@ -18,10 +19,7 @@ import javax.inject {
 	named=named__TYPE,
 	inject
 }
-import dddsample.cargotracker.infrastructure.ceylon {
 
-	toJavaList
-}
 
 """
    Handles listing cargo. Operates against a dedicated service facade, and could
@@ -53,7 +51,7 @@ shared class ChangeDestination(
 	
 	shared void load() {
 		assert(exists trackingId = trackingId);
-		_locations = toJavaList(bookingServiceFacade.listShippingLocations());        
+		_locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());        
 		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
 	}
 	

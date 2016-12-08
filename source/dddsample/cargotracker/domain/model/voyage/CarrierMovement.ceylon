@@ -11,14 +11,14 @@ import java.util {
 
 import javax.persistence {
 	entity,
-	id=id__FIELD,
-	generatedValue=generatedValue__FIELD,
+	id,
+	generatedValue,
 	table,
-	manyToOne=manyToOne__FIELD,
-	joinColumn=joinColumn__FIELD,
+	manyToOne,
+	joinColumn,
 	TemporalType,
-	column=column__FIELD,
-	temporal=temporal__FIELD
+	column,
+	temporal
 }
 
 

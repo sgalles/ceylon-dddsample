@@ -5,11 +5,8 @@ import java.text {
 }
 import java.util {
 	JList=List,
-	Date
-}
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	toJavaList
+	Date,
+    Arrays
 }
 
 """
@@ -28,7 +25,7 @@ shared class CargoRoute(trackingId, origin, finalDestination, Date arrivalDeadli
 	shared Boolean claimed;
 	shared String lastKnownLocation;
 	shared String transportStatus;
-	shared JList<Leg> legs = toJavaList(legsIt);
+	shared JList<Leg> legs = Arrays.asList(*legsIt);
 	
 	shared Boolean routed => !legs.empty;
 }

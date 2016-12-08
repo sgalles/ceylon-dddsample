@@ -3,8 +3,8 @@
 import javax.persistence {
 	embeddable,
 	CascadeType,
-	oneToMany=oneToMany__FIELD,
-	joinColumn=joinColumn__FIELD
+	oneToMany,
+	joinColumn
 }
 
 """

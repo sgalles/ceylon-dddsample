@@ -1,18 +1,11 @@
-
-
-
-
 import dddsample.cargotracker.domain.model.cargo {
 	HandlingActivity
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory,
 	HandlingEvent,
-	load,
-	unload,
-	receive,
-	customs,
-	claim
+	HandlingEventTypeRequiredVoyage {...},
+	HandlingEventTypeProhibitedVoyage {...}
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -31,13 +24,13 @@ import java.util {
 
 import javax.persistence {
 	embeddable,
-	convert=convert__FIELD,
-	column=column__FIELD,
-	manyToOne=manyToOne__FIELD,
-	joinColumn=joinColumn__FIELD,
-	embedded=embedded__FIELD,
+	convert,
+	column,
+	manyToOne,
+	joinColumn,
+	embedded,
 	TemporalType,
-	temporal=temporal__FIELD
+	temporal
 }
 
 
@@ -78,23 +71,23 @@ shared class Delivery {
 	RoutingStatus calculateRoutingStatus(Itinerary? itinerary, RouteSpecification routeSpecification) 
 			=> if(exists itinerary) 
 				then if(routeSpecification.isSatisfiedBy(itinerary)) 
-					 then routed 
-					 else misrouted
-			    else not_routed;
+					 then RoutingStatus.routed 
+					 else RoutingStatus.misrouted
+			    else RoutingStatus.not_routed;
 	 
 	
 	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) 
 			=> if(exists lastEvent) then (switch(lastEvent.type) 
-						case(load) onboard_carrier
-						case(unload | receive | customs) in_port
-						case(claim) claimed
+						case(load) TransportStatus.onboard_carrier
+						case(unload | receive | customs) TransportStatus.in_port
+						case(claim) TransportStatus.claimed
 				)
-				else not_received;
+				else TransportStatus.not_received;
 	
 	
 	
 	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
-			=> routingStatus == routed && !misdirected;
+			=> routingStatus == RoutingStatus.routed && !misdirected;
 	
 	
 	Date? calculateEta(Itinerary? itinerary,RoutingStatus routingStatus, Boolean misdirected) 
@@ -150,7 +143,7 @@ shared class Delivery {
 		this.routingStatus = calculateRoutingStatus(itinerary,routeSpecification);
 		this.transportStatus = calculateTransportStatus(lastEvent);
 		this._lastKnownLocation = lastEvent?.location;
-		this._currentVoyage = if(transportStatus == onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
+		this._currentVoyage = if(transportStatus == TransportStatus.onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
 		this.misdirected = calculateMisdirectionStatus();
 		this._eta = calculateEta(itinerary, routingStatus, misdirected);
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);

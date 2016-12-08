@@ -11,22 +11,22 @@ import java.lang {
 
 import javax.persistence {
 	entity,
-	embedded=embedded__FIELD,
-	id=id__FIELD,
-	generatedValue=generatedValue__FIELD,
+	embedded,
+	id,
+	generatedValue,
 	namedQueries,
 	namedQuery,
-	manyToOne=manyToOne__FIELD,
-	joinColumn=joinColumn__FIELD
+	manyToOne,
+	joinColumn
 }
 
 entity
-namedQueries({
+namedQueries {
 	namedQuery{name = "Cargo.findAll";
 		query = "Select c from Cargo c";},
-		namedQuery{name = "Cargo.findByTrackingId";
-			query = "Select c from Cargo c where c.trackingId = :trackingId";}	
-}) 
+	namedQuery{name = "Cargo.findByTrackingId";
+		query = "Select c from Cargo c where c.trackingId = :trackingId";}	
+}
 shared class Cargo(trackingId, routeSpecification){
 	
 	// Auto-generated surrogate key

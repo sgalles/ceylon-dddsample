@@ -1,5 +1,4 @@
 import ceylon.interop.java {
-	javaClass,
 	CeylonList
 }
 
@@ -35,7 +34,7 @@ class JpaHandlingEventRepository(
 	
 	shared actual HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId) 
 		=> let(jlist = 
-					entityManager.createNamedQuery("HandlingEvent.findByTrackingId", javaClass<HandlingEvent>())
+					entityManager.createNamedQuery("HandlingEvent.findByTrackingId", `HandlingEvent`)
                 	.setParameter("trackingId", trackingId).resultList
 			) 
 			HandlingHistory(CeylonList(jlist));

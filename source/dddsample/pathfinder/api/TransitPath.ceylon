@@ -1,7 +1,3 @@
-import ceylon.interop.java {
-	CeylonCollection
-}
-
 import java.util {
 	JList=List
 }
@@ -14,7 +10,7 @@ shared class TransitPath(shared variable JList<TransitEdge> transitEdges) {
 	
 	xmlTransient
 	shared [TransitEdge+] transitEdgesSeq {
-		value transitEdgesSeq = CeylonCollection(transitEdges).sequence();
+		value transitEdgesSeq = [*transitEdges];
 		assert(nonempty transitEdgesSeq); 
 		return transitEdgesSeq;
 	}

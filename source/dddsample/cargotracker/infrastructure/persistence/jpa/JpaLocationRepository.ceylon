@@ -1,7 +1,3 @@
-import ceylon.interop.java {
-	javaClass
-}
-
 import dddsample.cargotracker.domain.model.voyage {
 	VoyageRepository,
 	Voyage,
@@ -29,7 +25,7 @@ class JpaVoyageRepository(
 	shared actual Voyage? find(VoyageNumber voyageNumber) {
 
         try {
-            return entityManager.createNamedQuery("Voyage.findByVoyageNumber", javaClass<Voyage>())
+            return entityManager.createNamedQuery("Voyage.findByVoyageNumber", `Voyage`)
 						        .setParameter("voyageNumber", voyageNumber).singleResult;
         } catch (NoResultException e) {
             return null;

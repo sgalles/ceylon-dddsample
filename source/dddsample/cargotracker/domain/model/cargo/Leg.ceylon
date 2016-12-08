@@ -14,13 +14,13 @@ import java.util {
 
 import javax.persistence {
 	entity,
-	id = id__FIELD,
-	generatedValue = generatedValue__FIELD,
-	manyToOne = manyToOne__FIELD,
-	joinColumn = joinColumn__FIELD,
-	temporal = temporal__FIELD,
+	id,
+	generatedValue,
+	manyToOne,
+	joinColumn,
+	temporal,
 	TemporalType,
-	column = column__FIELD
+	column
 }
 
 
@@ -52,7 +52,6 @@ shared class Leg(voyage, loadLocation, unloadLocation, Date loadTimeValue, Date 
 	column{name = "unload_time";}
 	Date _unloadTime = unloadTimeValue;
 	
-
 	
 	shared Date loadTime => Date(_loadTime.time);
 	

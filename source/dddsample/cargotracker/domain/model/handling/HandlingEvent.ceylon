@@ -17,45 +17,46 @@ import java.util {
 }
 
 import javax.persistence {
-	convert=convert__FIELD,
+	convert,
 	entity,
-	id=id__FIELD,
-	generatedValue=generatedValue__FIELD,
-	column=column__FIELD,
-	manyToOne=manyToOne__FIELD,
-	joinColumn=joinColumn__FIELD,
-	temporal=temporal__FIELD,
+	id,
+	generatedValue,
+	column,
+	manyToOne,
+	joinColumn,
+	temporal,
 	TemporalType,
 	namedQuery
 }
 import dddsample.cargotracker.infrastructure.persistence.jpa {
-
 	HandlingEventTypeConverter
 }
 
 
- 
-
-shared abstract class HandlingEventType() of HandlingEventTypeRequiredVoyage | HandlingEventTypeProhibitedVoyage{
+shared abstract class HandlingEventType() 
+         of HandlingEventTypeRequiredVoyage 
+          | HandlingEventTypeProhibitedVoyage{
 	shared formal Boolean requiresVoyage;
 	shared Boolean prohibitsVoyage => !requiresVoyage;
 }
 
-shared abstract class HandlingEventTypeRequiredVoyage() 
-		of load | unload extends HandlingEventType() {
-	shared actual Boolean requiresVoyage => true;
+shared class HandlingEventTypeRequiredVoyage
+		of load | unload extends HandlingEventType {
+	requiresVoyage => true;
+	
+	shared new load extends HandlingEventType() {}
+	shared new unload extends HandlingEventType() {}
 }
 
-shared abstract class HandlingEventTypeProhibitedVoyage() 
-		of receive | claim |  customs extends HandlingEventType() {
-	shared actual Boolean requiresVoyage => false;
-} 
+shared class HandlingEventTypeProhibitedVoyage
+		of receive | claim |  customs 
+        extends HandlingEventType {
+	requiresVoyage => false;
 
-shared object load extends HandlingEventTypeRequiredVoyage() {}
-shared object unload extends HandlingEventTypeRequiredVoyage() {}
-shared object receive extends HandlingEventTypeProhibitedVoyage() {}
-shared object claim extends HandlingEventTypeProhibitedVoyage() {}
-shared object customs extends HandlingEventTypeProhibitedVoyage() {}
+	shared new receive extends HandlingEventType() {}
+	shared new claim extends HandlingEventType() {}
+	shared new customs extends HandlingEventType() {}
+} 
 
 shared alias HandlingEventTypeBundle<Info> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
  

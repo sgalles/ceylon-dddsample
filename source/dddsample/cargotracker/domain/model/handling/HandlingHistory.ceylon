@@ -3,11 +3,6 @@ import ceylon.collection {
 }
 
 
-import dddsample.cargotracker.infrastructure.ceylon {
-
-	ceylonComparison
-}
-
 shared class HandlingHistory {
 	
 	
@@ -19,13 +14,9 @@ shared class HandlingHistory {
 	
 	shared new empty extends HandlingHistory({}) {}
 	
-	
-    Comparison byCompletionTimeComparator(HandlingEvent he1, HandlingEvent he2) 
-		=> ceylonComparison(he1.completionTime.compareTo(he2.completionTime));
-	
-    
 	shared HandlingEvent[] distinctEventsByCompletionTime 
-			=> HashSet{*allHandlingEvents}.sort(byCompletionTimeComparator);
+			=> HashSet{*allHandlingEvents}
+			.sort((he1, he2) => he1.completionTime.compareTo(he2.completionTime) <=> 0);
 	
 	shared HandlingEvent? mostRecentlyCompletedEvent 
 			=> distinctEventsByCompletionTime.last;
