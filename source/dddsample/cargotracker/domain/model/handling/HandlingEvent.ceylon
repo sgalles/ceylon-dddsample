@@ -33,30 +33,27 @@ import dddsample.cargotracker.infrastructure.persistence.jpa {
 }
 
 
-shared abstract class HandlingEventType() 
-         of HandlingEventTypeRequiredVoyage 
-          | HandlingEventTypeProhibitedVoyage{
+shared abstract class HandlingEventType() of HandlingEventTypeRequiredVoyage | HandlingEventTypeProhibitedVoyage{
 	shared formal Boolean requiresVoyage;
 	shared Boolean prohibitsVoyage => !requiresVoyage;
 }
 
-shared class HandlingEventTypeRequiredVoyage
-		of load | unload extends HandlingEventType {
-	requiresVoyage => true;
-	
-	shared new load extends HandlingEventType() {}
-	shared new unload extends HandlingEventType() {}
+shared abstract class HandlingEventTypeRequiredVoyage() 
+		of load | unload extends HandlingEventType() {
+	shared actual Boolean requiresVoyage => true;
 }
 
-shared class HandlingEventTypeProhibitedVoyage
-		of receive | claim |  customs 
-        extends HandlingEventType {
-	requiresVoyage => false;
-
-	shared new receive extends HandlingEventType() {}
-	shared new claim extends HandlingEventType() {}
-	shared new customs extends HandlingEventType() {}
+shared abstract class HandlingEventTypeProhibitedVoyage() 
+		of receive | claim |  customs extends HandlingEventType() {
+	shared actual Boolean requiresVoyage => false;
 } 
+
+shared object load extends HandlingEventTypeRequiredVoyage() {}
+shared object unload extends HandlingEventTypeRequiredVoyage() {}
+shared object receive extends HandlingEventTypeProhibitedVoyage() {}
+shared object claim extends HandlingEventTypeProhibitedVoyage() {}
+shared object customs extends HandlingEventTypeProhibitedVoyage() {}
+
 
 shared alias HandlingEventTypeBundle<Info> => HandlingEventTypeProhibitedVoyage|[HandlingEventTypeRequiredVoyage, Info];
  

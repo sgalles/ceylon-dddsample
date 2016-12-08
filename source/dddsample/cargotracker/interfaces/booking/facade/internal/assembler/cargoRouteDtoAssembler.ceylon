@@ -4,8 +4,8 @@ import ceylon.language.meta {
 
 import dddsample.cargotracker.domain.model.cargo {
 	CargoModel=Cargo,
-	RoutingStatus,
-    TransportStatus
+	misrouted,
+	claimed
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
 	CargoRoute,
@@ -19,8 +19,8 @@ shared object cargoRouteDtoAssembler{
 				origin =  "``cargo.origin.name`` (``cargo.origin.unLocode.idString``)";
 				finalDestination = let(destination = cargo.routeSpecification.destination) "``destination.name`` (``destination.unLocode.idString``)";
 				arrivalDeadlineDate = cargo.routeSpecification.arrivalDeadline;
-				misrouted = cargo.delivery.routingStatus == RoutingStatus.misrouted;
-				claimed = cargo.delivery.transportStatus == TransportStatus.claimed;
+				misrouted = cargo.delivery.routingStatus == misrouted;
+				claimed = cargo.delivery.transportStatus == claimed;
 				lastKnownLocation = let(lastKnownLocation = cargo.delivery.lastKnownLocation) "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
 				transportStatus = type(cargo.delivery.transportStatus).declaration.name;
 				legsIt = (cargo.itinerary else nothing).legsMaybeEmpty.map((leg) => Leg { 

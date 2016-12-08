@@ -10,12 +10,25 @@ import ceylon.language.meta {
 
 import dddsample.cargotracker.domain.model.cargo {
 	Cargo,
-    TransportStatus
+	in_port,
+	onboard_carrier,
+	claimed,
+	not_received,
+	unknown
 }
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
-	HandlingEventTypeProhibitedVoyage {...},
-	HandlingEventTypeRequiredVoyage {...}
+	HandlingEventTypeProhibitedVoyage {
+		...
+	},
+	HandlingEventTypeRequiredVoyage {
+		...
+	},
+	load,
+	unload,
+	receive,
+	claim,
+	customs
 }
 import dddsample.cargotracker.domain.model.voyage {
 	Voyage
@@ -42,12 +55,12 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
 	shared String destination => cargo.routeSpecification.destination.name;
 	shared String statusText => let(delivery = cargo.delivery) (
 								switch(delivery.transportStatus)
-									case(TransportStatus.in_port) "In port ``delivery.lastKnownLocation.name``"
+									case(in_port) "In port ``delivery.lastKnownLocation.name``"
 									// TODO : remove 'else nothing'
-									case(TransportStatus.onboard_carrier) "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else nothing``"
-									case(TransportStatus.claimed) "Claimed"
-									case(TransportStatus.not_received) "Not received"
-									case(TransportStatus.unknown) "Unknown"
+									case(onboard_carrier) "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else nothing``"
+									case(claimed) "Claimed"
+									case(not_received) "Not received"
+									case(unknown) "Unknown"
 								);
 
 	

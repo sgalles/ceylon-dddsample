@@ -12,8 +12,17 @@ import dddsample.cargotracker.domain.model.cargo {
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEventFactory,
 	HandlingEventRepository,
-	HandlingEventTypeRequiredVoyage {...},
-	HandlingEventTypeProhibitedVoyage {...}
+	HandlingEventTypeRequiredVoyage {
+		...
+	},
+	HandlingEventTypeProhibitedVoyage {
+		...
+	},
+	receive,
+	load,
+	unload,
+	customs,
+	claim
 }
 import dddsample.cargotracker.domain.model.location {
 	Location {
@@ -24,6 +33,9 @@ import dddsample.cargotracker.domain.model.voyage {
 	Voyage {
 		...
 	}
+}
+import dddsample.cargotracker.infrastructure.ceylon {
+	toDate
 }
 
 import java.util {
@@ -48,9 +60,6 @@ import javax.persistence {
 
 import org.slf4j {
 	Logger
-}
-import dddsample.cargotracker.infrastructure.ceylon {
-	toDate
 }
 
 

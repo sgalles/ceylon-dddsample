@@ -4,8 +4,17 @@ import dddsample.cargotracker.domain.model.cargo {
 import dddsample.cargotracker.domain.model.handling {
 	HandlingHistory,
 	HandlingEvent,
-	HandlingEventTypeRequiredVoyage {...},
-	HandlingEventTypeProhibitedVoyage {...}
+	HandlingEventTypeRequiredVoyage {
+		...
+	},
+	HandlingEventTypeProhibitedVoyage {
+		...
+	},
+	load,
+	unload,
+	receive,
+	customs,
+	claim
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
@@ -71,23 +80,23 @@ shared class Delivery {
 	RoutingStatus calculateRoutingStatus(Itinerary? itinerary, RouteSpecification routeSpecification) 
 			=> if(exists itinerary) 
 				then if(routeSpecification.isSatisfiedBy(itinerary)) 
-					 then RoutingStatus.routed 
-					 else RoutingStatus.misrouted
-			    else RoutingStatus.not_routed;
+					 then routed 
+					 else misrouted
+			    else not_routed;
 	 
 	
 	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) 
 			=> if(exists lastEvent) then (switch(lastEvent.type) 
-						case(load) TransportStatus.onboard_carrier
-						case(unload | receive | customs) TransportStatus.in_port
-						case(claim) TransportStatus.claimed
+						case(load) onboard_carrier
+						case(unload | receive | customs) in_port
+						case(claim) claimed
 				)
-				else TransportStatus.not_received;
+				else not_received;
 	
 	
 	
 	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
-			=> routingStatus == RoutingStatus.routed && !misdirected;
+			=> routingStatus == routed && !misdirected;
 	
 	
 	Date? calculateEta(Itinerary? itinerary,RoutingStatus routingStatus, Boolean misdirected) 
@@ -143,7 +152,7 @@ shared class Delivery {
 		this.routingStatus = calculateRoutingStatus(itinerary,routeSpecification);
 		this.transportStatus = calculateTransportStatus(lastEvent);
 		this._lastKnownLocation = lastEvent?.location;
-		this._currentVoyage = if(transportStatus == TransportStatus.onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
+		this._currentVoyage = if(transportStatus == onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
 		this.misdirected = calculateMisdirectionStatus();
 		this._eta = calculateEta(itinerary, routingStatus, misdirected);
 		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);

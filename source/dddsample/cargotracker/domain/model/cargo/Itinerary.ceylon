@@ -1,7 +1,16 @@
 import dddsample.cargotracker.domain.model.handling {
 	HandlingEvent,
-	HandlingEventTypeRequiredVoyage {...},
-	HandlingEventTypeProhibitedVoyage {...}
+	HandlingEventTypeRequiredVoyage {
+		...
+	},
+	HandlingEventTypeProhibitedVoyage {
+		...
+	},
+	load,
+	unload,
+	receive,
+	claim,
+	customs
 }
 import dddsample.cargotracker.domain.model.location {
 	Location
