@@ -1,38 +1,57 @@
-#DDDSample for Ceylon / JEE
+# DDDSample for Ceylon and Java EE
 
-This project is a **Ceylon+JEE** port of this [Java+JEE](https://java.net/projects/cargotracker/pages/Home) 
-port of the [original Java+Spring DDDSample](http://dddsample.sourceforge.net/) project
+This project is a rewrite in Ceylon of this [Java EE port][]
+of the [original Spring DDDSample][] project.
 
-##Quickstart
+[Java EE port]: https://java.net/projects/cargotracker/pages/Home
+[original Spring DDDSample]: http://dddsample.sourceforge.net/
 
-###Build
+## Requirements
 
-You need a Ceylon 1.3.1 distribution available in your path.
+This project requires [Ceylon 1.3.1][] and [WildFly 10.1][].
 
-At the root directory of
-the project execute
+[Ceylon 1.3.1]: https://ceylon-lang.org/download
+[WildFly 10.1]: http://wildfly.org/
 
-* `ceylon compile`
-* `ceylon war dddsample/1.0.0  -R webapp --static-metamodel`
+### Compiling and assembling
 
-The war file `dddsample-1.0.0.war` is created at the root of the project
+In the root directory of this project, compile the Ceylon 
+source code:
 
-###Deploy
+    ceylon compile
 
-The created war file can be deployed into [Wildfly 10.1](http://wildfly.org/).
+Next, assemble the Java EE web application:
 
-* Copy the war at `wildfly-10.1.0.Final/standalone/deployments`
-* Start Wildfly with the command   `wildfly-10.1.0.Final/bin/standalone.sh -c standalone-full.xml`
+    ceylon war dddsample -R webapp --static-metamodel
+
+The web application archive `dddsample-1.0.0.war` is created at 
+the root of the project.
+
+### Deploying and running
+
+To deploy the web application archive to WildFly, first copy
+the `.war` file to the directory:
+   
+    wildfly-10.1.0.Final/standalone/deployments
+    
+Then start WildFly with the command:
+
+    wildfly-10.1.0.Final/bin/standalone.sh -c standalone-full.xml
   
-(you must explicitly use the *full* configuration because this project leverages JMS 2.0 that 
-is not available in the default configuration of Wildfly).
+You must explicitly specify the *full* configuration because 
+this project uses JMS 2.0 which is not available in the default 
+configuration of Wildfly.
 
-The JPA persistent-unit of the application uses the default in memory database preconfigured in
-Wildfly (`java:jboss/datasources/ExampleDS`). So this should work out of the box.
+The JPA persistence unit for the application uses the default 
+in memory database that comes preconfigured in WildFly 
+(`java:jboss/datasources/ExampleDS`).
 
-###Try it
+## Try it
 
-* In your browser go to [http://localhost:8080/dddsample-1.0.0/](http://localhost:8080/dddsample-1.0.0/)
-* click on the *public landing page* link
-* type a cargo name, as suggested, in the search box
-* try other links in the header of the page
+To test the application:
+
+* go to <http://localhost:8080/dddsample-1.0.0/>,
+* click on the *public landing page* link,
+* type a cargo name, as suggested, in the search box, and 
+  then
+* try other links in the header of the page.
