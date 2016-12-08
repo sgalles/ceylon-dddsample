@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <conelement value="com.redhat.ceylon.eclipse.ui.cpcontainer.RUNTIME_CONTAINER/default" />
+    <conelement value="com.redhat.ceylon.eclipse.ui.cpcontainer.CEYLON_CONTAINER/default" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/source" expected_position="0" />
+    </src_description>
+  </component>
+  <component name="FacetManager">
+    <facet type="ceylon" name="Ceylon">
+      <configuration>
+        <option name="compileForJvm" value="true" />
+        <option name="compileToJs" value="false" />
+        <option name="systemRepository" value="" />
+        Do not edit, modify .config/ide-config instead
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/source" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="com.redhat.ceylon.eclipse.ui.cpcontainer.RUNTIME_CONTAINER/default" level="application" />
+    <orderEntry type="library" name="com.redhat.ceylon.eclipse.ui.cpcontainer.CEYLON_CONTAINER/default" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: ceylon.collection/1.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: ceylon.interop.java/1.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: ceylon.json/1.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: ceylon.language/1.3.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: javax.activation/1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: javax.javaeeapi/7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: javax.mail/1.5.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Ceylon: org.slf4j.api/1.6.1" level="project" />
+  </component>
+</module>
