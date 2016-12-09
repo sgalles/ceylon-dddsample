@@ -35,8 +35,7 @@ import javax.ws.rs.client {
     WebTarget
 }
 import javax.ws.rs.core {
-    MediaType,
-    GenericType
+    MediaType
 }
 
 
@@ -73,9 +72,9 @@ shared class ExternalRoutingService(
                 .queryParam("origin", origin)
                 .queryParam("destination", destination)
                 .request(MediaType.applicationJsonType)
-                .get(object extends GenericType<TransitPaths>() {});
+                .get(`TransitPaths`);
 
-        function routeSpecificationSatisfiesBy(TransitPath transitPath){
+        function routeSpecificationSatisfiesBy(TransitPath transitPath) {
             value itinerary = toItinerary(transitPath);
             // Use the specification to safe-guard against invalid itineraries
             if (routeSpecification.isSatisfiedBy(itinerary)) {
