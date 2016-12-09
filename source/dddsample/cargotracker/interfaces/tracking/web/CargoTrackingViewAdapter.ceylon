@@ -1,7 +1,3 @@
-import ceylon.language.meta {
-    metatype=type
-}
-
 import dddsample.cargotracker.domain.model.cargo {
     Cargo,
     TransportStatus
@@ -57,10 +53,10 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
     shared String nextExpectedActivity {
         if (exists activity = cargo.delivery.nextExpectedActivity) {
             value type = activity.type;
-            value text = "Next expected activity is to ``metatype(activity.type).declaration.name``";
-            value voyageNumber = activity.voyage?.voyageNumber?.number else "";
+            value text = "Next expected activity is to ``activity.type``";
+            value voyageNumber = activity.voyage?.voyageNumber?.number else "???";
             return switch(type)
-                case (load) "``text`` cargo onto voyage ``voyageNumber`` in ``activity.location.name``"
+                case (load) "``text`` cargo onto ``voyageNumber`` in ``activity.location.name``"
                 case (unload) "``text`` cargo off of ``voyageNumber`` in ``activity.location.name``"
                 else "``text`` cargo in ``activity.location.name``";
         }
