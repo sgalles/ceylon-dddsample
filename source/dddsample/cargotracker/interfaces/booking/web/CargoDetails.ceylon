@@ -26,7 +26,7 @@ import javax.inject {
 named
 viewScoped
 inject
-shared class CargoDetails(BookingServiceFacade bookingServiceFacade){
+shared class CargoDetails(BookingServiceFacade bookingServiceFacade) {
 
     variable CargoRoute? _cargo = null;
     shared variable String? trackingId = null;

@@ -34,7 +34,7 @@ viewScoped
 inject
 shared class ChangeDestination(
     BookingServiceFacade bookingServiceFacade
-){
+) {
 
     variable CargoRoute? _cargo = null;
     variable JList<Location>? _locations = null;

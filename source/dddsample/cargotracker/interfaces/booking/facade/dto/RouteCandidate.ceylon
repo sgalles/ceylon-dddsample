@@ -13,9 +13,11 @@ import java.util {
 shared class RouteCandidate {
 
     shared {Leg+} legsSequence;
-    shared new({Leg+} legs){
+
+    shared new({Leg+} legs) {
         legsSequence = legs;
     }
-    shared JList<Leg> legs => JavaList<Leg>(legsSequence.sequence());
+
+    shared JList<Leg> legs => JavaList(legsSequence.sequence());
 
 }
