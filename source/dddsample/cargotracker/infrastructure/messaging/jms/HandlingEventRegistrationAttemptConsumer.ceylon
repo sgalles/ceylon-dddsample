@@ -65,9 +65,8 @@ shared class HandlingEventRegistrationAttemptConsumer() satisfies MessageListene
         }
         catch (JMSException | CannotCreateHandlingEventException e) {
             // Poison messages will be placed on dead-letter queue.
+            log.error("Error occurred processing message", e);
             throw Exception("Error occurred processing message", e);
-            //        } catch (JMSException e) {
-            // logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
     }

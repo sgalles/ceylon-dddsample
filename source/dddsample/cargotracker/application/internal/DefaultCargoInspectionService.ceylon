@@ -36,7 +36,7 @@ shared class DefaultCargoInspectionService (
         HandlingEventRepository handlingEventRepository,
         Logger logger,
         cargoInspected Event<Cargo> cargoInspected
-    ) satisfies CargoInspectionService{
+    ) satisfies CargoInspectionService {
 
 
     shared actual void inspectCargo(TrackingId trackingId) {

@@ -27,17 +27,24 @@ import javax.inject {
     inject
 }
 
+import org.slf4j {
+    Logger
+}
+
 stateless
 inject 
 shared class DefaultBookingService(
     LocationRepository locationRepository,
     CargoRepository cargoRepository,
     RoutingService routingService
-) satisfies BookingService{
+) satisfies BookingService {
+
+    inject
+    late Logger logger;
 
     shared actual TrackingId bookNewCargo(UnLocode originUnLocode, UnLocode destinationUnLocode, Date arrivalDeadline) {
         assert (exists origin = locationRepository.find(originUnLocode),
-                 exists destination = locationRepository.find(destinationUnLocode));
+                exists destination = locationRepository.find(destinationUnLocode));
 
         value cargo = Cargo {
             trackingId = cargoRepository.nextTrackingId();
@@ -49,8 +56,7 @@ shared class DefaultBookingService(
         };
 
         cargoRepository.store(cargo);
-        /*logger.log(Level.INFO, "Booked new cargo with tracking id {0}",
-            cargo.getTrackingId().getIdString());*/
+        logger.info("Booked new cargo with tracking id {0}", cargo.trackingId.idString);
 
         return cargo.trackingId;
     }
@@ -63,7 +69,7 @@ shared class DefaultBookingService(
     shared actual void assignCargoToRoute(Itinerary itinerary, TrackingId trackingId) {
         assert (exists cargo = cargoRepository.find(trackingId));
         cargoRepository.store(cargo,itinerary);
-        /*logger.log(Level.INFO, "Assigned cargo {0} to new route", trackingId);*/
+        logger.info("Assigned cargo {0} to new route", trackingId);
     }
 
     shared actual void changeDestination(TrackingId trackingId, UnLocode unLocode) {
@@ -79,8 +85,8 @@ shared class DefaultBookingService(
 
         cargoRepository.store(cargo);
 
-        /*logger.log(Level.INFO, "Changed destination for cargo {0} to {1}",
-            new Object[]{trackingId, routeSpecification.getDestination()});*/
+        logger.info("Changed destination for cargo {0} to {1}",
+                trackingId, routeSpecification.destination);
     }
 
 

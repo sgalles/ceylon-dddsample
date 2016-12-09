@@ -8,7 +8,7 @@ import javax.persistence {
    application.
 """ 
 embeddable
-shared class TrackingId(idString){
+shared class TrackingId(idString) {
 
     column{name = "tracking_id"; unique = true; updatable = false;}
     shared String idString;
