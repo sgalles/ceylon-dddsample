@@ -3,6 +3,9 @@
 This project is a rewrite in Ceylon of this [Java EE port][]
 of the [original Spring DDDSample][] project.
 
+Java EE technologies used include JPA, CDI, EJB, JAX-RS, JSF, 
+and Facelets.
+
 [Java EE port]: https://java.net/projects/cargotracker/pages/Home
 [original Spring DDDSample]: http://dddsample.sourceforge.net/
 
