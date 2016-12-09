@@ -72,7 +72,8 @@ shared class Delivery {
 	joinColumn{name = "last_event_id";} 
 	variable HandlingEvent? lastEvent;
 	
-	RoutingStatus calculateRoutingStatus(Itinerary? itinerary, RouteSpecification routeSpecification) 
+	RoutingStatus calculateRoutingStatus(Itinerary? itinerary,
+        RouteSpecification routeSpecification)
 			=> if (exists itinerary)
 			then if (routeSpecification.isSatisfiedBy(itinerary))
 				 then RoutingStatus.routed
@@ -94,91 +95,144 @@ shared class Delivery {
 	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
 			=> routingStatus == RoutingStatus.routed && !misdirected;
 
-	Date? calculateEta(Itinerary? itinerary,RoutingStatus routingStatus, Boolean misdirected) 
-			=> if (_onTrack(routingStatus, misdirected)) then itinerary?.finalArrivalDate() else null;
+	Date? calculateEta(Itinerary? itinerary, RoutingStatus routingStatus, Boolean misdirected)
+			=> if (_onTrack(routingStatus, misdirected))
+            then itinerary?.finalArrivalDate()
+            else null;
 
-	HandlingActivity? calculateNextExpectedActivity(HandlingEvent? lastEvent, RouteSpecification routeSpecification, Itinerary? itinerary, RoutingStatus routingStatus,Boolean misdirected){
-			if (!_onTrack(routingStatus, misdirected)) {
-				return null;
-			}
+	HandlingActivity? calculateNextExpectedActivity(
+        HandlingEvent? lastEvent,
+        RouteSpecification routeSpecification,
+        Itinerary? itinerary,
+        RoutingStatus routingStatus,
+        Boolean misdirected
+    ) {
 
-			assert(exists itinerary); // TODO : this because _ontrack means there's an itinerary...try to improve to remove assert
+        if (!_onTrack(routingStatus, misdirected)) {
+            return null;
+        }
 
-			if (!_onTrack(routingStatus, misdirected)) {
-			    return null;
-			}
-			else {
-			    if (exists lastEvent) {
-					value legs = itinerary.legs;
-					switch (lastEvent.type)
-					case (load) {
-						value leg = legs.find((leg) => leg.loadLocation.sameIdentityAs(lastEvent.location));
-						return if(exists leg)
-							then HandlingActivity([unload, leg.voyage], leg.unloadLocation)
-							else null;
-					}
-					case (unload) {
-						value pairedLegs = legs.paired.sequence().withTrailing([legs.last,null]);
-						value searchedPairedLeg = pairedLegs.find(
-							(pairedLeg) => pairedLeg[0].unloadLocation.sameIdentityAs(lastEvent.location));
-						return
-							if (exists [leg, nextLeg] = searchedPairedLeg)
-							then if (exists nextLeg)
-								then HandlingActivity([load, nextLeg.voyage], nextLeg.loadLocation)
-								else HandlingActivity(claim, leg.unloadLocation)
-							else null;
-					}
-					case (receive) {
-						value firstLeg = legs.first;
-						return HandlingActivity([load, firstLeg.voyage], firstLeg.loadLocation);
-					}
-					case (claim) {
-						return null;
-					}
-					case (customs) {
-						return null;
-					}
-			    }
-			    else {
-			        return HandlingActivity(receive, routeSpecification.origin);
-			    }
-			}
-		}
+        assert(exists itinerary); // TODO : this because _ontrack means there's an itinerary...try to improve to remove assert
 
-	Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent, RouteSpecification routeSpecification) 
-			=> 	if(exists lastEvent) 
-				then unload == lastEvent.type && routeSpecification.destination.sameIdentityAs(lastEvent.location)
-				else false;
-		
-	
-	shared new (HandlingEvent? lastEvent, Itinerary? itinerary, RouteSpecification routeSpecification){
+        if (!_onTrack(routingStatus, misdirected)) {
+            return null;
+        }
+        else {
+            if (exists lastEvent) {
+                value legs = itinerary.legs;
+                switch (lastEvent.type)
+                case (load) {
+                    value leg = legs.find((leg)
+                        => leg.loadLocation.sameIdentityAs(lastEvent.location));
+                    return if(exists leg)
+                        then HandlingActivity {
+                            typeAndVoyage = [unload, leg.voyage];
+                            location = leg.unloadLocation;
+                        }
+                        else null;
+                }
+                case (unload) {
+                    value pairedLegs = legs.paired.sequence().withTrailing([legs.last,null]);
+                    value searchedPairedLeg = pairedLegs.find((pairedLeg)
+                        => pairedLeg[0].unloadLocation.sameIdentityAs(lastEvent.location));
+                    return
+                        if (exists [leg, nextLeg] = searchedPairedLeg)
+                        then if (exists nextLeg)
+                            then HandlingActivity {
+                                typeAndVoyage = [load, nextLeg.voyage];
+                                location = nextLeg.loadLocation;
+                            }
+                            else HandlingActivity {
+                                typeAndVoyage = claim;
+                                location = leg.unloadLocation;
+                            }
+                        else null;
+                }
+                case (receive) {
+                    value firstLeg = legs.first;
+                    return HandlingActivity {
+                        typeAndVoyage = [load, firstLeg.voyage];
+                        location = firstLeg.loadLocation;
+                    };
+                }
+                case (claim) {
+                    return null;
+                }
+                case (customs) {
+                    return null;
+                }
+            }
+            else {
+                return HandlingActivity {
+                    typeAndVoyage = receive;
+                    location = routeSpecification.origin;
+                };
+            }
+        }
+    }
+
+	Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent,
+        RouteSpecification routeSpecification)
+			=> if (exists lastEvent)
+			then unload == lastEvent.type
+              && routeSpecification.destination.sameIdentityAs(lastEvent.location)
+			else false;
+
+	shared new (HandlingEvent? lastEvent, Itinerary? itinerary,
+        RouteSpecification routeSpecification) {
 		
 		Boolean calculateMisdirectionStatus() 
-				=> if(exists lastEvent,exists itinerary)  then !itinerary.isExpected(lastEvent) else false;
+				=> if(exists lastEvent,exists itinerary)
+                then !itinerary.isExpected(lastEvent)
+                else false;
 		
 		this.lastEvent = lastEvent;
-		this.routingStatus = calculateRoutingStatus(itinerary,routeSpecification);
+		this.routingStatus = calculateRoutingStatus {
+		    itinerary = itinerary;
+		    routeSpecification = routeSpecification;
+		};
 		this.transportStatus = calculateTransportStatus(lastEvent);
 		this._lastKnownLocation = lastEvent?.location;
-		this._currentVoyage = if (transportStatus == TransportStatus.onboard_carrier, exists lastEvent) then lastEvent.voyage else null;
+		this._currentVoyage
+                = if (transportStatus == TransportStatus.onboard_carrier,
+                      exists lastEvent)
+                then lastEvent.voyage
+                else null;
 		this.misdirected = calculateMisdirectionStatus();
-		this._eta = calculateEta(itinerary, routingStatus, misdirected);
-		this.nextExpectedActivity = calculateNextExpectedActivity(lastEvent, routeSpecification, itinerary, routingStatus, misdirected);
-		this.unloadedAtDestination = calculateUnloadedAtDestination(lastEvent, routeSpecification);
+		this._eta = calculateEta {
+		    itinerary = itinerary;
+		    routingStatus = routingStatus;
+		    misdirected = misdirected;
+		};
+		this.nextExpectedActivity = calculateNextExpectedActivity {
+		    lastEvent = lastEvent;
+		    routeSpecification = routeSpecification;
+		    itinerary = itinerary;
+		    routingStatus = routingStatus;
+		    misdirected = misdirected;
+		};
+		this.unloadedAtDestination = calculateUnloadedAtDestination {
+		    lastEvent = lastEvent;
+		    routeSpecification = routeSpecification;
+		};
 	}
 
-	shared new derivedFrom(RouteSpecification routeSpecification,Itinerary? itinerary, HandlingHistory handlingHistory)
-			extends Delivery(handlingHistory.mostRecentlyCompletedEvent, itinerary, routeSpecification){}
+	shared new derivedFrom(
+        RouteSpecification routeSpecification,
+        Itinerary? itinerary,
+        HandlingHistory handlingHistory
+    ) extends Delivery(handlingHistory.mostRecentlyCompletedEvent,
+                        itinerary, routeSpecification) {}
 	
 	shared Boolean onTrack => _onTrack(routingStatus,misdirected);
 	
 	shared Location lastKnownLocation => _lastKnownLocation else Location.unknown;
-	assign lastKnownLocation { _lastKnownLocation = lastKnownLocation; }
+	assign lastKnownLocation => _lastKnownLocation = lastKnownLocation;
 	
 	shared Voyage? currentVoyage => _currentVoyage;
-	assign currentVoyage { _currentVoyage = currentVoyage; }
+	assign currentVoyage => _currentVoyage = currentVoyage;
 	
-	shared Date? estimatedTimeOfArrival => if(exists _eta) then Date(_eta.time) else null;
+	shared Date? estimatedTimeOfArrival => if (exists _eta) then Date(_eta.time) else null;
 		
 	shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary) 
 			=> Delivery(this.lastEvent, itinerary, routeSpecification);
