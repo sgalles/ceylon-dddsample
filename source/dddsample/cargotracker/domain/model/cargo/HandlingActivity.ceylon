@@ -22,7 +22,6 @@ import dddsample.cargotracker.infrastructure.persistence.jpa {
     HandlingEventTypeConverter
 }
 
- 
 embeddable
 shared class HandlingActivity {
 

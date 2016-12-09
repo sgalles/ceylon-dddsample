@@ -61,6 +61,8 @@ shared class Location {
     shared new dallas extends Location(UnLocode("USDAL"), "Dallas"){}
 
     shared Boolean sameIdentityAs(Location? other)
-            => if(exists other) then this.unLocode.sameValueAs(other.unLocode) else false;
+            => if (exists other)
+            then this.unLocode.sameValueAs(other.unLocode)
+            else false;
 
 }

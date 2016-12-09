@@ -11,7 +11,7 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class Schedule(carrierMovements){
+shared class Schedule(carrierMovements) {
 
     oneToMany{cascade = { CascadeType.all }; orphanRemoval = true;}
     joinColumn{name = "voyage_id";}

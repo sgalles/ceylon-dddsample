@@ -88,7 +88,7 @@ shared class Voyage {
                     departureTime = toDate("2014-03-06");
                     arrivalTime = toDate("2014-03-09");
                 }
-            ){}
+            ) {}
 
     shared new hongkong_to_new_york extends build(
         VoyageNumber("0100S"),
@@ -113,7 +113,7 @@ shared class Voyage {
             departureTime = toDate("2013-10-14", "12:00");
             arrivalTime = toDate("2013-10-23", "23:10");
         }
-    ){}
+    ) {}
 
     shared new new_york_to_dallas extends build(
         VoyageNumber("0200T"),
@@ -128,7 +128,7 @@ shared class Voyage {
             departureTime = toDate("2013-10-24", "21:25");
             arrivalTime = toDate("2013-10-25", "19:30");
         }
-    ){}
+    ) {}
 
     shared new dallas_to_helsinki extends build(
         VoyageNumber("0300A"),
@@ -148,7 +148,7 @@ shared class Voyage {
             departureTime = toDate("2013-11-02", "09:00");
             arrivalTime = toDate("2013-11-02", "11:15");
         }
-    ){}
+    ) {}
 
     shared new dallas_to_helsinki_alt extends build(
         VoyageNumber("0301S"),
@@ -158,7 +158,7 @@ shared class Voyage {
             departureTime = toDate("2013-10-29", "03:30");
             arrivalTime = toDate("2013-11-05", "15:45");
         }
-    ){}
+    ) {}
 
     shared new helsinki_to_hongkong extends build(
         VoyageNumber("0400S"),
@@ -178,7 +178,7 @@ shared class Voyage {
             departureTime = toDate("2013-11-24", "07:00");
             arrivalTime = toDate("2013-11-28", "13:37");
         }
-    ){}
+    ) {}
 
     shared Boolean sameIdentityAs(Voyage other)
             => this.voyageNumber.sameValueAs(other.voyageNumber);

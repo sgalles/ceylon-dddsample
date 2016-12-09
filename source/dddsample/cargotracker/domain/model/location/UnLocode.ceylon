@@ -7,9 +7,9 @@ import javax.persistence {
    http://www.unece.org/cefact/locode/DocColumnDescription.htm#LOCODE   
    """
 embeddable
-shared class UnLocode(String countryAndLocation){
+shared class UnLocode(String countryAndLocation) {
 
-    String unlocode = countryAndLocation.uppercased;
+    value unlocode = countryAndLocation.uppercased;
 
     shared String idString => unlocode;
 
