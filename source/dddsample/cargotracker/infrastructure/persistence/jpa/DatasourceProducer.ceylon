@@ -1,16 +1,16 @@
 import javax.enterprise.inject {
-	produces
+    produces
 }
 import javax.persistence {
-	persistenceContext=persistenceContext__SETTER,
-	EntityManager
+    persistenceContext=persistenceContext__SETTER,
+    EntityManager
 }
 
 class DatasourceProducer() {
-	
-	suppressWarnings("unusedDeclaration")
-	produces
-	persistenceContext
-	late EntityManager entityManager;
-	
+
+    suppressWarnings("unusedDeclaration")
+    produces
+    persistenceContext
+    late EntityManager entityManager;
+
 }

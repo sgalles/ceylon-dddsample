@@ -1,33 +1,33 @@
 import dddsample.cargotracker.interfaces.booking.facade {
-	BookingServiceFacade
+    BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	Location
+    Location
 }
 
 import java.text {
-	SimpleDateFormat
+    SimpleDateFormat
 }
 import java.util {
-	JList=List,
+    JList=List,
     Arrays
 }
 
 import javax.annotation {
-	postConstruct
+    postConstruct
 }
 import javax.faces.application {
-	FacesMessage
+    FacesMessage
 }
 import javax.faces.context {
-	FacesContext
+    FacesContext
 }
 import javax.faces.view {
-	viewScoped
+    viewScoped
 }
 import javax.inject {
-	named=named__TYPE,
-	inject
+    named=named__TYPE,
+    inject
 }
 
 """
@@ -44,39 +44,39 @@ named
 viewScoped
 inject
 shared class Registration(BookingServiceFacade bookingServiceFacade) {
-	
-	value format = SimpleDateFormat("yyyy-MM-dd");
-	
-	shared late JList<Location> locations;
-	
-	shared variable String? arrivalDeadline = null;
-	shared variable String? originUnlocode = null;
-	shared variable String? destinationUnlocode = null;
-	
-	suppressWarnings("unusedDeclaration")
-	postConstruct
-	void init() => locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
 
-	shared String? register() {
-		assert(	exists arrivalDeadline = arrivalDeadline, 
-				exists originUnlocode = originUnlocode, 
-				exists destinationUnlocode = destinationUnlocode);
-		
-		if (originUnlocode != destinationUnlocode){
-			value trackingId = bookingServiceFacade.bookNewCargo {
-			    origin = originUnlocode;
-			    destination = destinationUnlocode;
-			    arrivalDeadline = format.parse(arrivalDeadline);
-			};
-			return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
-		}
-		else {
-			value message = FacesMessage("Origin and destination cannot be the same.");
-			message.severity = FacesMessage.severityError;
-			FacesContext.currentInstance.addMessage(null, message);
-			return null;
-		}
-	}
-	
-	
+    value format = SimpleDateFormat("yyyy-MM-dd");
+
+    shared late JList<Location> locations;
+
+    shared variable String? arrivalDeadline = null;
+    shared variable String? originUnlocode = null;
+    shared variable String? destinationUnlocode = null;
+
+    suppressWarnings("unusedDeclaration")
+    postConstruct
+    void init() => locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
+
+    shared String? register() {
+        assert(    exists arrivalDeadline = arrivalDeadline,
+                exists originUnlocode = originUnlocode,
+                exists destinationUnlocode = destinationUnlocode);
+
+        if (originUnlocode != destinationUnlocode){
+            value trackingId = bookingServiceFacade.bookNewCargo {
+                origin = originUnlocode;
+                destination = destinationUnlocode;
+                arrivalDeadline = format.parse(arrivalDeadline);
+            };
+            return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
+        }
+        else {
+            value message = FacesMessage("Origin and destination cannot be the same.");
+            message.severity = FacesMessage.severityError;
+            FacesContext.currentInstance.addMessage(null, message);
+            return null;
+        }
+    }
+
+
 }

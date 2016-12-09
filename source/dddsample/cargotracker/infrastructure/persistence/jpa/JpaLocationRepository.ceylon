@@ -19,19 +19,19 @@ import javax.persistence {
 applicationScoped
 inject
 class JpaVoyageRepository(
-	EntityManager entityManager
+    EntityManager entityManager
 ) satisfies VoyageRepository {
-	
-	shared actual Voyage? find(VoyageNumber voyageNumber) {
+
+    shared actual Voyage? find(VoyageNumber voyageNumber) {
         try {
             return entityManager
-				.createNamedQuery("Voyage.findByVoyageNumber", `Voyage`)
-				.setParameter("voyageNumber", voyageNumber)
-				.singleResult;
+                .createNamedQuery("Voyage.findByVoyageNumber", `Voyage`)
+                .setParameter("voyageNumber", voyageNumber)
+                .singleResult;
         }
         catch (NoResultException e) {
             return null;
         }
-	}
-	
+    }
+
 }

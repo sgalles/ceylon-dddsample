@@ -24,18 +24,18 @@ import javax.persistence {
 applicationScoped
 inject
 class JpaHandlingEventRepository(
-	EntityManager entityManager
+    EntityManager entityManager
 ) satisfies HandlingEventRepository{
 
-	function events(TrackingId trackingId)
-			=> entityManager
-				.createNamedQuery("HandlingEvent.findByTrackingId", `HandlingEvent`)
-				.setParameter("trackingId", trackingId)
-				.resultList;
+    function events(TrackingId trackingId)
+            => entityManager
+                .createNamedQuery("HandlingEvent.findByTrackingId", `HandlingEvent`)
+                .setParameter("trackingId", trackingId)
+                .resultList;
 
-	store(HandlingEvent event) => entityManager.persist(event);
-	
-	lookupHandlingHistoryOfCargo(TrackingId trackingId)
-			=> HandlingHistory(CeylonList(events(trackingId)));
-	
+    store(HandlingEvent event) => entityManager.persist(event);
+
+    lookupHandlingHistoryOfCargo(TrackingId trackingId)
+            => HandlingHistory(CeylonList(events(trackingId)));
+
 }

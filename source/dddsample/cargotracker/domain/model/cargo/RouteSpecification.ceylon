@@ -20,27 +20,27 @@ import javax.persistence {
 
 embeddable
 shared class RouteSpecification(origin, destination, Date arrivalDeadlineValue)
-		extends AbstractSpecification<Itinerary>() {
+        extends AbstractSpecification<Itinerary>() {
 
-	Date copy(Date date) => Date(date.time);
+    Date copy(Date date) => Date(date.time);
 
-	manyToOne
-	joinColumn{name = "spec_origin_id"; updatable = false;}
-	shared Location origin;
-	
-	manyToOne
-	joinColumn{name = "spec_destination_id";}
-	shared Location destination;
-	
-	temporal(TemporalType.date)
-	column{name = "spec_arrival_deadline";}
-	Date _arrivalDeadline = copy(arrivalDeadlineValue);
-	
-	shared Date arrivalDeadline => copy(_arrivalDeadline);
-	
-	isSatisfiedBy(Itinerary itinerary) 
-			=> origin.sameIdentityAs(itinerary.initialDepartureLocation())
-			&& destination.sameIdentityAs(itinerary.finalArrivalLocation())
-			&& arrivalDeadline.after(itinerary.finalArrivalDate());
+    manyToOne
+    joinColumn{name = "spec_origin_id"; updatable = false;}
+    shared Location origin;
+
+    manyToOne
+    joinColumn{name = "spec_destination_id";}
+    shared Location destination;
+
+    temporal(TemporalType.date)
+    column{name = "spec_arrival_deadline";}
+    Date _arrivalDeadline = copy(arrivalDeadlineValue);
+
+    shared Date arrivalDeadline => copy(_arrivalDeadline);
+
+    isSatisfiedBy(Itinerary itinerary)
+            => origin.sameIdentityAs(itinerary.initialDepartureLocation())
+            && destination.sameIdentityAs(itinerary.finalArrivalLocation())
+            && arrivalDeadline.after(itinerary.finalArrivalDate());
 
 }

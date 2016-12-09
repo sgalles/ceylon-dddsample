@@ -1,22 +1,22 @@
 import dddsample.cargotracker.interfaces.booking.facade {
-	BookingServiceFacade
+    BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	CargoRoute,
-	RouteCandidate
+    CargoRoute,
+    RouteCandidate
 }
 
 import java.util {
-	JList=List,
+    JList=List,
     Arrays
 }
 
 import javax.faces.view {
-	viewScoped
+    viewScoped
 }
 import javax.inject {
-	named=named__TYPE,
-	inject
+    named=named__TYPE,
+    inject
 }
 
 
@@ -34,28 +34,28 @@ named
 viewScoped
 inject
 shared class ItinerarySelection(BookingServiceFacade bookingServiceFacade) {
-	
-	variable CargoRoute? _cargo = null;
-	variable JList<RouteCandidate>? _routeCandidates = null;
-	shared variable String? trackingId = null;
-	
-	shared CargoRoute? cargo => _cargo;
-	
-	shared JList<RouteCandidate>? routeCandidates => _routeCandidates;
-	
-	shared void load() {
-		assert (exists trackingId = trackingId);
-		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
-		_routeCandidates = Arrays.asList(*bookingServiceFacade.requestPossibleRoutesForCargo(trackingId));
-	}
-	
-	shared String assignItinerary(Integer routeIndex) {
-		assert (exists trackingId = trackingId, 
-				exists _routeCandidates = _routeCandidates);
-		RouteCandidate route = _routeCandidates.get(routeIndex);
-		bookingServiceFacade.assignCargoToRoute(trackingId, route);
-		
-		return "show.html?faces-redirect=true&trackingId=" + trackingId;
-	}
-	
+
+    variable CargoRoute? _cargo = null;
+    variable JList<RouteCandidate>? _routeCandidates = null;
+    shared variable String? trackingId = null;
+
+    shared CargoRoute? cargo => _cargo;
+
+    shared JList<RouteCandidate>? routeCandidates => _routeCandidates;
+
+    shared void load() {
+        assert (exists trackingId = trackingId);
+        _cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
+        _routeCandidates = Arrays.asList(*bookingServiceFacade.requestPossibleRoutesForCargo(trackingId));
+    }
+
+    shared String assignItinerary(Integer routeIndex) {
+        assert (exists trackingId = trackingId,
+                exists _routeCandidates = _routeCandidates);
+        RouteCandidate route = _routeCandidates.get(routeIndex);
+        bookingServiceFacade.assignCargoToRoute(trackingId, route);
+
+        return "show.html?faces-redirect=true&trackingId=" + trackingId;
+    }
+
 }

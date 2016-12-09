@@ -1,22 +1,22 @@
 import javax.enterprise.context {
-	applicationScoped
+    applicationScoped
 }
 import javax.enterprise.inject {
-	produces
+    produces
 }
 import javax.enterprise.inject.spi {
-	InjectionPoint
+    InjectionPoint
 }
 
 import org.slf4j {
-	Logger,
-	LoggerFactory
+    Logger,
+    LoggerFactory
 }
 
 applicationScoped
 shared class LoggerProducer() {
-	suppressWarnings("unusedDeclaration")
-	produces  
-	Logger createLogger(InjectionPoint ip)
-			=> LoggerFactory.getLogger(ip.member.declaringClass);
+    suppressWarnings("unusedDeclaration")
+    produces
+    Logger createLogger(InjectionPoint ip)
+            => LoggerFactory.getLogger(ip.member.declaringClass);
 }

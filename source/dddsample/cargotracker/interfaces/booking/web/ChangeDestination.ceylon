@@ -33,33 +33,33 @@ named
 viewScoped
 inject
 shared class ChangeDestination(
-	BookingServiceFacade bookingServiceFacade
+    BookingServiceFacade bookingServiceFacade
 ){
-	
-	variable CargoRoute? _cargo = null;
-	variable JList<Location>? _locations = null;
-		
-	shared variable String? trackingId = null;
-	
-	shared variable String? destinationUnlocode = null;
-	
-	shared CargoRoute? cargo => _cargo;
-	
-	shared JList<Location>? locations => _locations;
-	
-	shared void load() {
-		assert (exists trackingId = trackingId);
-		_locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());        
-		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
-	}
-	
-	shared String changeDestination() {
-		assert (exists trackingId = trackingId,
-				exists destinationUnlocode = destinationUnlocode);
 
-		bookingServiceFacade.changeDestination(trackingId, destinationUnlocode);
-		return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
-	}
-	
-	
+    variable CargoRoute? _cargo = null;
+    variable JList<Location>? _locations = null;
+
+    shared variable String? trackingId = null;
+
+    shared variable String? destinationUnlocode = null;
+
+    shared CargoRoute? cargo => _cargo;
+
+    shared JList<Location>? locations => _locations;
+
+    shared void load() {
+        assert (exists trackingId = trackingId);
+        _locations = Arrays.asList(*bookingServiceFacade.listShippingLocations());
+        _cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
+    }
+
+    shared String changeDestination() {
+        assert (exists trackingId = trackingId,
+                exists destinationUnlocode = destinationUnlocode);
+
+        bookingServiceFacade.changeDestination(trackingId, destinationUnlocode);
+        return "show.xhtml?faces-redirect=true&trackingId=``trackingId``";
+    }
+
+
 }

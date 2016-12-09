@@ -1,33 +1,33 @@
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEvent,
-	HandlingEventTypeRequiredVoyage {
-		...
-	},
-	HandlingEventTypeProhibitedVoyage {
-		...
-	}
+    HandlingEvent,
+    HandlingEventTypeRequiredVoyage {
+        ...
+    },
+    HandlingEventTypeProhibitedVoyage {
+        ...
+    }
 }
 import dddsample.cargotracker.domain.model.location {
-	Location
+    Location
 }
 import dddsample.cargotracker.domain.model.voyage {
-	Voyage
+    Voyage
 }
 
 import java.lang {
-	Long
+    Long
 }
 import java.util {
-	Date
+    Date
 }
 
 import javax.persistence {
-	CascadeType,
-	embeddable,
-	joinColumn,
-	oneToMany,
-	FetchType,
-	orderBy
+    CascadeType,
+    embeddable,
+    joinColumn,
+    oneToMany,
+    FetchType,
+    orderBy
 }
 
 shared Date endOfDays = Date(Long.maxValue);
@@ -49,10 +49,10 @@ shared class Itinerary({Leg+} legsInit) {
             _legs.sequence();
 
     shared Location? initialDepartureLocation() 
-            => legsMaybeEmpty.first?.loadLocation;	
+            => legsMaybeEmpty.first?.loadLocation;
     
     shared Location? finalArrivalLocation() 
-            => legsMaybeEmpty.last?.unloadLocation;	
+            => legsMaybeEmpty.last?.unloadLocation;
     
     shared Date finalArrivalDate() 
             => Date(legs.last.unloadTime.time);

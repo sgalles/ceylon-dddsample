@@ -1,11 +1,11 @@
 import dddsample.cargotracker.domain.model.cargo {
-	Cargo
+    Cargo
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEvent
+    HandlingEvent
 }
 import dddsample.cargotracker.interfaces.handling {
-	HandlingEventRegistrationAttempt
+    HandlingEventRegistrationAttempt
 }
 
 """
@@ -14,8 +14,8 @@ import dddsample.cargotracker.interfaces.handling {
    It may be implemented synchronously or asynchronously, using for example JMS.
    """
 shared interface ApplicationEvents {
-	shared formal void cargoWasHandled(HandlingEvent event);
-	shared formal void cargoWasMisdirected(Cargo cargo);
-	shared formal void cargoHasArrived(Cargo cargo);
-	shared formal void receivedHandlingEventRegistrationAttempt(HandlingEventRegistrationAttempt attempt);
+    shared formal void cargoWasHandled(HandlingEvent event);
+    shared formal void cargoWasMisdirected(Cargo cargo);
+    shared formal void cargoHasArrived(Cargo cargo);
+    shared formal void receivedHandlingEventRegistrationAttempt(HandlingEventRegistrationAttempt attempt);
 }

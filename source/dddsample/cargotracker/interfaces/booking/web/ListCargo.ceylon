@@ -1,24 +1,24 @@
 import dddsample.cargotracker.interfaces.booking.facade {
-	BookingServiceFacade
+    BookingServiceFacade
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
-	CargoRoute
+    CargoRoute
 }
 
 import java.util {
-	JList=List,
+    JList=List,
     Arrays
 }
 
 import javax.annotation {
-	postConstruct
+    postConstruct
 }
 import javax.faces.view {
-	viewScoped
+    viewScoped
 }
 import javax.inject {
-	named=named__TYPE,
-	inject
+    named=named__TYPE,
+    inject
 }
 
 """
@@ -35,21 +35,21 @@ named
 viewScoped
 inject
 shared class ListCargo(BookingServiceFacade bookingServiceFacade) {
-	
-	late List<CargoRoute> _cargos;
 
-	suppressWarnings("unusedDeclaration")
-	postConstruct
-	void init() => _cargos = bookingServiceFacade.listAllCargos();
-	
-	shared JList<CargoRoute> cargos => Arrays.asList(*_cargos);
-	
-	function filteredCargos(Boolean(CargoRoute) predicate) => Arrays.asList(*_cargos.filter(predicate));
-	
-	shared JList<CargoRoute> routedCargos => filteredCargos(CargoRoute.routed);
-	
-	shared JList<CargoRoute> notRoutedCargos => filteredCargos(not(CargoRoute.routed));
-	
-	shared JList<CargoRoute> claimedCargos => filteredCargos(CargoRoute.claimed);
+    late List<CargoRoute> _cargos;
+
+    suppressWarnings("unusedDeclaration")
+    postConstruct
+    void init() => _cargos = bookingServiceFacade.listAllCargos();
+
+    shared JList<CargoRoute> cargos => Arrays.asList(*_cargos);
+
+    function filteredCargos(Boolean(CargoRoute) predicate) => Arrays.asList(*_cargos.filter(predicate));
+
+    shared JList<CargoRoute> routedCargos => filteredCargos(CargoRoute.routed);
+
+    shared JList<CargoRoute> notRoutedCargos => filteredCargos(not(CargoRoute.routed));
+
+    shared JList<CargoRoute> claimedCargos => filteredCargos(CargoRoute.claimed);
 
 }

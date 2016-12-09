@@ -14,11 +14,11 @@ import java.util {
    concerns about such things as the user interface and remoting.
    """
 shared interface BookingServiceFacade {
-	shared formal String bookNewCargo(String origin, String destination, Date arrivalDeadline);
-	shared formal CargoRoute loadCargoForRouting(String trackingId);
-	shared formal void assignCargoToRoute(String trackingId, RouteCandidate route);
-	shared formal void changeDestination(String trackingId, String destinationUnLocode);
-	shared formal List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId);
-	shared formal List<Location> listShippingLocations();
-	shared formal List<CargoRoute> listAllCargos();
+    shared formal String bookNewCargo(String origin, String destination, Date arrivalDeadline);
+    shared formal CargoRoute loadCargoForRouting(String trackingId);
+    shared formal void assignCargoToRoute(String trackingId, RouteCandidate route);
+    shared formal void changeDestination(String trackingId, String destinationUnLocode);
+    shared formal List<RouteCandidate> requestPossibleRoutesForCargo(String trackingId);
+    shared formal List<Location> listShippingLocations();
+    shared formal List<CargoRoute> listAllCargos();
 }

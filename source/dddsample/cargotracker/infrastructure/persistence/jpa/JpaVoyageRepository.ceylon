@@ -23,24 +23,24 @@ import javax.persistence {
 applicationScoped
 inject
 class JpaLocationRepository(
-	EntityManager entityManager
+    EntityManager entityManager
 ) satisfies LocationRepository{
-	
-	shared actual Location? find(UnLocode unLocode) {
+
+    shared actual Location? find(UnLocode unLocode) {
         try {
             return entityManager
-				.createNamedQuery("Location.findByUnLocode",`Location`)
-				.setParameter("unLocode", unLocode)
-				.singleResult;
+                .createNamedQuery("Location.findByUnLocode",`Location`)
+                .setParameter("unLocode", unLocode)
+                .singleResult;
         } catch (NoResultException e) {
             return null;
         }
-	}
-	
-	function locations()
-	        => entityManager.createNamedQuery("Location.findAll", `Location`)
-					.resultList;
+    }
 
-	findAll() => CeylonList(locations());
+    function locations()
+            => entityManager.createNamedQuery("Location.findAll", `Location`)
+                    .resultList;
+
+    findAll() => CeylonList(locations());
 
 }

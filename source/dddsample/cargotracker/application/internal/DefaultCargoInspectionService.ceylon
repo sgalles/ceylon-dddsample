@@ -31,43 +31,43 @@ import org.slf4j {
 stateless
 inject
 shared class DefaultCargoInspectionService ( 
-		ApplicationEvents applicationEvents,
-		CargoRepository cargoRepository,
-		HandlingEventRepository handlingEventRepository,
-		Logger logger,
-		cargoInspected Event<Cargo> cargoInspected 
-	) satisfies CargoInspectionService{
-	
-	
-	shared actual void inspectCargo(TrackingId trackingId) {
-		logger.info("Inspecting cargo ``trackingId.idString``");
+        ApplicationEvents applicationEvents,
+        CargoRepository cargoRepository,
+        HandlingEventRepository handlingEventRepository,
+        Logger logger,
+        cargoInspected Event<Cargo> cargoInspected
+    ) satisfies CargoInspectionService{
 
-		if (exists cargo = cargoRepository.find(trackingId)) {
-			logger.info("Found cargo ``trackingId.idString``");
 
-			value handlingHistory = handlingEventRepository
-					.lookupHandlingHistoryOfCargo(trackingId);
-			
-			cargo.deriveDeliveryProgress(handlingHistory);
-			
-			if (cargo.delivery.misdirected) {
-				applicationEvents.cargoWasMisdirected(cargo);
-			}
-			
-			if (cargo.delivery.unloadedAtDestination) {
-				applicationEvents.cargoHasArrived(cargo);
-			}
-			
-			cargoRepository.store(cargo);
-			
-			logger.info("Firing 'cargoInspected' event");
-			cargoInspected.fire(cargo);			
-			
-		}
-		else {
-			logger.warn("Can't inspect non-existing cargo ``trackingId``");
-		}
-		
-	}
-	
+    shared actual void inspectCargo(TrackingId trackingId) {
+        logger.info("Inspecting cargo ``trackingId.idString``");
+
+        if (exists cargo = cargoRepository.find(trackingId)) {
+            logger.info("Found cargo ``trackingId.idString``");
+
+            value handlingHistory = handlingEventRepository
+                    .lookupHandlingHistoryOfCargo(trackingId);
+
+            cargo.deriveDeliveryProgress(handlingHistory);
+
+            if (cargo.delivery.misdirected) {
+                applicationEvents.cargoWasMisdirected(cargo);
+            }
+
+            if (cargo.delivery.unloadedAtDestination) {
+                applicationEvents.cargoHasArrived(cargo);
+            }
+
+            cargoRepository.store(cargo);
+
+            logger.info("Firing 'cargoInspected' event");
+            cargoInspected.fire(cargo);
+
+        }
+        else {
+            logger.warn("Can't inspect non-existing cargo ``trackingId``");
+        }
+
+    }
+
 }

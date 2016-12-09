@@ -1,22 +1,22 @@
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId
+    TrackingId
 }
 import dddsample.cargotracker.domain.model.handling {
-	HandlingEventTypeBundle
+    HandlingEventTypeBundle
 }
 import dddsample.cargotracker.domain.model.location {
-	UnLocode
+    UnLocode
 }
 import dddsample.cargotracker.domain.model.voyage {
-	VoyageNumber
+    VoyageNumber
 }
 
 import java.util {
-	Date
+    Date
 }
 
 "Registers a handling event in the system, and notifies interested parties
  that a cargo has been handled."
 shared interface HandlingEventService {
-	shared formal void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> eventTypeBundle, UnLocode unLocode);
+    shared formal void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> eventTypeBundle, UnLocode unLocode);
 }

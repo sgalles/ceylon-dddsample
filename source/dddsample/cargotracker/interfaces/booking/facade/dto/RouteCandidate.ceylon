@@ -1,9 +1,9 @@
 import ceylon.interop.java {
-	JavaList
+    JavaList
 }
 
 import java.util {
-	JList=List
+    JList=List
 }
 
 """
@@ -12,10 +12,10 @@ import java.util {
    """
 shared class RouteCandidate {
 
-	shared {Leg+} legsSequence;
-	shared new({Leg+} legs){
-		legsSequence = legs;
-	}
-	shared JList<Leg> legs => JavaList<Leg>(legsSequence.sequence());
+    shared {Leg+} legsSequence;
+    shared new({Leg+} legs){
+        legsSequence = legs;
+    }
+    shared JList<Leg> legs => JavaList<Leg>(legsSequence.sequence());
 
 }

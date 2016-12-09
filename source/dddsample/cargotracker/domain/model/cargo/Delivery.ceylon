@@ -40,67 +40,67 @@ import javax.persistence {
 
 embeddable
 shared class Delivery {
-	
-	convert{converter = `class TransportStatusConverter`;}
-	column{name = "transport_status";}
-	shared TransportStatus transportStatus;
-	
-	manyToOne
-	joinColumn{name = "last_known_location_id";}
-	variable Location? _lastKnownLocation;
-	
-	manyToOne
-	joinColumn{name = "current_voyage_id";}
-	variable Voyage? _currentVoyage;
-	
-	temporal(TemporalType.date)
-	Date? _eta;
-	
-	shared Boolean misdirected;
-	
-	embedded
-	shared HandlingActivity? nextExpectedActivity;
-	
-	column{name = "unloaded_at_dest";}
-	shared variable Boolean unloadedAtDestination;
-	
-	convert{converter = `class RoutingStatusConverter`;}
-	column{name = "routing_status";} 
-	shared RoutingStatus routingStatus;
-	
-	manyToOne
-	joinColumn{name = "last_event_id";} 
-	variable HandlingEvent? lastEvent;
-	
-	RoutingStatus calculateRoutingStatus(Itinerary? itinerary,
+
+    convert{converter = `class TransportStatusConverter`;}
+    column{name = "transport_status";}
+    shared TransportStatus transportStatus;
+
+    manyToOne
+    joinColumn{name = "last_known_location_id";}
+    variable Location? _lastKnownLocation;
+
+    manyToOne
+    joinColumn{name = "current_voyage_id";}
+    variable Voyage? _currentVoyage;
+
+    temporal(TemporalType.date)
+    Date? _eta;
+
+    shared Boolean misdirected;
+
+    embedded
+    shared HandlingActivity? nextExpectedActivity;
+
+    column{name = "unloaded_at_dest";}
+    shared variable Boolean unloadedAtDestination;
+
+    convert{converter = `class RoutingStatusConverter`;}
+    column{name = "routing_status";}
+    shared RoutingStatus routingStatus;
+
+    manyToOne
+    joinColumn{name = "last_event_id";}
+    variable HandlingEvent? lastEvent;
+
+    RoutingStatus calculateRoutingStatus(Itinerary? itinerary,
         RouteSpecification routeSpecification)
-			=> if (exists itinerary)
-			then if (routeSpecification.isSatisfiedBy(itinerary))
-				 then RoutingStatus.routed
-				 else RoutingStatus.misrouted
-			else RoutingStatus.not_routed;
+            => if (exists itinerary)
+            then if (routeSpecification.isSatisfiedBy(itinerary))
+                 then RoutingStatus.routed
+                 else RoutingStatus.misrouted
+            else RoutingStatus.not_routed;
 
-	TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) {
-	    if (exists lastEvent) {
-	        return switch(lastEvent.type)
-				case (load) TransportStatus.onboard_carrier
-				case (unload | receive | customs) TransportStatus.in_port
-				case (claim) TransportStatus.claimed;
-	    }
-	    else {
-	        return TransportStatus.not_received;
-	    }
-	}
+    TransportStatus calculateTransportStatus(HandlingEvent? lastEvent) {
+        if (exists lastEvent) {
+            return switch(lastEvent.type)
+                case (load) TransportStatus.onboard_carrier
+                case (unload | receive | customs) TransportStatus.in_port
+                case (claim) TransportStatus.claimed;
+        }
+        else {
+            return TransportStatus.not_received;
+        }
+    }
 
-	Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected) 
-			=> routingStatus == RoutingStatus.routed && !misdirected;
+    Boolean _onTrack(RoutingStatus routingStatus, Boolean misdirected)
+            => routingStatus == RoutingStatus.routed && !misdirected;
 
-	Date? calculateEta(Itinerary? itinerary, RoutingStatus routingStatus, Boolean misdirected)
-			=> if (_onTrack(routingStatus, misdirected))
+    Date? calculateEta(Itinerary? itinerary, RoutingStatus routingStatus, Boolean misdirected)
+            => if (_onTrack(routingStatus, misdirected))
             then itinerary?.finalArrivalDate()
             else null;
 
-	HandlingActivity? calculateNextExpectedActivity(
+    HandlingActivity? calculateNextExpectedActivity(
         HandlingEvent? lastEvent,
         RouteSpecification routeSpecification,
         Itinerary? itinerary,
@@ -171,70 +171,70 @@ shared class Delivery {
         }
     }
 
-	Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent,
+    Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent,
         RouteSpecification routeSpecification)
-			=> if (exists lastEvent)
-			then unload == lastEvent.type
+            => if (exists lastEvent)
+            then unload == lastEvent.type
               && routeSpecification.destination.sameIdentityAs(lastEvent.location)
-			else false;
+            else false;
 
-	shared new (HandlingEvent? lastEvent, Itinerary? itinerary,
+    shared new (HandlingEvent? lastEvent, Itinerary? itinerary,
         RouteSpecification routeSpecification) {
-		
-		Boolean calculateMisdirectionStatus() 
-				=> if(exists lastEvent,exists itinerary)
+
+        Boolean calculateMisdirectionStatus()
+                => if(exists lastEvent,exists itinerary)
                 then !itinerary.isExpected(lastEvent)
                 else false;
-		
-		this.lastEvent = lastEvent;
-		this.routingStatus = calculateRoutingStatus {
-		    itinerary = itinerary;
-		    routeSpecification = routeSpecification;
-		};
-		this.transportStatus = calculateTransportStatus(lastEvent);
-		this._lastKnownLocation = lastEvent?.location;
-		this._currentVoyage
+
+        this.lastEvent = lastEvent;
+        this.routingStatus = calculateRoutingStatus {
+            itinerary = itinerary;
+            routeSpecification = routeSpecification;
+        };
+        this.transportStatus = calculateTransportStatus(lastEvent);
+        this._lastKnownLocation = lastEvent?.location;
+        this._currentVoyage
                 = if (transportStatus == TransportStatus.onboard_carrier,
                       exists lastEvent)
                 then lastEvent.voyage
                 else null;
-		this.misdirected = calculateMisdirectionStatus();
-		this._eta = calculateEta {
-		    itinerary = itinerary;
-		    routingStatus = routingStatus;
-		    misdirected = misdirected;
-		};
-		this.nextExpectedActivity = calculateNextExpectedActivity {
-		    lastEvent = lastEvent;
-		    routeSpecification = routeSpecification;
-		    itinerary = itinerary;
-		    routingStatus = routingStatus;
-		    misdirected = misdirected;
-		};
-		this.unloadedAtDestination = calculateUnloadedAtDestination {
-		    lastEvent = lastEvent;
-		    routeSpecification = routeSpecification;
-		};
-	}
+        this.misdirected = calculateMisdirectionStatus();
+        this._eta = calculateEta {
+            itinerary = itinerary;
+            routingStatus = routingStatus;
+            misdirected = misdirected;
+        };
+        this.nextExpectedActivity = calculateNextExpectedActivity {
+            lastEvent = lastEvent;
+            routeSpecification = routeSpecification;
+            itinerary = itinerary;
+            routingStatus = routingStatus;
+            misdirected = misdirected;
+        };
+        this.unloadedAtDestination = calculateUnloadedAtDestination {
+            lastEvent = lastEvent;
+            routeSpecification = routeSpecification;
+        };
+    }
 
-	shared new derivedFrom(
+    shared new derivedFrom(
         RouteSpecification routeSpecification,
         Itinerary? itinerary,
         HandlingHistory handlingHistory
     ) extends Delivery(handlingHistory.mostRecentlyCompletedEvent,
                         itinerary, routeSpecification) {}
-	
-	shared Boolean onTrack => _onTrack(routingStatus,misdirected);
-	
-	shared Location lastKnownLocation => _lastKnownLocation else Location.unknown;
-	assign lastKnownLocation => _lastKnownLocation = lastKnownLocation;
-	
-	shared Voyage? currentVoyage => _currentVoyage;
-	assign currentVoyage => _currentVoyage = currentVoyage;
-	
-	shared Date? estimatedTimeOfArrival => if (exists _eta) then Date(_eta.time) else null;
-		
-	shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary) 
-			=> Delivery(this.lastEvent, itinerary, routeSpecification);
-	
+
+    shared Boolean onTrack => _onTrack(routingStatus,misdirected);
+
+    shared Location lastKnownLocation => _lastKnownLocation else Location.unknown;
+    assign lastKnownLocation => _lastKnownLocation = lastKnownLocation;
+
+    shared Voyage? currentVoyage => _currentVoyage;
+    assign currentVoyage => _currentVoyage = currentVoyage;
+
+    shared Date? estimatedTimeOfArrival => if (exists _eta) then Date(_eta.time) else null;
+
+    shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary)
+            => Delivery(this.lastEvent, itinerary, routeSpecification);
+
 }

@@ -28,9 +28,9 @@ import javax.inject {
 applicationScoped
 inject
 shared class HandlingEventFactory(
-	CargoRepository cargoRepository,
-	VoyageRepository voyageRepository,
-	LocationRepository locationRepository
+    CargoRepository cargoRepository,
+    VoyageRepository voyageRepository,
+    LocationRepository locationRepository
 ) {
 
     Entity findEntity<Entity,Id>(Entity?(Id) find, Exception(Id) createError)(Id id) {
@@ -47,20 +47,20 @@ shared class HandlingEventFactory(
     Location(UnLocode) findLocation = findEntity(locationRepository.find, UnknownLocationException);
 
     shared HandlingEvent createHandlingEvent(Date registrationTime,
-		Date completionTime, TrackingId trackingId,
-		UnLocode unlocode,
-		HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber)
-			=> HandlingEvent {
-				cargo = findCargo(trackingId);
-				completionTime = completionTime;
-				registrationTime = registrationTime;
-				location = findLocation(unlocode);
-				typeAndVoyage
-						= switch (typeAndVoyageNumber)
-						case (is HandlingEventTypeProhibitedVoyage)
-							typeAndVoyageNumber
-						case([HandlingEventTypeRequiredVoyage type, VoyageNumber voyageNumber])
-							[type, findVoyage(voyageNumber)];
-			};
+        Date completionTime, TrackingId trackingId,
+        UnLocode unlocode,
+        HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber)
+            => HandlingEvent {
+                cargo = findCargo(trackingId);
+                completionTime = completionTime;
+                registrationTime = registrationTime;
+                location = findLocation(unlocode);
+                typeAndVoyage
+                        = switch (typeAndVoyageNumber)
+                        case (is HandlingEventTypeProhibitedVoyage)
+                            typeAndVoyageNumber
+                        case([HandlingEventTypeRequiredVoyage type, VoyageNumber voyageNumber])
+                            [type, findVoyage(voyageNumber)];
+            };
 
 }

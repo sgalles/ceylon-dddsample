@@ -1,6 +1,6 @@
 import javax.persistence {
-	embeddable,
-	column
+    embeddable,
+    column
 }
 
 """
@@ -9,11 +9,11 @@ import javax.persistence {
 """ 
 embeddable
 shared class VoyageNumber(number) {
-	
-	column{name = "voyage_number";}
-	shared String number;
-	
-	shared Boolean sameValueAs(VoyageNumber other)
-			=> this.number == other.number;
-	
+
+    column{name = "voyage_number";}
+    shared String number;
+
+    shared Boolean sameValueAs(VoyageNumber other)
+            => this.number == other.number;
+
 }

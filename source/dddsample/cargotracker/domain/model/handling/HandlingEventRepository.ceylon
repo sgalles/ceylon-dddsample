@@ -1,11 +1,11 @@
 import dddsample.cargotracker.domain.model.cargo {
-	TrackingId
+    TrackingId
 }
 
 shared interface HandlingEventRepository {
-	
-	shared formal void store(HandlingEvent event);
-	
-	shared formal HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId);
-	
+
+    shared formal void store(HandlingEvent event);
+
+    shared formal HandlingHistory lookupHandlingHistoryOfCargo(TrackingId trackingId);
+
 }

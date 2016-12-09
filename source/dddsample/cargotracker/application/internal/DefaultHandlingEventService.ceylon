@@ -35,35 +35,35 @@ import org.slf4j {
 stateless 
 inject
 shared class DefaultHandlingEventService(
-	ApplicationEvents applicationEvents,
-	HandlingEventRepository handlingEventRepository,
-	HandlingEventFactory handlingEventFactory,
-	Logger logger
+    ApplicationEvents applicationEvents,
+    HandlingEventRepository handlingEventRepository,
+    HandlingEventFactory handlingEventFactory,
+    Logger logger
 ) satisfies HandlingEventService {
-	
-	shared actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
-		Date registrationTime = Date();
-		/* Using a factory to create a HandlingEvent (aggregate). This is where
-		 it is determined wether the incoming data, the attempt, actually is capable
-		 of representing a real handling event. */
-		value event = handlingEventFactory.createHandlingEvent {
-		    registrationTime = registrationTime;
-		    completionTime = completionTime;
-		    trackingId = trackingId;
-		    unlocode = unLocode;
-		    typeAndVoyageNumber = typeAndVoyageNumber;
-		};
-		
-		/* Store the new handling event, which updates the persistent
-		 state of the handling event aggregate (but not the cargo aggregate -
-		 that happens asynchronously!)
-		 */
-		handlingEventRepository.store(event);
-		
-		/* Publish an event stating that a cargo has been handled. */
-		applicationEvents.cargoWasHandled(event);
-		
-		logger.info("Registered handling event");
-	}
-	
+
+    shared actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
+        Date registrationTime = Date();
+        /* Using a factory to create a HandlingEvent (aggregate). This is where
+         it is determined wether the incoming data, the attempt, actually is capable
+         of representing a real handling event. */
+        value event = handlingEventFactory.createHandlingEvent {
+            registrationTime = registrationTime;
+            completionTime = completionTime;
+            trackingId = trackingId;
+            unlocode = unLocode;
+            typeAndVoyageNumber = typeAndVoyageNumber;
+        };
+
+        /* Store the new handling event, which updates the persistent
+         state of the handling event aggregate (but not the cargo aggregate -
+         that happens asynchronously!)
+         */
+        handlingEventRepository.store(event);
+
+        /* Publish an event stating that a cargo has been handled. */
+        applicationEvents.cargoWasHandled(event);
+
+        logger.info("Registered handling event");
+    }
+
 }

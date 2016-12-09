@@ -1,6 +1,6 @@
 import javax.persistence {
-	embeddable,
-	column
+    embeddable,
+    column
 }
 
 """
@@ -9,8 +9,8 @@ import javax.persistence {
 """ 
 embeddable
 shared class TrackingId(idString){
-	
-	column{name = "tracking_id"; unique = true; updatable = false;}
-	shared String idString;
+
+    column{name = "tracking_id"; unique = true; updatable = false;}
+    shared String idString;
 
 }

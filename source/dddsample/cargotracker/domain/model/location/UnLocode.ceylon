@@ -1,5 +1,5 @@
 import javax.persistence {
-	embeddable
+    embeddable
 }
 """
    United nations location code.
@@ -8,12 +8,12 @@ import javax.persistence {
    """
 embeddable
 shared class UnLocode(String countryAndLocation){
-	
-	String unlocode = countryAndLocation.uppercased;
-	
-	shared String idString => unlocode;
-	
-	shared Boolean sameValueAs(UnLocode other) 
-			=> this.unlocode == other.unlocode;
-	
+
+    String unlocode = countryAndLocation.uppercased;
+
+    shared String idString => unlocode;
+
+    shared Boolean sameValueAs(UnLocode other)
+            => this.unlocode == other.unlocode;
+
 }

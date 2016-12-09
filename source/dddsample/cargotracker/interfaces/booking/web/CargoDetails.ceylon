@@ -27,16 +27,16 @@ named
 viewScoped
 inject
 shared class CargoDetails(BookingServiceFacade bookingServiceFacade){
-	
-	variable CargoRoute? _cargo = null;
-	shared variable String? trackingId = null;
-	shared CargoRoute? cargo => _cargo;
-	
-	shared void load() {
-		assert(exists trackingId = trackingId);
-		_cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
-	}
-	
-	
-	
+
+    variable CargoRoute? _cargo = null;
+    shared variable String? trackingId = null;
+    shared CargoRoute? cargo => _cargo;
+
+    shared void load() {
+        assert(exists trackingId = trackingId);
+        _cargo = bookingServiceFacade.loadCargoForRouting(trackingId);
+    }
+
+
+
 }

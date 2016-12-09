@@ -1,8 +1,8 @@
 import javax.persistence {
-	embeddable,
-	CascadeType,
-	oneToMany,
-	joinColumn
+    embeddable,
+    CascadeType,
+    oneToMany,
+    joinColumn
 }
 
 """
@@ -12,9 +12,9 @@ import javax.persistence {
    """
 embeddable
 shared class Schedule(carrierMovements){
-	
-	oneToMany{cascade = { CascadeType.all }; orphanRemoval = true;}
-	joinColumn{name = "voyage_id";}
-	shared variable List<CarrierMovement> carrierMovements;
+
+    oneToMany{cascade = { CascadeType.all }; orphanRemoval = true;}
+    joinColumn{name = "voyage_id";}
+    shared variable List<CarrierMovement> carrierMovements;
 
 }

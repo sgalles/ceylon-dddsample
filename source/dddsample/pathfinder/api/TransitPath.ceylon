@@ -9,11 +9,11 @@ import javax.xml.bind.annotation {
 shared class TransitPath(transitEdges) {
 
     shared JList<TransitEdge> transitEdges;
-	
-	xmlTransient
-	shared [TransitEdge+] transitEdgesSeq {
-		assert (nonempty transitEdgesSeq = [*transitEdges]);
-		return transitEdgesSeq;
-	}
-	
+
+    xmlTransient
+    shared [TransitEdge+] transitEdgesSeq {
+        assert (nonempty transitEdgesSeq = [*transitEdges]);
+        return transitEdgesSeq;
+    }
+
 }

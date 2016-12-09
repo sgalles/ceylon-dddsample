@@ -22,23 +22,23 @@ import java.util {
    It is used as a message queue element.
    """
 shared class HandlingEventRegistrationAttempt(
-	registrationTime,
-	completionTime,
-	trackingId,
-	typeAndVoyage,
-	unLocode
+    registrationTime,
+    completionTime,
+    trackingId,
+    typeAndVoyage,
+    unLocode
 ) {
 
-	shared Date registrationTime;
-	shared Date completionTime;
-	shared TrackingId trackingId;
-	shared HandlingEventTypeBundle<VoyageNumber> typeAndVoyage;
-	shared UnLocode unLocode;
+    shared Date registrationTime;
+    shared Date completionTime;
+    shared TrackingId trackingId;
+    shared HandlingEventTypeBundle<VoyageNumber> typeAndVoyage;
+    shared UnLocode unLocode;
 
-	string => "registrationTime=``registrationTime``
-	           completionTime=``completionTime``
-	           trackingId=``trackingId``
-	           typeAndVoyage=``typeAndVoyage``
-	           unLocode=``unLocode``"
-			.replace("\n","");
+    string => "registrationTime=``registrationTime``
+               completionTime=``completionTime``
+               trackingId=``trackingId``
+               typeAndVoyage=``typeAndVoyage``
+               unLocode=``unLocode``"
+            .replace("\n","");
 }
