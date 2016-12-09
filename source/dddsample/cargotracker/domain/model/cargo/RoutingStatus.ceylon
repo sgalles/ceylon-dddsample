@@ -1,6 +1,6 @@
 
-shared class RoutingStatus 
-	of not_routed | routed | misrouted {
+shared class RoutingStatus
+        of not_routed | routed | misrouted {
 
     shared actual String string;
 

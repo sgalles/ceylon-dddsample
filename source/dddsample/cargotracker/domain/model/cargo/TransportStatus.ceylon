@@ -1,7 +1,6 @@
 
-
 shared class TransportStatus
-	of not_received | in_port | onboard_carrier | claimed | unknown {
+		of not_received | in_port | onboard_carrier | claimed | unknown {
 
 	shared actual String string;
 
