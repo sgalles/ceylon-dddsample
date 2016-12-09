@@ -17,6 +17,9 @@ import dddsample.cargotracker.domain.model.location {
 import dddsample.cargotracker.domain.model.voyage {
     Voyage
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate
+}
 import dddsample.cargotracker.infrastructure.persistence.jpa {
     RoutingStatusConverter,
     TransportStatusConverter
@@ -232,7 +235,7 @@ shared class Delivery {
     shared Voyage? currentVoyage => _currentVoyage;
     assign currentVoyage => _currentVoyage = currentVoyage;
 
-    shared Date? estimatedTimeOfArrival => if (exists _eta) then Date(_eta.time) else null;
+    shared Date? estimatedTimeOfArrival => if (exists _eta) then copyDate(_eta) else null;
 
     shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary)
             => Delivery(this.lastEvent, itinerary, routeSpecification);

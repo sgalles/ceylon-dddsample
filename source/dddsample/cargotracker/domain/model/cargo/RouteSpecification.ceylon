@@ -17,12 +17,13 @@ import javax.persistence {
     column,
     embeddable
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate
+}
 
 embeddable
 shared class RouteSpecification(origin, destination, Date arrivalDeadlineValue)
         extends AbstractSpecification<Itinerary>() {
-
-    Date copy(Date date) => Date(date.time);
 
     manyToOne
     joinColumn{name = "spec_origin_id"; updatable = false;}
@@ -34,9 +35,9 @@ shared class RouteSpecification(origin, destination, Date arrivalDeadlineValue)
 
     temporal(TemporalType.date)
     column{name = "spec_arrival_deadline";}
-    Date _arrivalDeadline = copy(arrivalDeadlineValue);
+    Date _arrivalDeadline = copyDate(arrivalDeadlineValue);
 
-    shared Date arrivalDeadline => copy(_arrivalDeadline);
+    shared Date arrivalDeadline => copyDate(_arrivalDeadline);
 
     isSatisfiedBy(Itinerary itinerary)
             => origin.sameIdentityAs(itinerary.initialDepartureLocation())

@@ -22,6 +22,9 @@ import javax.persistence {
     TemporalType,
     column
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate
+}
 
 
 entity
@@ -52,8 +55,8 @@ shared class Leg(voyage, loadLocation, unloadLocation, Date loadTimeValue, Date 
     column{name = "unload_time";}
     Date _unloadTime = unloadTimeValue;
 
-    shared Date loadTime => Date(_loadTime.time);
+    shared Date loadTime => copyDate(_loadTime);
 
-    shared Date unloadTime => Date(_unloadTime.time);
+    shared Date unloadTime => copyDate(_unloadTime);
 
 }

@@ -104,8 +104,9 @@ shared class GraphTraversalService() {
         return TransitPaths(Arrays.asList(*candidates));
     }
 
-    Date nextDate(Date date) => Date(date.time + oneDayMs
-        + (random.nextInt(1000) - 500) * oneMinMs);
+    Date nextDate(Date date)
+            => Date(date.time + oneDayMs
+                + (random.nextInt(1000) - 500) * oneMinMs);
 
     Integer randomNumberOfCandidates() => 3 + random.nextInt(3);
 

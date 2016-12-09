@@ -29,6 +29,9 @@ import javax.persistence {
     FetchType,
     orderBy
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate
+}
 
 shared Date endOfDays = Date(Long.maxValue);
 
@@ -55,7 +58,7 @@ shared class Itinerary({Leg+} legsInit) {
             => legsMaybeEmpty.last?.unloadLocation;
     
     shared Date finalArrivalDate() 
-            => Date(legs.last.unloadTime.time);
+            => copyDate(legs.last.unloadTime);
 
     shared Boolean isExpected(HandlingEvent event) {
         

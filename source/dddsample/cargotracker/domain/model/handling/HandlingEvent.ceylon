@@ -30,6 +30,9 @@ import javax.persistence {
     TemporalType,
     namedQuery
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate
+}
 
 shared abstract class HandlingEventType() 
          of HandlingEventTypeRequiredVoyage 
@@ -102,8 +105,6 @@ shared class HandlingEvent {
     joinColumn{name = "cargo_id";}
     shared Cargo cargo;
 
-    Date copy(Date date) => Date(date.time);
-
     shared new (
         Cargo cargo,
         Date completionTime,
@@ -121,15 +122,15 @@ shared class HandlingEvent {
             this.voyage = voyage;
         }
 
-        this._completionTime = copy(completionTime);
-        this._registrationTime = copy(registrationTime);
+        this._completionTime = copyDate(completionTime);
+        this._registrationTime = copyDate(registrationTime);
         this.location = location;
         this.cargo = cargo;
     }
 
-    shared Date completionTime => copy(_completionTime);
+    shared Date completionTime => copyDate(_completionTime);
 
-    shared Date registrationTime => copy(_registrationTime);
+    shared Date registrationTime => copyDate(_registrationTime);
 
     shared HandlingEventTypeBundle<Voyage> typeAndVoyage {
         switch(type)

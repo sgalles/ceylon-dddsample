@@ -42,12 +42,11 @@ shared class DefaultHandlingEventService(
 ) satisfies HandlingEventService {
 
     shared actual void registerHandlingEvent(Date completionTime, TrackingId trackingId, HandlingEventTypeBundle<VoyageNumber> typeAndVoyageNumber, UnLocode unLocode) {
-        Date registrationTime = Date();
         /* Using a factory to create a HandlingEvent (aggregate). This is where
          it is determined wether the incoming data, the attempt, actually is capable
          of representing a real handling event. */
         value event = handlingEventFactory.createHandlingEvent {
-            registrationTime = registrationTime;
+            registrationTime = Date();
             completionTime = completionTime;
             trackingId = trackingId;
             unlocode = unLocode;
