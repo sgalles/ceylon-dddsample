@@ -1,9 +1,8 @@
 import ceylon.collection {
-    ArrayList,
-    MutableList
+    ArrayList
 }
 import ceylon.interop.java {
-    CeylonMutableList
+    CeylonList
 }
 
 import dddsample.pathfinder.internal {
@@ -27,13 +26,13 @@ import javax.ws.rs {
     queryParam
 }
 
-
-Integer oneMinMs = 1000 * 60;
-Integer oneDayMs = oneMinMs * 60 * 24;
-
-
 path("/graph-traversal")
-shared class GraphTraversalService() {
+shared class GraphTraversalService {
+
+    static Integer oneMinMs = 1000 * 60;
+    static Integer oneDayMs = oneMinMs * 60 * 24;
+
+    shared new () {}
 
     inject
     late GraphDao dao;
@@ -50,16 +49,18 @@ shared class GraphTraversalService() {
     ) {
         variable Date date = nextDate(Date());
 
-        variable MutableList<String> allVertices = ArrayList { *dao.locations };
-        allVertices.remove(originUnLocode);
-        allVertices.remove(destinationUnLocode);
+        variable List<String> allVertices = [
+            for (loc in dao.locations)
+            if (!loc in [originUnLocode, destinationUnLocode])
+            loc
+        ];
 
         value candidateCount = randomNumberOfCandidates();
-        MutableList<TransitPath> candidates = ArrayList<TransitPath>(candidateCount);
+        value candidates = ArrayList<TransitPath>(candidateCount);
         for (i in 0:candidateCount) {
             allVertices = randomChunkOfLocations(allVertices);
             value transitEdges = ArrayList<TransitEdge>(allVertices.size-1);
-            assert (exists firstLegTo = allVertices[0]);
+            assert (exists firstLegTo = allVertices.first);
             variable Date fromDate = nextDate(date);
             variable Date toDate = nextDate(fromDate);
             date = nextDate(toDate);
@@ -74,7 +75,7 @@ shared class GraphTraversalService() {
 
             for (j in 0:allVertices.size-1) {
                 assert (exists current = allVertices[j],
-                        exists next = allVertices[j + 1]);
+                        exists next = allVertices[j+1]);
                 fromDate = nextDate(date);
                 toDate = nextDate(fromDate);
                 date = nextDate(toDate);
@@ -87,7 +88,7 @@ shared class GraphTraversalService() {
                 });
             }
 
-            assert (exists lastLegFrom = allVertices[allVertices.size - 1]);
+            assert (exists lastLegFrom = allVertices.last);
             fromDate = nextDate(date);
             toDate = nextDate(fromDate);
             transitEdges.add(TransitEdge {
@@ -98,10 +99,10 @@ shared class GraphTraversalService() {
                 toDate = toDate;
             });
 
-            candidates.add(TransitPath(Arrays.asList(*transitEdges)));
+            candidates.add(TransitPath(transitEdges));
         }
 
-        return TransitPaths(Arrays.asList(*candidates));
+        return TransitPaths(candidates);
     }
 
     Date nextDate(Date date)
@@ -110,12 +111,12 @@ shared class GraphTraversalService() {
 
     Integer randomNumberOfCandidates() => 3 + random.nextInt(3);
 
-    MutableList<String> randomChunkOfLocations(List<String> allLocations) {
+    List<String> randomChunkOfLocations(List<String> allLocations) {
         value list = Arrays.asList(*allLocations);
         Collections.shuffle(list);
         value total = list.size();
-        value chunk = if(total > 4) then 1 + Random().nextInt(5) else total;
-        return CeylonMutableList(list.subList(0, chunk));
+        value chunk = total > 4 then 1 + random.nextInt(5) else total;
+        return CeylonList(list.subList(0, chunk));
     }
 
 }

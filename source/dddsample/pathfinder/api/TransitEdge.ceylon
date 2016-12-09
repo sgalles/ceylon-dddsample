@@ -3,12 +3,19 @@ import java.util {
 }
 
 shared class TransitEdge(
-    shared String voyageNumber,
-    shared String fromUnLocode,
-    shared String toUnLocode,
-    shared Date fromDate,
-    shared Date toDate
+    voyageNumber,
+    fromUnLocode,
+    toUnLocode,
+    fromDate,
+    toDate
 ) {
+
+    shared String voyageNumber;
+    shared String fromUnLocode;
+    shared String toUnLocode;
+    shared Date fromDate;
+    shared Date toDate;
+
     string =>"""TransitEdge{
                 voyageNumber=``voyageNumber``,
                 fromUnLocode=``fromUnLocode``,
