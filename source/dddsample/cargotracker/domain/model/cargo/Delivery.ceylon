@@ -237,7 +237,7 @@ shared class Delivery {
 
     shared Date? estimatedTimeOfArrival => if (exists _eta) then copyDate(_eta) else null;
 
-    shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary itinerary)
+    shared Delivery updateOnRouting(RouteSpecification routeSpecification, Itinerary? itinerary)
             => Delivery(this.lastEvent, itinerary, routeSpecification);
 
 }

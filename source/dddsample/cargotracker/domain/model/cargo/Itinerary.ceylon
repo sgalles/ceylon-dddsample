@@ -48,12 +48,15 @@ shared class Itinerary({Leg+} legsInit) {
         return legs;
     }
 
+    "legs should never be empty, expect when JPA creates an empty collection
+     for what should be a Null Itinerary. With method is used to detect this case
+     in Cargo"
     shared Boolean hasLegs =>  _legs.sequence() nonempty;    
 
-    shared Location? initialDepartureLocation() 
+    shared Location initialDepartureLocation()
             => legs.first.loadLocation;
     
-    shared Location? finalArrivalLocation() 
+    shared Location finalArrivalLocation()
             => legs.last.unloadLocation;
     
     shared Date finalArrivalDate() 

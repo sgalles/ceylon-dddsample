@@ -55,6 +55,8 @@ shared class Cargo(trackingId, routeSpecification){
     embedded
     variable Itinerary? _itinerary = null;
 
+    // when hasLegs is false, it means that JPA has created an empty collection instead of a null itinerary.
+    // let's fix this here
     shared Itinerary? itinerary =>  if(exists currentItinerary = _itinerary) 
                                     then if(currentItinerary.hasLegs) then currentItinerary else null
                                     else null;
@@ -67,8 +69,6 @@ shared class Cargo(trackingId, routeSpecification){
     }; 
 
 
-   
-
     shared Delivery delivery => _delivery;
 
     shared void assignToRoute(Itinerary itinerary) {
@@ -79,9 +79,6 @@ shared class Cargo(trackingId, routeSpecification){
     shared void specifyNewRoute(RouteSpecification routeSpecification) {
         this.routeSpecification = routeSpecification;
         // Handling consistency within the Cargo aggregate synchronously
-        // TODO try to use state design pattern to remove this assert
-        // actually this is because assignToRoute must be called before AFAICT
-        assert(exists itinerary = this.itinerary);
         this._delivery = delivery.updateOnRouting(this.routeSpecification, itinerary);
     }
 
