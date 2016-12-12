@@ -1,7 +1,3 @@
-import ceylon.language.meta {
-    type
-}
-
 import dddsample.cargotracker.domain.model.cargo {
     CargoModel=Cargo,
     RoutingStatus,
@@ -28,7 +24,7 @@ shared object cargoRouteDtoAssembler {
                 lastKnownLocation
                         = let (lastKnownLocation = cargo.delivery.lastKnownLocation)
                         "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
-                transportStatus = type(cargo.delivery.transportStatus).declaration.name;
+                transportStatus = cargo.delivery.transportStatus.string;
                 legsIt = it.legsMaybeEmpty.map((leg)
                         => Leg {
                             voyageNumber = leg.voyage.voyageNumber.number;
