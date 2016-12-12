@@ -11,7 +11,6 @@ import dddsample.cargotracker.interfaces.booking.facade.dto {
 shared object cargoRouteDtoAssembler {
 
     shared CargoRoute toDto(CargoModel cargo) {
-        assert (exists it = cargo.itinerary);
         return CargoRoute {
                 trackingId = cargo.trackingId.idString;
                 origin =  "``cargo.origin.name`` (``cargo.origin.unLocode.idString``)";
@@ -25,16 +24,18 @@ shared object cargoRouteDtoAssembler {
                         = let (lastKnownLocation = cargo.delivery.lastKnownLocation)
                         "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
                 transportStatus = cargo.delivery.transportStatus.string;
-                legsIt = it.legsMaybeEmpty.map((leg)
-                        => Leg {
-                            voyageNumber = leg.voyage.voyageNumber.number;
-                            fromUnLocode = leg.loadLocation.unLocode.idString;
-                            fromName = leg.loadLocation.name;
-                            toUnLocode = leg.unloadLocation.unLocode.idString;
-                            toName = leg.unloadLocation.name;
-                            loadTimeDate = leg.loadTime;
-                            unloadTimeDate = leg.unloadTime;
-                        });
+                legsIt =    if(exists it = cargo.itinerary) 
+                            then it.legs.map((leg)
+                                => Leg {
+                                    voyageNumber = leg.voyage.voyageNumber.number;
+                                    fromUnLocode = leg.loadLocation.unLocode.idString;
+                                    fromName = leg.loadLocation.name;
+                                    toUnLocode = leg.unloadLocation.unLocode.idString;
+                                    toName = leg.unloadLocation.name;
+                                    loadTimeDate = leg.loadTime;
+                                    unloadTimeDate = leg.unloadTime;
+                                })
+                            else [];
             };
     }
 

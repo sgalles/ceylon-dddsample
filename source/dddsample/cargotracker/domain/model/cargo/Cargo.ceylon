@@ -55,15 +55,19 @@ shared class Cargo(trackingId, routeSpecification){
     embedded
     variable Itinerary? _itinerary = null;
 
+    shared Itinerary? itinerary =>  if(exists currentItinerary = _itinerary) 
+                                    then if(currentItinerary.hasLegs) then currentItinerary else null
+                                    else null;
+
     embedded
     variable Delivery _delivery = Delivery.derivedFrom {
         routeSpecification = routeSpecification;
-        itinerary = this._itinerary;
+        itinerary = this.itinerary;
         handlingHistory = HandlingHistory.empty;
-    }; // TODO : WAT ? this._itinerary is always here null. Strange.
+    }; 
 
 
-    shared Itinerary? itinerary => _itinerary;
+   
 
     shared Delivery delivery => _delivery;
 

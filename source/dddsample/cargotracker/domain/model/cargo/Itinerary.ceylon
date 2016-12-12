@@ -48,14 +48,13 @@ shared class Itinerary({Leg+} legsInit) {
         return legs;
     }
 
-    shared [Leg*] legsMaybeEmpty => // TODO remove
-            _legs.sequence();
+    shared Boolean hasLegs =>  _legs.sequence() nonempty;    
 
     shared Location? initialDepartureLocation() 
-            => legsMaybeEmpty.first?.loadLocation;
+            => legs.first.loadLocation;
     
     shared Location? finalArrivalLocation() 
-            => legsMaybeEmpty.last?.unloadLocation;
+            => legs.last.unloadLocation;
     
     shared Date finalArrivalDate() 
             => copyDate(legs.last.unloadTime);

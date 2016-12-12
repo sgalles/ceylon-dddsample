@@ -44,7 +44,7 @@ class JpaCargoRepository(
 
     shared actual void store(Cargo cargo, Itinerary? newItinerary) {
         if (exists newItinerary, exists oldItinerary = cargo.itinerary) {
-            for (leg in oldItinerary.legsMaybeEmpty){
+            for (leg in oldItinerary.legs){
                 entityManager.remove(leg);
             }
             cargo.assignToRoute(newItinerary);
