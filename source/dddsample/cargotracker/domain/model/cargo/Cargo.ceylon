@@ -57,8 +57,8 @@ shared class Cargo(trackingId, routeSpecification){
 
     // when hasLegs is false, it means that JPA has created an empty collection instead of a null itinerary.
     // let's fix this here
-    shared Itinerary? itinerary =>  if(exists currentItinerary = _itinerary) 
-                                    then if(currentItinerary.hasLegs) then currentItinerary else null
+    shared Itinerary? itinerary =>  if(exists currentItinerary = _itinerary, currentItinerary.hasLegs) 
+                                    then currentItinerary
                                     else null;
 
     embedded
