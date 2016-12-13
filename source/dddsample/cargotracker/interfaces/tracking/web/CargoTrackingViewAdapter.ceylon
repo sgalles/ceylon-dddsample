@@ -39,7 +39,6 @@ shared class CargoTrackingViewAdapter(Cargo cargo, List<HandlingEvent> handlingE
         return switch (delivery.transportStatus)
         case (TransportStatus.in_port)
             "In port ``delivery.lastKnownLocation.name``"
-        // TODO : remove 'else nothing'
         case (TransportStatus.onboard_carrier)
             "Onboard voyage ``delivery.currentVoyage?.voyageNumber?.number else "???"``"
         case (TransportStatus.claimed)

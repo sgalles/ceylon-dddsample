@@ -117,61 +117,57 @@ shared class Delivery {
 
         assert(exists itinerary); // TODO : this because _ontrack means there's an itinerary...try to improve to remove assert
 
-        if (!_onTrack(routingStatus, misdirected)) {
-            return null;
-        }
-        else {
-            if (exists lastEvent) {
-                value legs = itinerary.legs;
-                switch (lastEvent.type)
-                case (load) {
-                    value leg = legs.find((leg)
-                        => leg.loadLocation.sameIdentityAs(lastEvent.location));
-                    return if(exists leg)
+        if (exists lastEvent) {
+            value legs = itinerary.legs;
+            switch (lastEvent.type)
+            case (load) {
+                value leg = legs.find((leg)
+                    => leg.loadLocation.sameIdentityAs(lastEvent.location));
+                return if(exists leg)
+                    then HandlingActivity {
+                        typeAndVoyage = [unload, leg.voyage];
+                        location = leg.unloadLocation;
+                    }
+                    else null;
+            }
+            case (unload) {
+                value pairedLegs = legs.paired.sequence().withTrailing([legs.last,null]);
+                value searchedPairedLeg = pairedLegs.find((pairedLeg)
+                    => pairedLeg[0].unloadLocation.sameIdentityAs(lastEvent.location));
+                return
+                    if (exists [leg, nextLeg] = searchedPairedLeg)
+                    then if (exists nextLeg)
                         then HandlingActivity {
-                            typeAndVoyage = [unload, leg.voyage];
+                            typeAndVoyage = [load, nextLeg.voyage];
+                            location = nextLeg.loadLocation;
+                        }
+                        else HandlingActivity {
+                            typeAndVoyage = claim;
                             location = leg.unloadLocation;
                         }
-                        else null;
-                }
-                case (unload) {
-                    value pairedLegs = legs.paired.sequence().withTrailing([legs.last,null]);
-                    value searchedPairedLeg = pairedLegs.find((pairedLeg)
-                        => pairedLeg[0].unloadLocation.sameIdentityAs(lastEvent.location));
-                    return
-                        if (exists [leg, nextLeg] = searchedPairedLeg)
-                        then if (exists nextLeg)
-                            then HandlingActivity {
-                                typeAndVoyage = [load, nextLeg.voyage];
-                                location = nextLeg.loadLocation;
-                            }
-                            else HandlingActivity {
-                                typeAndVoyage = claim;
-                                location = leg.unloadLocation;
-                            }
-                        else null;
-                }
-                case (receive) {
-                    value firstLeg = legs.first;
-                    return HandlingActivity {
-                        typeAndVoyage = [load, firstLeg.voyage];
-                        location = firstLeg.loadLocation;
-                    };
-                }
-                case (claim) {
-                    return null;
-                }
-                case (customs) {
-                    return null;
-                }
+                    else null;
             }
-            else {
+            case (receive) {
+                value firstLeg = legs.first;
                 return HandlingActivity {
-                    typeAndVoyage = receive;
-                    location = routeSpecification.origin;
+                    typeAndVoyage = [load, firstLeg.voyage];
+                    location = firstLeg.loadLocation;
                 };
             }
+            case (claim) {
+                return null;
+            }
+            case (customs) {
+                return null;
+            }
         }
+        else {
+            return HandlingActivity {
+                typeAndVoyage = receive;
+                location = routeSpecification.origin;
+            };
+        }
+        
     }
 
     Boolean calculateUnloadedAtDestination(HandlingEvent? lastEvent,

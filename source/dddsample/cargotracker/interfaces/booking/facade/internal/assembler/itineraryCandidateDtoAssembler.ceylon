@@ -1,6 +1,6 @@
 import dddsample.cargotracker.domain.model.cargo {
-    ModelItinerary=Itinerary,
-    ModelLeg=Leg
+    Itinerary,
+    Leg
 }
 import dddsample.cargotracker.domain.model.location {
     LocationRepository,
@@ -12,7 +12,7 @@ import dddsample.cargotracker.domain.model.voyage {
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
     RouteCandidate,
-    Leg
+    LegDto=Leg
 }
 
 import java.text {
@@ -23,28 +23,28 @@ shared object itineraryCandidateDtoAssembler {
 
     value dateFormat = SimpleDateFormat("MM/dd/yyyy hh:mm a z");
 
-    shared RouteCandidate toDTO(ModelItinerary itinerary)
-            => RouteCandidate(itinerary.legs.map((leg) => Leg {
-                voyageNumber = leg.voyage.voyageNumber.number;
-                fromUnLocode = leg.loadLocation.unLocode.idString;
-                fromName = leg.loadLocation.name;
-                toUnLocode = leg.unloadLocation.unLocode.idString;
-                toName = leg.unloadLocation.name;
-                loadTimeDate = leg.loadTime;
-                unloadTimeDate = leg.unloadTime;
+    shared RouteCandidate toDTO(Itinerary itinerary)
+            => RouteCandidate(itinerary.legs.map((currentLeg) => LegDto {
+                voyageNumber = currentLeg.voyage.voyageNumber.number;
+                fromUnLocode = currentLeg.loadLocation.unLocode.idString;
+                fromName = currentLeg.loadLocation.name;
+                toUnLocode = currentLeg.unloadLocation.unLocode.idString;
+                toName = currentLeg.unloadLocation.name;
+                loadTimeDate = currentLeg.loadTime;
+                unloadTimeDate = currentLeg.unloadTime;
             }));
 
-    shared ModelItinerary fromDTO(RouteCandidate routeCandidateDTO, VoyageRepository voyageRepository, LocationRepository locationRepository)
-            => ModelItinerary(routeCandidateDTO.legsSequence.map((legDTO) {
-                assert (exists voyage = voyageRepository.find(VoyageNumber(legDTO.voyageNumber)),
-                        exists loadLoc = locationRepository.find(UnLocode(legDTO.fromUnLocode)),
-                        exists unloadLoc = locationRepository.find(UnLocode(legDTO.toUnLocode)));
-                return ModelLeg {
+    shared Itinerary fromDTO(RouteCandidate routeCandidateDTO, VoyageRepository voyageRepository, LocationRepository locationRepository)
+            => Itinerary(routeCandidateDTO.legsSequence.map((currentLegDto) {
+                assert (exists voyage = voyageRepository.find(VoyageNumber(currentLegDto.voyageNumber)),
+                        exists loadLoc = locationRepository.find(UnLocode(currentLegDto.fromUnLocode)),
+                        exists unloadLoc = locationRepository.find(UnLocode(currentLegDto.toUnLocode)));
+                return Leg {
                     voyage = voyage;
                     loadLocation = loadLoc;
                     unloadLocation = unloadLoc;
-                    loadTimeValue = dateFormat.parse(legDTO.loadTime);
-                    unloadTimeValue = dateFormat.parse(legDTO.unloadTime);
+                    loadTimeValue = dateFormat.parse(currentLegDto.loadTime);
+                    unloadTimeValue = dateFormat.parse(currentLegDto.unloadTime);
                 };
             }));
 

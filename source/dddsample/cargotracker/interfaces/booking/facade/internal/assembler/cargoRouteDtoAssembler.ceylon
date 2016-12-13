@@ -1,16 +1,29 @@
 import dddsample.cargotracker.domain.model.cargo {
-    CargoModel=Cargo,
+    Cargo,
     RoutingStatus,
-    TransportStatus
+    TransportStatus,
+    Leg
 }
 import dddsample.cargotracker.interfaces.booking.facade.dto {
     CargoRoute,
-    Leg
+    LegDto=Leg
 }
 
 shared object cargoRouteDtoAssembler {
 
-    shared CargoRoute toDto(CargoModel cargo) {
+    shared CargoRoute toDto(Cargo cargo) {
+        
+        function collectingLegDto(Leg leg) 
+                => LegDto {
+                        voyageNumber = leg.voyage.voyageNumber.number;
+                        fromUnLocode = leg.loadLocation.unLocode.idString;
+                        fromName = leg.loadLocation.name;
+                        toUnLocode = leg.unloadLocation.unLocode.idString;
+                        toName = leg.unloadLocation.name;
+                        loadTimeDate = leg.loadTime;
+                        unloadTimeDate = leg.unloadTime;
+                };
+        
         return CargoRoute {
                 trackingId = cargo.trackingId.idString;
                 origin =  "``cargo.origin.name`` (``cargo.origin.unLocode.idString``)";
@@ -24,17 +37,8 @@ shared object cargoRouteDtoAssembler {
                         = let (lastKnownLocation = cargo.delivery.lastKnownLocation)
                         "``lastKnownLocation.name`` (``lastKnownLocation.unLocode.idString``)";
                 transportStatus = cargo.delivery.transportStatus.string;
-                legsIt =    if(exists it = cargo.itinerary) 
-                            then it.legs.map((leg)
-                                => Leg {
-                                    voyageNumber = leg.voyage.voyageNumber.number;
-                                    fromUnLocode = leg.loadLocation.unLocode.idString;
-                                    fromName = leg.loadLocation.name;
-                                    toUnLocode = leg.unloadLocation.unLocode.idString;
-                                    toName = leg.unloadLocation.name;
-                                    loadTimeDate = leg.loadTime;
-                                    unloadTimeDate = leg.unloadTime;
-                                })
+                legsIt =    if(exists currentItinerary = cargo.itinerary) 
+                            then currentItinerary.legs.map(collectingLegDto)
                             else [];
             };
     }
