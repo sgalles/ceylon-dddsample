@@ -7,6 +7,10 @@ import dddsample.cargotracker.domain.model.location {
 import dddsample.cargotracker.domain.model.voyage {
     Voyage
 }
+import dddsample.cargotracker.infrastructure.ceylon {
+    copyDate,
+    CeylonEnumMetadata
+}
 import dddsample.cargotracker.infrastructure.persistence.jpa {
     HandlingEventTypeConverter
 }
@@ -30,13 +34,14 @@ import javax.persistence {
     TemporalType,
     namedQuery
 }
-import dddsample.cargotracker.infrastructure.ceylon {
-    copyDate
-}
 
-shared abstract class HandlingEventType() 
+shared abstract class HandlingEventType 
          of HandlingEventTypeRequiredVoyage 
           | HandlingEventTypeProhibitedVoyage {
+
+    shared static CeylonEnumMetadata<HandlingEventType> enums = CeylonEnumMetadata<HandlingEventType>();
+
+    shared new(){}
 
     shared formal Boolean requiresVoyage;
     shared Boolean prohibitsVoyage => !requiresVoyage;

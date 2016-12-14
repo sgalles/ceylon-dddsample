@@ -1,1 +1,1 @@
-package dddsample.cargotracker.infrastructure.ceylon;
+shared package dddsample.cargotracker.infrastructure.ceylon;

@@ -7,9 +7,6 @@ import dddsample.cargotracker.domain.model.handling {
 import dddsample.cargotracker.domain.model.voyage {
     VoyageNumber
 }
-import dddsample.cargotracker.infrastructure.ceylon {
-    caseValueByName
-}
 
 import javax.xml.bind.annotation {
     xmlRootElement
@@ -33,15 +30,15 @@ shared class HandlingReport(
 
     shared HandlingEventTypeBundle<VoyageNumber> voyageBundle() {
 
-        assert (exists eventType = caseValueByName(`HandlingEventType`, eventType));
+        HandlingEventType eventTypeEnum = HandlingEventType.enums.getValue(eventType);
 
-        switch (eventType)
+        switch (eventTypeEnum)
         case (is HandlingEventTypeRequiredVoyage) {
             assert (exists voyageNumber = voyageNumber);
-            return [eventType, VoyageNumber(voyageNumber)];
+            return [eventTypeEnum, VoyageNumber(voyageNumber)];
         }
         case (is HandlingEventTypeProhibitedVoyage) {
-            return eventType;
+            return eventTypeEnum;
         }
     }
 

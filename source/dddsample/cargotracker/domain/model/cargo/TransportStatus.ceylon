@@ -1,4 +1,5 @@
 
+
 shared class TransportStatus
         of not_received | in_port | onboard_carrier | claimed | unknown {
 

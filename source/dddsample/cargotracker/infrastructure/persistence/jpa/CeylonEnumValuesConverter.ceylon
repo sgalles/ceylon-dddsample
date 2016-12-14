@@ -1,7 +1,3 @@
-import ceylon.language.meta.model {
-    ClassOrInterface
-}
-
 import dddsample.cargotracker.domain.model.cargo {
     RoutingStatus,
     TransportStatus
@@ -10,11 +6,10 @@ import dddsample.cargotracker.domain.model.handling {
     HandlingEventType
 }
 import dddsample.cargotracker.infrastructure.ceylon {
-    caseValues
+    CeylonEnumMetadata
 }
 
 import java.lang {
-    IllegalStateException,
     JString=String
 }
 
@@ -39,45 +34,19 @@ shared class HandlingEventTypeConverter()
         satisfies AttributeConverter<HandlingEventType, JString> {}
 
 
+
 shared class CeylonEnumValuesConverter<EnumValue>() 
         satisfies AttributeConverter<EnumValue, JString>
         given EnumValue satisfies Object {
 
-    "Not a class or interface type."
-    assert (is ClassOrInterface<EnumValue> enumType = `EnumValue`);
+    CeylonEnumMetadata<EnumValue> enums = CeylonEnumMetadata<EnumValue>();
 
-    "No elements found for enum values. Is the metamodel initialized?"
-    assert (nonempty enums = caseValues(enumType));
+    shared actual JString? convertToDatabaseColumn(EnumValue? x) 
+        => if(exists x) then JString(enums.getName(x)) else null;
+       
 
-    value nameByEnumValue
-            = enums.tabulate((val) => JString(val.string));
-
-    value enumValueByName
-            = nameByEnumValue.inverse().mapItems((key, items) => items[0]);
-
-    shared actual JString? convertToDatabaseColumn(EnumValue? x) {
-        if (exists x) {
-            assert (exists name = nameByEnumValue[x]);
-            return name;
-        }
-        else {
-            return null;
-        }
-    }
-
-    shared actual EnumValue? convertToEntityAttribute(JString? y) {
-        if (exists y) {
-            if (exists x = enumValueByName[y]) {
-                return x;
-            }
-            else {
-                throw IllegalStateException("Unable to convert string ``y`` into RoutingStatus");
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
+    shared actual EnumValue? convertToEntityAttribute(JString? y)
+        => if(exists y) then enums.getValue(y.string) else null;
+       
 }
 
